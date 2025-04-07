@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { GameTemplateOptionsSpec } from '@gamepark/game-template/GameTemplateOptions'
-import { GameTemplateRules } from '@gamepark/game-template/GameTemplateRules'
-import { GameTemplateSetup } from '@gamepark/game-template/GameTemplateSetup'
+import { VersoOptionsSpec } from '@gamepark/verso/VersoOptions'
+import { VersoRules } from '@gamepark/verso/VersoRules'
+import { VersoSetup } from '@gamepark/verso/VersoSetup'
 import { GameProvider, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
@@ -16,10 +16,10 @@ setupTranslation(translations, { debug: false })
 ReactDOM.render(
   <StrictMode>
     <GameProvider
-      game="game-template"
-      Rules={GameTemplateRules}
-      optionsSpec={GameTemplateOptionsSpec}
-      GameSetup={GameTemplateSetup}
+      game="verso"
+      Rules={VersoRules}
+      optionsSpec={VersoOptionsSpec}
+      GameSetup={VersoSetup}
       material={Material}
       locators={Locators}
       animations={gameAnimations}

@@ -1,3 +1,3 @@
-export { GameTemplateRules } from './GameTemplateRules'
-export { GameTemplateOptionsSpec } from './GameTemplateOptions'
-export { GameTemplateSetup } from './GameTemplateSetup'
+export { VersoRules } from './VersoRules'
+export { VersoOptionsSpec } from './VersoOptions'
+export { VersoSetup } from './VersoSetup'
