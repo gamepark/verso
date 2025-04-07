@@ -40,11 +40,17 @@ export type CardId = {
 
 export function getCardIds(): CardId[] {
   const colors = getEnumValues(FaceColor)
-  return getEnumValues(Face).filter(face => !isJoker(face)).flatMap(face =>
-    colors.filter(color => getFaceColor(face) !== color).flatMap(color => [
-      { front: face, back: color * 10 + (face === 1 ? 6 : face - 1) },
-      { front: face, back: color * 10 + (face === 6 ? 1 : face + 1) }
-    ]).concat([
+  return getEnumValues(Face)
+    .filter((face) => !isJoker(face))
+    .flatMap((face) =>
+      colors
+        .filter((color) => getFaceColor(face) !== color)
+        .flatMap((color) => [
+          { front: face, back: color * 10 + (face % 10 === 1 ? 6 : face - 1) },
+          { front: face, back: color * 10 + (face % 10 === 6 ? 1 : face + 1) }
+        ])
+    )
+    .concat([
       { front: Face.Sea1, back: Face.LandJoker },
       { front: Face.Sea2, back: Face.SkyJoker },
       { front: Face.Sea3, back: Face.LandJoker },
@@ -62,7 +68,6 @@ export function getCardIds(): CardId[] {
       { front: Face.Sky3, back: Face.SeaJoker },
       { front: Face.Sky4, back: Face.LandJoker },
       { front: Face.Sky5, back: Face.SeaJoker },
-      { front: Face.Sky6, back: Face.LandJoker },
+      { front: Face.Sky6, back: Face.LandJoker }
     ])
-  )
 }
