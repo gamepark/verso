@@ -1,4 +1,4 @@
-import { MaterialGame, MaterialMove, MaterialRules, TimeLimit } from '@gamepark/rules-api'
+import { HiddenMaterialRules, MaterialGame, MaterialItem, MaterialMove, PositiveSequenceStrategy, TimeLimit } from '@gamepark/rules-api'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { TheFirstStepRule } from './rules/TheFirstStepRule'
@@ -9,11 +9,23 @@ import { RuleId } from './rules/RuleId'
  * It must follow Game Park "Rules" API so that the Game Park server can enforce the rules.
  */
 export class VersoRules
-  extends MaterialRules<number, MaterialType, LocationType>
-  implements TimeLimit<MaterialGame<number, MaterialType, LocationType>, MaterialMove<number, MaterialType, LocationType>, number>
+  extends HiddenMaterialRules<number, MaterialType, LocationType>
+  implements TimeLimit<MaterialGame<number, MaterialType, LocationType>, MaterialMove<number, MaterialType, LocationType>>
 {
   rules = {
     [RuleId.TheFirstStep]: TheFirstStepRule
+  }
+
+  locationsStrategies = {
+    [MaterialType.Card]: {
+      [LocationType.Deck]: new PositiveSequenceStrategy()
+    }
+  }
+
+  hidingStrategies = {
+    [MaterialType.Card]: {
+      [LocationType.Deck]: hideIfRotated
+    }
   }
 
   giveTime(): number {
@@ -21,3 +33,4 @@ export class VersoRules
   }
 }
 
+const hideIfRotated = (item: MaterialItem) => (item.location.rotation ? ['id.front'] : ['id.back'])
