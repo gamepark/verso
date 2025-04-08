@@ -11,4 +11,3 @@ export type VersoOptions = {}
  * (forms for friendly games, or forms for matchmaking preferences, for instance).
  */
 export const VersoOptionsSpec: OptionsSpec<VersoOptions> = {}
-
