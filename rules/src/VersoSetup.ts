@@ -12,13 +12,33 @@ export class VersoSetup extends MaterialGameSetup<number, MaterialType, Location
   Rules = VersoRules
 
   setupMaterial(_options: VersoOptions) {
-    getCardIds().forEach((cardId) => {
-      this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck }, id: cardId })
-    })
+    this.setupCards()
   }
 
   start() {
     this.startPlayerTurn(RuleId.TheFirstStep, this.players[0])
+  }
+
+  setupCards() {
+    const cards = getCardIds()
+    shuffle(cards)
+    const numberOfCardsToAdd = this.players.length * 15
+    cards.slice(0, numberOfCardsToAdd).forEach((cardId) => {
+      this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck }, id: cardId })
+    })
+  }
+}
+function shuffle(array: any[]) {
+  let currentIndex = array.length
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
+
+    // And swap it with the current element.
+    ;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
   }
 }
 
