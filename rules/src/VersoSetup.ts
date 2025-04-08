@@ -1,4 +1,5 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
+import { sample } from 'lodash'
 import { VersoOptions } from './VersoOptions'
 import { VersoRules } from './VersoRules'
 import { getCardIds } from './material/Face'
@@ -24,21 +25,21 @@ export class VersoSetup extends MaterialGameSetup<number, MaterialType, Location
     shuffle(cards)
     const numberOfCardsToAdd = this.players.length * 15
     cards.slice(0, numberOfCardsToAdd).forEach((cardId) => {
-      this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck }, id: cardId })
+      this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck, rotation: sample([false, false]) }, id: cardId })
     })
   }
 }
+
 function shuffle(array: any[]) {
   let currentIndex = array.length
 
   // While there remain elements to shuffle...
   while (currentIndex != 0) {
     // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex)
+    const randomIndex = Math.floor(Math.random() * currentIndex)
     currentIndex--
 
     // And swap it with the current element.
     ;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
   }
 }
-

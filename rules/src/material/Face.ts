@@ -71,4 +71,3 @@ export function getCardIds(): CardId[] {
       { front: Face.Sky6, back: Face.LandJoker }
     ])
 }
-
