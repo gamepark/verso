@@ -1,6 +1,14 @@
 {
   "en": {
     "translation": {
+      "header.choice.action.you": "You must choose an action",
+      "header.choice.action.player": "{player} must choose an action",
+      "header.draw.card.you": "You draw a card",
+      "header.draw.card.player": "{player} draw a card",
+      "header.flip.you": "Place your card or <0>Flip it</0>",
+      "header.flip.player": "{player} must place the card or flip it",
+      "header.place.you": "Place your card",
+      "header.place.player": "{player} must place his card",
       "Menu": "Menu",
       "OK": "OK",
       "Validate": "Validate",
@@ -115,6 +123,14 @@
   },
   "fr": {
     "translation": {
+      "header.choice.action.you": "Vous devez choisir une action",
+      "header.choice.action.player": "{player} doit choisir une action",
+      "header.draw.card.you": "Vous piochez une carte",
+      "header.draw.card.player": "{player} pioche une carte",
+      "header.flip.you": "Placez votre carte ou <0>Retournez la</0>",
+      "header.flip.player": "{player} doit placer sa carte ou la retourner",
+      "header.place.you": "Placez votre carte",
+      "header.place.player": "{player} doit placer sa carte",
       "Menu": "Menu",
       "OK": "OK",
       "Validate": "Valider",

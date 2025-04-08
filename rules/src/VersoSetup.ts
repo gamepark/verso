@@ -17,7 +17,7 @@ export class VersoSetup extends MaterialGameSetup<number, MaterialType, Location
   }
 
   start() {
-    this.startPlayerTurn(RuleId.TheFirstStep, this.players[0])
+    this.startPlayerTurn(RuleId.DrawCard, this.players[0])
   }
 
   setupCards() {

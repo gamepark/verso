@@ -1,7 +1,9 @@
 import { HiddenMaterialRules, MaterialGame, MaterialItem, MaterialMove, PositiveSequenceStrategy, TimeLimit } from '@gamepark/rules-api'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
-import { TheFirstStepRule } from './rules/TheFirstStepRule'
+import { ChoiceActionRule } from './rules/ChoiceActionRule'
+import { DrawCardRule } from './rules/DrawCardRule'
+import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
 
 /**
@@ -13,7 +15,9 @@ export class VersoRules
   implements TimeLimit<MaterialGame<number, MaterialType, LocationType>, MaterialMove<number, MaterialType, LocationType>>
 {
   rules = {
-    [RuleId.TheFirstStep]: TheFirstStepRule
+    [RuleId.ChoiceAction]: ChoiceActionRule,
+    [RuleId.DrawCard]: DrawCardRule,
+    [RuleId.PlayCard]: PlayCardRule
   }
 
   locationsStrategies = {
@@ -24,7 +28,8 @@ export class VersoRules
 
   hidingStrategies = {
     [MaterialType.Card]: {
-      [LocationType.Deck]: hideIfRotated
+      [LocationType.Deck]: hideIfRotated,
+      [LocationType.PlayerHand]: hideIfRotated
     }
   }
 

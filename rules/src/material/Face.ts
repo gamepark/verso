@@ -46,8 +46,8 @@ export function getCardIds(): CardId[] {
       colors
         .filter((color) => getFaceColor(face) !== color)
         .flatMap((color) => [
-          { front: face, back: color * 10 + (face % 10 === 1 ? 6 : face - 1) },
-          { front: face, back: color * 10 + (face % 10 === 6 ? 1 : face + 1) }
+          { front: face, back: color * 10 + (face % 10 === 1 ? 6 : (face % 10) - 1) },
+          { front: face, back: color * 10 + (face % 10 === 6 ? 1 : (face % 10) + 1) }
         ])
     )
     .concat([
