@@ -1,5 +1,4 @@
 export enum RuleId {
-  ChoiceAction = 1,
-  DrawCard,
+  ChooseAction = 1,
   PlayCard
 }

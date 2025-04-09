@@ -51,23 +51,23 @@ export function getCardIds(): CardId[] {
         ])
     )
     .concat([
-      { front: Face.Sea1, back: Face.LandJoker },
-      { front: Face.Sea2, back: Face.SkyJoker },
-      { front: Face.Sea3, back: Face.LandJoker },
-      { front: Face.Sea4, back: Face.SkyJoker },
-      { front: Face.Sea5, back: Face.LandJoker },
-      { front: Face.Sea6, back: Face.SkyJoker },
-      { front: Face.Land1, back: Face.SkyJoker },
-      { front: Face.Land2, back: Face.SeaJoker },
-      { front: Face.Land3, back: Face.SkyJoker },
-      { front: Face.Land4, back: Face.SeaJoker },
-      { front: Face.Land5, back: Face.SkyJoker },
-      { front: Face.Land6, back: Face.SeaJoker },
-      { front: Face.Sky1, back: Face.SeaJoker },
-      { front: Face.Sky2, back: Face.LandJoker },
-      { front: Face.Sky3, back: Face.SeaJoker },
-      { front: Face.Sky4, back: Face.LandJoker },
-      { front: Face.Sky5, back: Face.SeaJoker },
-      { front: Face.Sky6, back: Face.LandJoker }
+      { back: Face.Sea1, front: Face.LandJoker },
+      { back: Face.Sea2, front: Face.SkyJoker },
+      { back: Face.Sea3, front: Face.LandJoker },
+      { back: Face.Sea4, front: Face.SkyJoker },
+      { back: Face.Sea5, front: Face.LandJoker },
+      { back: Face.Sea6, front: Face.SkyJoker },
+      { back: Face.Land1, front: Face.SkyJoker },
+      { back: Face.Land2, front: Face.SeaJoker },
+      { back: Face.Land3, front: Face.SkyJoker },
+      { back: Face.Land4, front: Face.SeaJoker },
+      { back: Face.Land5, front: Face.SkyJoker },
+      { back: Face.Land6, front: Face.SeaJoker },
+      { back: Face.Sky1, front: Face.SeaJoker },
+      { back: Face.Sky2, front: Face.LandJoker },
+      { back: Face.Sky3, front: Face.SeaJoker },
+      { back: Face.Sky4, front: Face.LandJoker },
+      { back: Face.Sky5, front: Face.SeaJoker },
+      { back: Face.Sky6, front: Face.LandJoker }
     ])
 }

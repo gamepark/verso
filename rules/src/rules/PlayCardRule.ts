@@ -1,48 +1,38 @@
 import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { FaceCardHelper } from './helpers/FaceCardHelper'
+import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
   getPlayerMoves() {
-    const hand = this.hand
+    const cardToPlay = this.cardToPlay
+    console.log('cardToPlay', cardToPlay.getItem())
     const moves: MaterialMove[] = []
-    moves.push(
-      hand.moveItem((item) => ({
-        type: LocationType.PlayerLayout,
-        player: this.player,
-        rotation: item.location.rotation
-      }))
-    )
-
-    if (!this.hasFlipped) {
-      moves.push(hand.rotateItem((item) => !item.location.rotation))
+    const faceCardHelper = new FaceCardHelper(this.game)
+    const cardColor = faceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+    const availablePlaces = new PlayerLayoutHelper(this.game).getFreePlaces(this.player, cardColor)
+    for (const [x, y] of Object.entries(availablePlaces)) {
+      moves.push(
+        cardToPlay.moveItem((item) => ({
+          type: LocationType.PlayerLayout,
+          player: this.player,
+          rotation: item.location.rotation,
+          x: parseInt(x),
+          y: y
+        }))
+      )
     }
-    console.log('moves', moves)
     return moves
-  }
-
-  get hasFlipped() {
-    return this.remind(Memory.Flipped)
-  }
-
-  beforeItemMove(move: ItemMove) {
-    console.log('beforeItemMove', move)
-    if (isMoveItemType(MaterialType.Card)(move) && move.location.type !== LocationType.PlayerLayout) {
-      const item = this.material(MaterialType.Card).getItem(move.itemIndex)
-      console.log('item', item)
-      if (item.location.rotation !== move.location.rotation) this.memorize(Memory.Flipped, true)
-    }
-
-    return []
   }
 
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
       this.addPlacedCard(move.itemIndex)
-      moves.push(this.startPlayerTurn(RuleId.DrawCard, this.nextPlayer))
+      moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
     }
 
     return moves
@@ -52,12 +42,8 @@ export class PlayCardRule extends PlayerTurnRule {
     this.memorize(Memory.PlacedCard, index)
   }
 
-  get hand() {
-    return this.material(MaterialType.Card).location(LocationType.PlayerHand)
-  }
-
-  onRuleEnd() {
-    this.forget(Memory.Flipped)
-    return []
+  get cardToPlay() {
+    const length = this.material(MaterialType.Card).location(LocationType.Deck).length
+    return this.material(MaterialType.Card).location(LocationType.Deck).index(length - 1)
   }
 }

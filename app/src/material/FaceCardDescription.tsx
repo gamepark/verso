@@ -1,5 +1,9 @@
-import { CardDescription } from '@gamepark/react-game'
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
+import { isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Face } from '@gamepark/verso/material/Face'
+import { LocationType } from '@gamepark/verso/material/LocationType'
 
 import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
 import ReverseLand2 from '../images/cards/reverse/Land2.jpg'
@@ -50,6 +54,24 @@ export class FaceCardDescription extends CardDescription {
   images = frontImages
 
   backImages = reverseImages
+
+  menuAlwaysVisible = true
+
+  getItemMenu(_: MaterialItem, context: ItemContext, legalMoves: MaterialMove[]) {
+    const { type, index } = context
+    const moves = legalMoves.filter(isMoveItemType(type)).filter((move) => move.itemIndex === index)
+    const flip = moves.find((move) => move.location.type === LocationType.Deck)
+    if (flip) {
+      return (
+        <>
+          <ItemMenuButton angle={50} radius={4} move={flip}>
+            <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss} />
+          </ItemMenuButton>
+        </>
+      )
+    }
+    return
+  }
 }
 
 const frontImages = {
