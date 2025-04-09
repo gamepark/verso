@@ -1,7 +1,6 @@
 import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
@@ -11,20 +10,10 @@ export class PlayCardRule extends PlayerTurnRule {
     const cardToPlay = this.cardToPlay
     console.log('cardToPlay', cardToPlay.getItem())
     const moves: MaterialMove[] = []
-    const faceCardHelper = new FaceCardHelper(this.game)
-    const cardColor = faceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
-    const availablePlaces = new PlayerLayoutHelper(this.game).getFreePlaces(this.player, cardColor)
-    for (const [x, y] of Object.entries(availablePlaces)) {
-      moves.push(
-        cardToPlay.moveItem((item) => ({
-          type: LocationType.PlayerLayout,
-          player: this.player,
-          rotation: item.location.rotation,
-          x: parseInt(x),
-          y: y
-        }))
-      )
-    }
+    const availablePlaces = new PlayerLayoutHelper(this.game, this.player).getFreePlaces(this.player)
+    availablePlaces.forEach((place) => {
+      moves.push(cardToPlay.moveItem((item) => ({ ...place, rotation: item.location.rotation })))
+    })
     return moves
   }
 
@@ -44,6 +33,8 @@ export class PlayCardRule extends PlayerTurnRule {
 
   get cardToPlay() {
     const length = this.material(MaterialType.Card).location(LocationType.Deck).length
-    return this.material(MaterialType.Card).location(LocationType.Deck).index(length - 1)
+    return this.material(MaterialType.Card)
+      .location(LocationType.Deck)
+      .index(length - 1)
   }
 }

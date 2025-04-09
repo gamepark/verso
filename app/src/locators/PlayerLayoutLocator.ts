@@ -1,7 +1,24 @@
-import { getRelativePlayerIndex, Locator, MaterialContext } from '@gamepark/react-game'
-import { Location } from '@gamepark/rules-api'
+import { css } from '@emotion/react'
+import { DropAreaDescription, getRelativePlayerIndex, LocationContext, Locator, MaterialContext } from '@gamepark/react-game'
+import { isMoveItemType, Location, MaterialMove } from '@gamepark/rules-api'
+import { LocationType } from '@gamepark/verso/material/LocationType'
+import { MaterialType } from '@gamepark/verso/material/MaterialType'
+import { isEqual } from 'lodash'
+import { faceCardDescription } from '../material/FaceCardDescription'
 
 class PlayerLayoutLocator extends Locator {
+  getLocations({ rules, player }: MaterialContext) {
+    if (player) {
+      const res = rules
+        .getLegalMoves(player)
+        .filter(isMoveItemType(MaterialType.Card))
+        .filter((move) => move.location.type === LocationType.PlayerLayout)
+        .map((move) => move.location) as Location[]
+      console.log('res', res)
+      return res
+    }
+    return []
+  }
   getCoordinates(location: Location, context: MaterialContext) {
     const index = getRelativePlayerIndex(context, location.player)
     switch (index) {
@@ -33,6 +50,25 @@ class PlayerLayoutLocator extends Locator {
       default:
         return { y: 17 }
     }
+  }
+
+  locationDescription = new PlayerLayoutSpotDescription()
+}
+
+export class PlayerLayoutSpotDescription extends DropAreaDescription {
+  constructor() {
+    super(faceCardDescription)
+  }
+
+  getExtraCss(location: Location, { rules }: LocationContext) {
+    console.log('location', location, rules)
+    return css`
+      background: red;
+    `
+  }
+
+  canShortClick(move: MaterialMove, location: Location, _: MaterialContext) {
+    return isMoveItemType(MaterialType.Card)(move) && isEqual(move.location.type, location.type)
   }
 }
 

@@ -1,27 +1,19 @@
-import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
-import { FaceColor } from '../../material/Face'
+import { Location, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { LocationType } from '../../material/LocationType'
 //import { LocationType } from '../../material/LocationType'
 //import { MaterialType } from '../../material/MaterialType'
 
 export class PlayerLayoutHelper extends MaterialRulesPart {
-  constructor(game: MaterialGame) {
+  constructor(game: MaterialGame, readonly player: number) {
     super(game)
   }
 
-  getFreePlaces(_: number, cardColor: FaceColor) {
+  getFreePlaces(_: number) {
     //const cards = this.getCards(playerId)
-    const availablePlaces: Record<number, number> = {}
-    switch (cardColor) {
-      case FaceColor.Sky:
-        availablePlaces[-8] = 0
-        break
-      case FaceColor.Land:
-        availablePlaces[0] = 0
-        break
-      case FaceColor.Sea:
-        availablePlaces[8] = 0
-        break
-    }
+    const availablePlaces: Location[] = []
+    availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: 0, y: -18 })
+    availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: 0, y: 0 })
+    availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: 0, y: 18 })
     return availablePlaces
   }
 
