@@ -100,6 +100,39 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       })
   }
 
+  checkSuite(color: FaceColor) {
+    const cards = this.getCards(this.player)
+      .filter((card) => {
+        const faceCardHelper = new FaceCardHelper(this.game)
+        const cardColor = faceCardHelper.getCardColor(card.id, card.location.rotation)
+        return cardColor === color
+      })
+      .getItems()
+      .map((item) => {
+        const faceCardHelper = new FaceCardHelper(this.game)
+        return faceCardHelper.getCurrentId(item.id, item.location.rotation)
+      })
+      .sort()
+    let maxInSuite: number | null = null
+
+    for (let i = 0; i < cards.length - 1; i++) {
+      if (cards[i + 1] - cards[i] === 1) {
+        maxInSuite = cards[i + 1]
+      }
+    }
+
+    if (maxInSuite) {
+      return this.getCards(this.player)
+        .filter((card) => {
+          const faceCardHelper = new FaceCardHelper(this.game)
+          const currentId = faceCardHelper.getCurrentId(card.id, card.location.rotation)
+          return currentId === maxInSuite
+        })
+        .getIndex()
+    }
+    return null
+  }
+
   private getCards(playerId: number) {
     return this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(playerId)
   }

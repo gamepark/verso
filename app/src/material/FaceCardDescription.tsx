@@ -1,9 +1,11 @@
 import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
+import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons/faMoneyCheckDollar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
-import { isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Face } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
+import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 
 import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
 import ReverseLand2 from '../images/cards/reverse/Land2.jpg'
@@ -45,6 +47,7 @@ import FrontSky4 from '../images/cards/front/Sky4.jpg'
 import FrontSky5 from '../images/cards/front/Sky5.jpg'
 import FrontSky6 from '../images/cards/front/Sky6.jpg'
 import FrontSkyJoker from '../images/cards/front/SkyJoker.jpg'
+import { Trans } from 'react-i18next'
 
 export class FaceCardDescription extends CardDescription {
   height = 7.3
@@ -61,11 +64,21 @@ export class FaceCardDescription extends CardDescription {
     const { type, index } = context
     const moves = legalMoves.filter(isMoveItemType(type)).filter((move) => move.itemIndex === index)
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
+    const bank = legalMoves.filter(isCustomMoveType(CustomMoveType.BankSequence)).find((move) => move.data === index)
     if (flip) {
       return (
         <>
           <ItemMenuButton angle={50} radius={4} move={flip}>
             <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss} />
+          </ItemMenuButton>
+        </>
+      )
+    }
+    if (bank) {
+      return (
+        <>
+          <ItemMenuButton label={<Trans defaults="bank" />} angle={50} radius={4} y={-3.7} move={bank}>
+            <FontAwesomeIcon icon={faMoneyCheckDollar} css={pointerCursorCss} />
           </ItemMenuButton>
         </>
       )
