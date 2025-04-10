@@ -1,25 +1,37 @@
-import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItemType, ItemMove, Material, MaterialMove, PlayerTurnRule, PlayMoveContext, RuleMove, RuleStep } from '@gamepark/rules-api'
+import { FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
+  card = this.cardToPlay
+  onRuleStart(_move: RuleMove, _previousRule?: RuleStep, _context?: PlayMoveContext): MaterialMove[] {
+    const playerAlreadyHaveCard = new PlayerLayoutHelper(this.game, this.player).checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
+    if (playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
+      this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
+      return [this.startRule(RuleId.DiscardCard)]
+    }
+    const { cardColor, cardValue } = this.getCardInfos(this.cardToPlay)
+    return new PlayerLayoutHelper(this.game, this.player).decalCards(cardColor, cardValue)
+  }
+
   getPlayerMoves() {
-    const cardToPlay = this.cardToPlay
-    console.log('cardToPlay', cardToPlay.getItem())
     const moves: MaterialMove[] = []
-    const availablePlaces = new PlayerLayoutHelper(this.game, this.player).getFreePlaces(this.player)
+    const { cardColor, cardValue } = this.getCardInfos(this.card)
+    const availablePlaces = new PlayerLayoutHelper(this.game, this.player).getFreePlaces(this.player, cardColor, cardValue)
     availablePlaces.forEach((place) => {
-      moves.push(cardToPlay.moveItem((item) => ({ ...place, rotation: item.location.rotation })))
+      moves.push(this.card.moveItem((item) => ({ ...place, rotation: item.location.rotation })))
     })
     return moves
   }
 
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
-    if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
+    if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout && move.itemIndex === this.card.getIndex()) {
       this.addPlacedCard(move.itemIndex)
       moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
     }
@@ -31,10 +43,26 @@ export class PlayCardRule extends PlayerTurnRule {
     this.memorize(Memory.PlacedCard, index)
   }
 
+  getCardInfos(cardToPlay: Material) {
+    const faceCardHelper = new FaceCardHelper(this.game)
+    const cardColor = faceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+    const cardValue = faceCardHelper.getCardValue(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+    return { cardColor, cardValue }
+  }
+
   get cardToPlay() {
     const length = this.material(MaterialType.Card).location(LocationType.Deck).length
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
       .index(length - 1)
+  }
+
+  onRuleEnd(_move: RuleMove, _context?: PlayMoveContext): MaterialMove[] {
+    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
+    const moves: MaterialMove[] = []
+    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Sea))
+    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Land))
+    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Sky))
+    return moves
   }
 }

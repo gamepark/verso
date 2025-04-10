@@ -4,7 +4,7 @@ import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { VersoRules } from '@gamepark/verso/VersoRules'
 import { Trans } from 'react-i18next'
 
-export const PlayCardHeader = () => {
+export const DiscardCardHeader = () => {
   const player = usePlayerId()
   const rules = useRules<VersoRules>()!
   const activePlayer = rules.game.rule?.player
@@ -12,8 +12,8 @@ export const PlayCardHeader = () => {
   const name = usePlayerName(activePlayer)
 
   if (itsMe) {
-    return <Trans defaults="header.place.you" />
+    return <Trans defaults="header.discard.you" />
   }
 
-  return <Trans defaults="header.place.player" values={{ player: name }} />
+  return <Trans defaults="header.discard.player" values={{ player: name }} />
 }

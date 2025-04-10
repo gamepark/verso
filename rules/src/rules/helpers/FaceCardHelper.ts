@@ -7,12 +7,16 @@ export class FaceCardHelper extends MaterialRulesPart {
   }
 
   getCardColor(cardId: { front: number; back: number }, rotated: boolean) {
-    const currentId = rotated ? cardId.back : cardId.front
-    console.log('cardId', currentId)
+    const currentId = this.getCurrentId(cardId, rotated)
     return Math.floor(currentId / 10) as FaceColor
   }
 
-  getCardValue(cardId: number) {
-    return cardId % 10
+  getCardValue(cardId: { front: number; back: number }, rotated: boolean) {
+    const currentId = this.getCurrentId(cardId, rotated)
+    return currentId % 10
+  }
+
+  getCurrentId(cardId: { front: number; back: number }, rotated: boolean) {
+    return rotated ? cardId.back : cardId.front
   }
 }

@@ -2,6 +2,7 @@ import { HiddenMaterialRules, MaterialGame, MaterialItem, MaterialMove, Positive
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { ChooseActionRule } from './rules/ChooseActionRule'
+import { DiscardCardRule } from './rules/DiscardCardRule'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
 
@@ -15,7 +16,8 @@ export class VersoRules
 {
   rules = {
     [RuleId.ChooseAction]: ChooseActionRule,
-    [RuleId.PlayCard]: PlayCardRule
+    [RuleId.PlayCard]: PlayCardRule,
+    [RuleId.DiscardCard]: DiscardCardRule
   }
 
   locationsStrategies = {
