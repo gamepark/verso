@@ -1,28 +1,16 @@
 import { DropAreaDescription, getRelativePlayerIndex, Locator, MaterialContext } from '@gamepark/react-game'
-import { isMoveItemType, Location, MaterialMove } from '@gamepark/rules-api'
+import { Location } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
-import { MaterialType } from '@gamepark/verso/material/MaterialType'
-import { isEqual } from 'lodash'
-import { faceCardDescription } from '../material/FaceCardDescription'
 
 class PlayerLayoutLocator extends Locator {
-  getLocations({ rules, player }: MaterialContext) {
-    if (player) {
-      const res = rules
-        .getLegalMoves(player)
-        .filter(isMoveItemType(MaterialType.Card))
-        .filter((move) => move.location.type === LocationType.PlayerLayout)
-        .map((move) => move.location) as Location[]
-      return res
-    }
-    return []
-  }
   getCoordinates(location: Location, context: MaterialContext) {
     const base = this.getBaseCoordinates(location, context)
-    const xLocation = location.x ?? 0
-    const yLocation = location.y ?? 0
     const xBase = base.x ?? 0
     const yBase = base.y ?? 0
+    if (location.x === undefined) return { x: xBase + 18, y: yBase }
+
+    const xLocation = location.x ?? 0
+    const yLocation = location.y ?? 0
     return { x: xBase + xLocation * 7, y: yBase + yLocation }
   }
   getBaseCoordinates(location: Location, context: MaterialContext) {
@@ -58,17 +46,16 @@ class PlayerLayoutLocator extends Locator {
     }
   }
 
+  getDropLocations() {
+    return [{ type: LocationType.PlayerLayout }]
+  }
+
   locationDescription = new PlayerLayoutSpotDescription()
 }
 
 export class PlayerLayoutSpotDescription extends DropAreaDescription {
-  constructor() {
-    super(faceCardDescription)
-  }
-
-  canShortClick(move: MaterialMove, location: Location, _: MaterialContext) {
-    return isMoveItemType(MaterialType.Card)(move) && isEqual(move.location.type, location.type)
-  }
+  width = 42
+  height = 24
 }
 
 export const playerLayoutLocator = new PlayerLayoutLocator()
