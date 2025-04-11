@@ -1,5 +1,5 @@
 export enum Memory {
-  Flipped = 1,
-  PlacedCard,
-  DiscardedCard
+  PlacedCard = 1,
+  DiscardedCard,
+  Score
 }

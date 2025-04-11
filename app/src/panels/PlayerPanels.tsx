@@ -1,11 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { StyledPlayerPanel, usePlayers } from '@gamepark/react-game'
+import { StyledPlayerPanel, usePlayers, useRules } from '@gamepark/react-game'
+import { Memory } from '@gamepark/verso/rules/Memory'
+import { VersoRules } from '@gamepark/verso/VersoRules'
+import Star from '../images/tokens/star.png'
 import { createPortal } from 'react-dom'
 
 export const PlayerPanels = () => {
   const players = usePlayers<number>({ sortFromMe: true })
   const root = document.getElementById('root')
+  const rules = useRules<VersoRules>()!
   if (!root) {
     return null
   }
@@ -13,7 +17,18 @@ export const PlayerPanels = () => {
   return createPortal(
     <>
       {players.map((player, index) => (
-        <StyledPlayerPanel key={player.id} player={player} color={playerColorCode[player.id]} css={panelPosition(index)} />
+        <StyledPlayerPanel
+          key={player.id}
+          player={player}
+          color={playerColorCode[player.id]}
+          css={panelPosition(index)}
+          counters={[
+            {
+              image: Star,
+              value: rules.remind(Memory.Score, player.id) || 0
+            }
+          ]}
+        />
       ))}
     </>,
     root
