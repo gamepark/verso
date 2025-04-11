@@ -37,54 +37,20 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       .filter(({ id, location }) => faceCardHelper.getCardColor(id, location.rotation) === color)
 
     if (playerCards.length === 0) {
-      availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: 0, y })
+      availablePlaces.push({ id: color, type: LocationType.PlayerLayout, player: this.player, x: 0, y })
     } else {
       playerCards.forEach((card) => {
         const value = faceCardHelper.getCardValue(card.id, card.location.rotation)
         const baseX = card.location.x ?? 0
         if (cardValue < value) {
-          availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: baseX - 7, y })
+          availablePlaces.push({ id: color, type: LocationType.PlayerLayout, player: this.player, x: baseX, y })
         }
         if (cardValue > value) {
-          availablePlaces.push({ type: LocationType.PlayerLayout, player: this.player, x: baseX + 7, y })
+          availablePlaces.push({ id: color, type: LocationType.PlayerLayout, player: this.player, x: baseX + 1, y })
         }
       })
     }
     return uniqBy(availablePlaces, (location) => JSON.stringify(location))
-  }
-
-  decalCards(cardColor: FaceColor, cardValue: number) {
-    const cards = this.getCards(this.player)
-      .filter((card) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const color = faceCardHelper.getCardColor(card.id, card.location.rotation)
-        return cardColor === color
-      })
-      .filter((card) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const value = faceCardHelper.getCardValue(card.id, card.location.rotation)
-        return value > cardValue
-      })
-    return cards.moveItems((item) => ({ ...item.location, x: item.location.x! + 7 }))
-  }
-
-  reorderCards(color: FaceColor) {
-    const cards = this.getCards(this.player)
-      .filter((card) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const cardColor = faceCardHelper.getCardColor(card.id, card.location.rotation)
-        return cardColor === color
-      })
-      .sort((item: MaterialItem) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        return faceCardHelper.getCardValue(item.id, item.location.rotation)
-      })
-    let index = 0
-    return cards.moveItems((item) => {
-      const indexToMove = index
-      index++
-      return { ...item.location, x: indexToMove * 7 }
-    })
   }
 
   checkIfPlayerAlreadyHaveCard(card?: MaterialItem) {

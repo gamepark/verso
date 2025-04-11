@@ -1,5 +1,4 @@
 import { isMoveItemType, ItemMove, Material, MaterialMove, PlayerTurnRule, PlayMoveContext, RuleMove, RuleStep } from '@gamepark/rules-api'
-import { FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
@@ -15,8 +14,7 @@ export class PlayCardRule extends PlayerTurnRule {
       this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
       return [this.startRule(RuleId.DiscardCard)]
     }
-    const { cardColor, cardValue } = this.getCardInfos(this.cardToPlay)
-    return new PlayerLayoutHelper(this.game, this.player).decalCards(cardColor, cardValue)
+    return []
   }
 
   getPlayerMoves() {
@@ -55,14 +53,5 @@ export class PlayCardRule extends PlayerTurnRule {
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
       .index(length - 1)
-  }
-
-  onRuleEnd(_move: RuleMove, _context?: PlayMoveContext): MaterialMove[] {
-    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-    const moves: MaterialMove[] = []
-    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Sea))
-    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Land))
-    moves.push(...playerLayoutHelper.reorderCards(FaceColor.Sky))
-    return moves
   }
 }

@@ -23,7 +23,7 @@ class PlayerLayoutLocator extends Locator {
     const yLocation = location.y ?? 0
     const xBase = base.x ?? 0
     const yBase = base.y ?? 0
-    return { ...base, x: xBase + xLocation, y: yBase + yLocation }
+    return { x: xBase + xLocation * 7, y: yBase + yLocation }
   }
   getBaseCoordinates(location: Location, context: MaterialContext) {
     const index = getRelativePlayerIndex(context, location.player)

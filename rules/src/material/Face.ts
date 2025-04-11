@@ -1,27 +1,27 @@
 import { getEnumValues } from '@gamepark/rules-api'
 
 export enum Face {
-  Sea1 = 11,
+  SeaJoker = 10,
+  Sea1,
   Sea2,
   Sea3,
   Sea4,
   Sea5,
   Sea6,
-  SeaJoker,
-  Land1 = 21,
+  LandJoker = 20,
+  Land1,
   Land2,
   Land3,
   Land4,
   Land5,
   Land6,
-  LandJoker,
-  Sky1 = 31,
+  SkyJoker = 30,
+  Sky1,
   Sky2,
   Sky3,
   Sky4,
   Sky5,
   Sky6,
-  SkyJoker
 }
 
 export enum FaceColor {

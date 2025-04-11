@@ -22,7 +22,8 @@ export class VersoRules
 
   locationsStrategies = {
     [MaterialType.Card]: {
-      [LocationType.Deck]: new PositiveSequenceStrategy()
+      [LocationType.Deck]: new PositiveSequenceStrategy(),
+      [LocationType.PlayerLayout]: new PositiveSequenceStrategy()
     }
   }
 
