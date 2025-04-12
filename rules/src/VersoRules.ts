@@ -4,6 +4,7 @@ import { MaterialType } from './material/MaterialType'
 import { BankSequenceRule } from './rules/BankSequenceRule'
 import { ChooseActionRule } from './rules/ChooseActionRule'
 import { DiscardCardRule } from './rules/DiscardCardRule'
+import { FlipCardAfterBankSequenceRule } from './rules/FlipCardAfterBankSequenceRule'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
 
@@ -19,7 +20,8 @@ export class VersoRules
     [RuleId.ChooseAction]: ChooseActionRule,
     [RuleId.PlayCard]: PlayCardRule,
     [RuleId.DiscardCard]: DiscardCardRule,
-    [RuleId.BankSequence]: BankSequenceRule
+    [RuleId.BankSequence]: BankSequenceRule,
+    [RuleId.FlipCardAfterBankSequence]: FlipCardAfterBankSequenceRule,
   }
 
   locationsStrategies = {

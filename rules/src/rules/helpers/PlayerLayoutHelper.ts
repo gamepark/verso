@@ -30,23 +30,20 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
 
   private getPlaceByColor(playerId: number, cardValue: number, color: FaceColor, y: number) {
     let availablePlace: Location | undefined
-    const faceCardHelper = new FaceCardHelper(this.game)
     const playerCards = this.getCards(playerId)
       .getItems()
-      .filter(({ id, location }) => faceCardHelper.getCardColor(id, location.rotation) === color)
-      .sort((a, b) => faceCardHelper.getCardValue(a.id, a.location.rotation) - faceCardHelper.getCardValue(b.id, b.location.rotation))
-    console.log(playerCards)
+      .filter(({ id, location }) => FaceCardHelper.getCardColor(id, location.rotation) === color)
+      .sort((a, b) => FaceCardHelper.getCardValue(a.id, a.location.rotation) - FaceCardHelper.getCardValue(b.id, b.location.rotation))
     if (playerCards.length === 0) {
       availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: 0, y }
     } else {
       const hightestCard = playerCards[playerCards.length - 1]
-      if(cardValue > faceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation)) {
+      if(cardValue > FaceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation)) {
         availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: hightestCard.location.x! + 1, y }
       } else {
         for(let i = 0; i < playerCards.length; i++) {
           const card = playerCards[i]
-          console.log(card)
-          const value = faceCardHelper.getCardValue(card.id, card.location.rotation)
+          const value = FaceCardHelper.getCardValue(card.id, card.location.rotation)
           const baseX = card.location.x ?? 0
           if (cardValue < value) {
             availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: baseX, y }
@@ -64,9 +61,8 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     return this.getCards(this.player)
       .getItems()
       .some((item) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const itemCurrentId = faceCardHelper.getCurrentId(item.id, item.location.rotation)
-        const cardCurrentId = faceCardHelper.getCurrentId(card.id, card.location.rotation)
+        const itemCurrentId = FaceCardHelper.getCurrentId(item.id, item.location.rotation)
+        const cardCurrentId = FaceCardHelper.getCurrentId(card.id, card.location.rotation)
         return itemCurrentId === cardCurrentId
       })
   }
@@ -74,14 +70,12 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
   checkSuite(color: FaceColor) {
     const cards = this.getCards(this.player)
       .filter((card) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const cardColor = faceCardHelper.getCardColor(card.id, card.location.rotation)
+        const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
         return cardColor === color
       })
       .getItems()
       .map((item) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        return faceCardHelper.getCurrentId(item.id, item.location.rotation)
+        return FaceCardHelper.getCurrentId(item.id, item.location.rotation)
       })
       .sort()
     let maxInSuite: number | null = null
@@ -101,7 +95,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       }
     }
 
-    if (maxInSuite) {
+    if (maxInSuite && suites.size > 1) {
       return {
         maxInSuite: this.getCardIndexFromId(maxInSuite),
         suites: Array.from(suites).map((id) => this.getCardIndexFromId(id))
@@ -113,8 +107,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
   private getCardIndexFromId(cardId: number) {
     return this.getCards(this.player)
       .filter((card) => {
-        const faceCardHelper = new FaceCardHelper(this.game)
-        const currentId = faceCardHelper.getCurrentId(card.id, card.location.rotation)
+        const currentId = FaceCardHelper.getCurrentId(card.id, card.location.rotation)
         return currentId === cardId
       })
       .getIndex()

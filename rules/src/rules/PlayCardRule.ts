@@ -42,9 +42,8 @@ export class PlayCardRule extends PlayerTurnRule {
   }
 
   getCardInfos(cardToPlay: Material) {
-    const faceCardHelper = new FaceCardHelper(this.game)
-    const cardColor = faceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
-    const cardValue = faceCardHelper.getCardValue(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
     return { cardColor, cardValue }
   }
 

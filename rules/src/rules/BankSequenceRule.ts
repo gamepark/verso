@@ -55,7 +55,7 @@ export class BankSequenceRule extends PlayerTurnRule {
   afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
     if (isMoveItem(_move) && _move.location.type === LocationType.BankSequenceLayout) {
       const cardMoved = this.bankCards.index(_move.itemIndex)
-      const isJocker = new FaceCardHelper(this.game).getCardValue(cardMoved.getItem()?.id, cardMoved.getItem()?.location.rotation) === 0
+      const isJocker = FaceCardHelper.getCardValue(cardMoved.getItem()?.id, cardMoved.getItem()?.location.rotation) === 0
       if (!isJocker) {
         return new BankHelper(this.game, this.player).reorderJocker()
       }
@@ -67,6 +67,7 @@ export class BankSequenceRule extends PlayerTurnRule {
     const bankHelper = new BankHelper(this.game, this.player)
     const moves: MaterialMove[] = []
 
+    this.memorize(Memory.BankedSequence, bankHelper.getColorInBank())
     this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + bankHelper.getBankScore(), this.player)
 
     bankHelper.getCardsToDiscard().forEach((card) => {
@@ -86,14 +87,13 @@ export class BankSequenceRule extends PlayerTurnRule {
       }
     }
 
-    moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    moves.push(this.startRule(RuleId.FlipCardAfterBankSequence))
     return moves
   }
 
   getCardInfos(cardToPlay: MaterialItem) {
-    const faceCardHelper = new FaceCardHelper(this.game)
-    const cardColor = faceCardHelper.getCardColor(cardToPlay.id, cardToPlay.location.rotation)
-    const cardValue = faceCardHelper.getCardValue(cardToPlay.id, cardToPlay.location.rotation)
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay.id, cardToPlay.location.rotation)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay.id, cardToPlay.location.rotation)
     return { cardColor, cardValue }
   }
 }
