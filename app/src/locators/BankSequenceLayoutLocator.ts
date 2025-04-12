@@ -9,7 +9,7 @@ class BankSequenceLayoutLocator extends Locator {
     if (location.x === undefined) return { x: xBase, y: yBase }
 
     const xLocation = location.x ?? 0
-    return { x: xBase + xLocation * 7, y: yBase }
+    return { x: xBase + xLocation * 7 - 21, y: yBase }
   }
 
   getDropLocations() {

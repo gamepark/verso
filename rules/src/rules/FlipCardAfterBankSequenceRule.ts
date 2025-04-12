@@ -11,9 +11,7 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
   onRuleStart() {
     const moves: MaterialMove[] = []
     const color = this.remind(Memory.BankedSequence)
-    console.log(this.getPlayersNear())
     for (const player of this.getPlayersNear()) {
-      console.log(player)
       const playerCards = this.getPlayerLayoutByPlayerId(player)
         .filter((item) => {
           const cardColor = FaceCardHelper.getCardColor(item.id, item.location.rotation)
@@ -21,7 +19,6 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
         })
         .sort((item) => FaceCardHelper.getCardValue(item.id, item.location.rotation))
         .getItems()
-      console.log(playerCards)
       if (playerCards.length > 0) {
         const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
         const hightestCard = playerCards[playerCards.length - 1]
@@ -58,6 +55,21 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
 
     return moves
+  }
+
+  onRuleEnd(): MaterialMove[] {
+    this.checkAndBankSquare()
+    return []
+  }
+
+  checkAndBankSquare() {
+    const isSquare = new PlayerLayoutHelper(this.game, this.player).checkSquare()
+    const notAlreadyBankedASquare = this.remind(Memory.SquareBanked, this.player) === undefined
+
+    if (isSquare && notAlreadyBankedASquare) {
+      this.memorize(Memory.SquareBanked, this.player)
+      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
+    }
   }
 
   getCardInfos(cardToPlay: MaterialItem, isRotated: boolean) {

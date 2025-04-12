@@ -38,10 +38,10 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: 0, y }
     } else {
       const hightestCard = playerCards[playerCards.length - 1]
-      if(cardValue > FaceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation)) {
+      if (cardValue > FaceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation)) {
         availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: hightestCard.location.x! + 1, y }
       } else {
-        for(let i = 0; i < playerCards.length; i++) {
+        for (let i = 0; i < playerCards.length; i++) {
           const card = playerCards[i]
           const value = FaceCardHelper.getCardValue(card.id, card.location.rotation)
           const baseX = card.location.x ?? 0
@@ -79,7 +79,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       })
       .sort()
     let maxInSuite: number | null = null
-    let suites: Set<number> = new Set()
+    const suites = new Set<number>()
     for (let i = 0; i < cards.length; i++) {
       if (cards[i + 1] - cards[i] === 1) {
         maxInSuite = cards[i + 1]
@@ -103,7 +103,20 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     }
     return null
   }
-  
+
+  checkSquare() {
+    return (
+      this.getNumberOfCardsByColor(FaceColor.Land) >= 3 && this.getNumberOfCardsByColor(FaceColor.Sea) >= 3 && this.getNumberOfCardsByColor(FaceColor.Sky) >= 3
+    )
+  }
+
+  private getNumberOfCardsByColor(color: FaceColor) {
+    return this.getCards(this.player).filter((card) => {
+      const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+      return cardColor === color
+    }).length
+  }
+
   private getCardIndexFromId(cardId: number) {
     return this.getCards(this.player)
       .filter((card) => {

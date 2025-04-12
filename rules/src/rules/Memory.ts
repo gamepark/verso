@@ -1,6 +1,8 @@
 export enum Memory {
-  PlacedCard = 1,
+  SquareBanked = 1,
   DiscardedCard,
   Score,
-  BankedSequence
+  BankedSequence,
+  Reordered,
+  PlayerEndedGame
 }

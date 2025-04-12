@@ -52,13 +52,18 @@ export class BankSequenceRule extends PlayerTurnRule {
     return this.material(MaterialType.Card).location(LocationType.BankSequenceLayout)
   }
 
+  beforeItemMove(_move: ItemMove): MaterialMove[] {
+    if (this.isLegalMove(this.player, _move)) {
+      this.forget(Memory.Reordered)
+    }
+    return []
+  }
+
   afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
-    if (isMoveItem(_move) && _move.location.type === LocationType.BankSequenceLayout) {
-      const cardMoved = this.bankCards.index(_move.itemIndex)
-      const isJocker = FaceCardHelper.getCardValue(cardMoved.getItem()?.id, cardMoved.getItem()?.location.rotation) === 0
-      if (!isJocker) {
-        return new BankHelper(this.game, this.player).reorderJocker()
-      }
+    const reordered = this.remind(Memory.Reordered)
+    if (!reordered && isMoveItem(_move) && _move.location.type === LocationType.BankSequenceLayout) {
+      this.memorize(Memory.Reordered, true)
+      return new BankHelper(this.game, this.player).reorderJocker()
     }
     return []
   }
@@ -86,8 +91,16 @@ export class BankSequenceRule extends PlayerTurnRule {
         moves.push(this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
       }
     }
-
-    moves.push(this.startRule(RuleId.FlipCardAfterBankSequence))
+    this.forget(Memory.SquareBanked, this.player)
+    if (this.remind(Memory.PlayerEndedGame)) {
+      if(this.remind(Memory.PlayerEndedGame) === this.player) {
+        moves.push(this.endGame())
+      } else {
+        moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
+      }
+    } else {
+      moves.push(this.startRule(RuleId.FlipCardAfterBankSequence))
+    }
     return moves
   }
 

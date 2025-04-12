@@ -4,4 +4,5 @@ export enum RuleId {
   DiscardCard,
   BankSequence,
   FlipCardAfterBankSequence,
+  BankLastSequence
 }

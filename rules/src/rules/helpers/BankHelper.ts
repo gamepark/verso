@@ -11,7 +11,7 @@ export class BankHelper extends MaterialRulesPart {
   ) {
     super(game)
   }
-  
+
   getBankScore() {
     let score = 0
     this.bankCards.getItems().forEach((card) => {
@@ -61,6 +61,14 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   private getPossibleMoveIfBankContainJoker(valuesInBank: number[]) {
+    if (valuesInBank.length === 1) {
+      return this.playerCards
+        .filter((card) => {
+          const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+          return cardColor === this.getColorInBank()
+        })
+        .moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
+    }
     const moves: MaterialMove[] = []
     const possibleCards = this.playerCards
       .filter((card) => {
@@ -69,7 +77,12 @@ export class BankHelper extends MaterialRulesPart {
       })
       .filter((card) => {
         const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
-        return valuesInBank.includes(cardValue + 2) || valuesInBank.includes(cardValue - 2)
+        return (
+          valuesInBank.includes(cardValue + 2) ||
+          valuesInBank.includes(cardValue - 2) ||
+          valuesInBank.includes(cardValue + 1) ||
+          valuesInBank.includes(cardValue - 1)
+        )
       })
     possibleCards.getItems().forEach((card) => {
       const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
@@ -103,31 +116,47 @@ export class BankHelper extends MaterialRulesPart {
 
     if (!valuesInBank.includes(0)) return moves
 
-    let baseX = 0
+    const reorderdValues = this.reorder(valuesInBank)
 
-    const bankCardsWithoutJocker = this.bankCards.filter((card) => FaceCardHelper.getCardValue(card.id, card.location.rotation) !== 0)
-      .sort((item) => FaceCardHelper.getCardValue(item.id, item.location.rotation))
-    for (let i = 0; i < bankCardsWithoutJocker.length; i++) {
-      if(i === bankCardsWithoutJocker.length - 1) break
+    for (let i = 0; i < reorderdValues.length; i++) {
+      moves.push(
+        this.bankCards
+          .filter((card) => FaceCardHelper.getCardValue(card.id, card.location.rotation) === reorderdValues[i])
+          .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: i }))
+      )
+    }
 
-      const card = bankCardsWithoutJocker.getItems()[i]
-      const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
-      const nextCard = bankCardsWithoutJocker.getItems()[i + 1]
-      const nextCardValue = FaceCardHelper.getCardValue(nextCard.id, nextCard.location.rotation)
-      console.log(cardValue, nextCardValue)
-      if (nextCardValue - cardValue === 2) {
-        baseX = nextCard.location.x!
-        break
+    return moves
+  }
+
+  reorder(valuesInBank: number[]) {
+    // Séparer le 0 des autres chiffres
+    const numbers = valuesInBank.filter((n) => n !== 0).sort((a, b) => a - b)
+    const hasJoker = valuesInBank.includes(0)
+
+    // Si pas de 0, on retourne simplement les chiffres triés
+    if (!hasJoker) {
+      return numbers
+    }
+
+    // Vérifier les positions où inclure le 0
+    for (let i = 0; i < numbers.length - 1; i++) {
+      if (numbers[i + 1] - numbers[i] > 1) {
+        // Insérer le 0 ici si deux nombres ne sont pas consécutifs
+        return [...numbers.slice(0, i + 1), 0, ...numbers.slice(i + 1)]
       }
     }
 
-    moves.push(
-      this.bankCards
-        .filter((card) => FaceCardHelper.getCardValue(card.id, card.location.rotation) === 0)
-        .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: baseX }))
-    )
+    // Si aucun emplacement entre des nombres non consécutifs n'est trouvé
+    // Placer le 0 au début si 1 est absent, sinon à la fin si 6 est absent
+    if (!numbers.includes(6)) {
+      return [...numbers, 0]
+    } else {
+      return [0, ...numbers]
+    }
 
-    return moves
+    // Si tout échoue, mettre le 0 entre les plus proches
+    return [...numbers.slice(0, 1), 0, ...numbers.slice(1)]
   }
 
   private getPlaceInBank(cardItem: MaterialItem) {

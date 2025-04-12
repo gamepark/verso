@@ -7,9 +7,10 @@ import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
+  playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
   card = this.cardToPlay
   onRuleStart(_move: RuleMove, _previousRule?: RuleStep, _context?: PlayMoveContext): MaterialMove[] {
-    const playerAlreadyHaveCard = new PlayerLayoutHelper(this.game, this.player).checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
+    const playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
     if (playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
       this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
       return [this.startRule(RuleId.DiscardCard)]
@@ -20,8 +21,8 @@ export class PlayCardRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = []
     const { cardColor, cardValue } = this.getCardInfos(this.card)
-    const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
-    if(availablePlace) {
+    const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
+    if (availablePlace) {
       moves.push(this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
     }
     return moves
@@ -30,15 +31,28 @@ export class PlayCardRule extends PlayerTurnRule {
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout && move.itemIndex === this.card.getIndex()) {
-      this.addPlacedCard(move.itemIndex)
-      moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+      this.checkAndBankSquare()
+      if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
+        this.memorize(Memory.PlayerEndedGame, this.player)
+      }
+      if (this.remind(Memory.PlayerEndedGame)) {
+        moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
+      } else {
+        moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+      }
     }
 
     return moves
   }
 
-  addPlacedCard(index: number) {
-    this.memorize(Memory.PlacedCard, index)
+  checkAndBankSquare() {
+    const isSquare = this.playerLayoutHelper.checkSquare()
+    const notAlreadyBankedASquare = !this.remind(Memory.SquareBanked, this.player)
+
+    if (isSquare && notAlreadyBankedASquare) {
+      this.memorize(Memory.SquareBanked, 1, this.player)
+      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
+    }
   }
 
   getCardInfos(cardToPlay: Material) {
