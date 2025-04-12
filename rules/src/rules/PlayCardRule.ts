@@ -20,10 +20,10 @@ export class PlayCardRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = []
     const { cardColor, cardValue } = this.getCardInfos(this.card)
-    const availablePlaces = new PlayerLayoutHelper(this.game, this.player).getFreePlaces(this.player, cardColor, cardValue)
-    availablePlaces.forEach((place) => {
-      moves.push(this.card.moveItem((item) => ({ ...place, rotation: item.location.rotation })))
-    })
+    const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
+    if(availablePlace) {
+      moves.push(this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
+    }
     return moves
   }
 

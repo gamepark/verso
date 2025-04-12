@@ -1,3 +1,4 @@
 export enum CustomMoveType {
-  BankSequence = 1
+  BankSequence = 1,
+  ValidateSequence
 }

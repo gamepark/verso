@@ -18,15 +18,15 @@ export class ChooseActionRule extends PlayCardRule {
     const seaSuite = playerLayoutHelper.checkSuite(FaceColor.Sea)
 
     if (skySuite) {
-      moves.push(this.customMove(CustomMoveType.BankSequence, skySuite))
+      moves.push(this.customMove(CustomMoveType.BankSequence, skySuite.maxInSuite))
     }
 
     if (seaSuite) {
-      moves.push(this.customMove(CustomMoveType.BankSequence, seaSuite))
+      moves.push(this.customMove(CustomMoveType.BankSequence, seaSuite.maxInSuite))
     }
 
     if (landSuite) {
-      moves.push(this.customMove(CustomMoveType.BankSequence, landSuite))
+      moves.push(this.customMove(CustomMoveType.BankSequence, landSuite.maxInSuite))
     }
 
     moves.push(cardToPlay.rotateItem((item) => !item.location.rotation))
@@ -43,7 +43,6 @@ export class ChooseActionRule extends PlayCardRule {
   }
 
   onCustomMove(_move: CustomMove): MaterialMove[] {
-    console.log('Custom move', _move)
-    return []
+    return [this.startRule(RuleId.BankSequence)]
   }
 }

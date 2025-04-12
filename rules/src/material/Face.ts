@@ -21,7 +21,7 @@ export enum Face {
   Sky3,
   Sky4,
   Sky5,
-  Sky6,
+  Sky6
 }
 
 export enum FaceColor {
@@ -31,7 +31,7 @@ export enum FaceColor {
 }
 
 export const getFaceColor = (face: Face) => Math.floor(face / 10) as FaceColor
-export const isJoker = (face: Face) => face % 10 === 7
+export const isJoker = (face: Face) => face % 10 === 0
 
 export type CardId = {
   front: Face

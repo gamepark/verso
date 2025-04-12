@@ -17,6 +17,7 @@ export class FaceCardHelper extends MaterialRulesPart {
   }
 
   getCurrentId(cardId: { front: number; back: number }, rotated: boolean) {
+    console.log(cardId, rotated)
     return rotated ? cardId.back : cardId.front
   }
 }
