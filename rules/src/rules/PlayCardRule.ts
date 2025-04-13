@@ -9,9 +9,9 @@ import { RuleId } from './RuleId'
 export class PlayCardRule extends PlayerTurnRule {
   playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
   card = this.cardToPlay
+  playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
   onRuleStart(_move: RuleMove, _previousRule?: RuleStep, _context?: PlayMoveContext): MaterialMove[] {
-    const playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
-    if (playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
+    if (this.playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
       this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
       return [this.startRule(RuleId.DiscardCard)]
     }
@@ -20,6 +20,9 @@ export class PlayCardRule extends PlayerTurnRule {
 
   getPlayerMoves() {
     const moves: MaterialMove[] = []
+    if(this.playerAlreadyHaveCard) {
+      return moves
+    }
     const { cardColor, cardValue } = this.getCardInfos(this.card)
     const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
     if (availablePlace) {
