@@ -9,6 +9,9 @@ import { FlipCardAfterBankSequenceRule } from './rules/FlipCardAfterBankSequence
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
+import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
+import { SimulateOtherPlayerWithoutConsequencesRule } from './rules/soloMode/SimulateOtherPlayerWithoutConsequencesRule'
+import { SimulateOtherPlayerWithConsequencesRule } from './rules/soloMode/SimulateOtherPlayerWithConsequencesRule'
 
 /**
  * This class implements the rules of the board game.
@@ -26,7 +29,10 @@ export class VersoRules
     [RuleId.DiscardCard]: DiscardCardRule,
     [RuleId.BankSequence]: BankSequenceRule,
     [RuleId.FlipCardAfterBankSequence]: FlipCardAfterBankSequenceRule,
-    [RuleId.BankLastSequence]: BankLastSequenceRule
+    [RuleId.BankLastSequence]: BankLastSequenceRule,
+    [RuleId.SimulateOtherPlayer]: SimulateOtherPlayerRule,
+    [RuleId.SimulateOtherPlayerWithoutConsequences]: SimulateOtherPlayerWithoutConsequencesRule,
+    [RuleId.SimulateOtherPlayerWithConsequences]: SimulateOtherPlayerWithConsequencesRule
   }
 
   locationsStrategies = {

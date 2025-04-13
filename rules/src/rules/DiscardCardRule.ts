@@ -9,7 +9,11 @@ export class DiscardCardRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
     const cardToDiscard: Material = this.cardToDiscard
     moves.push(cardToDiscard.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
-    moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    if(this.game.players.length === 1) {
+      moves.push(this.startRule(RuleId.SimulateOtherPlayer))
+    } else {
+      moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    }
     return moves
   }
 

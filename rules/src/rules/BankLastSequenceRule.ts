@@ -2,6 +2,7 @@ import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { FaceColor } from '../material/Face'
 import { CustomMoveType } from './CustomMoveType'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
+import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class BankLastSequenceRule extends PlayerTurnRule {
@@ -30,12 +31,17 @@ export class BankLastSequenceRule extends PlayerTurnRule {
   }
 
   onCustomMove(_move: CustomMove): MaterialMove[] {
+    const moves: MaterialMove[] = []
     if(_move.type === CustomMoveType.Pass) {
-      return [this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer)]
+      if (this.remind(Memory.PlayerEndedGame) === this.player) {
+        moves.push(this.endGame())
+      } else {
+        moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
+      }
     }
     if(_move.type === CustomMoveType.BankSequence) {
-      return [this.startRule(RuleId.BankSequence)]
+      moves.push(this.startRule(RuleId.BankSequence))
     }
-    return []
+    return moves
   }
 }

@@ -93,13 +93,17 @@ export class BankSequenceRule extends PlayerTurnRule {
     }
     this.forget(Memory.SquareBanked, this.player)
     if (this.remind(Memory.PlayerEndedGame)) {
-      if(this.remind(Memory.PlayerEndedGame) === this.player) {
+      if (this.remind(Memory.PlayerEndedGame) === this.player) {
         moves.push(this.endGame())
       } else {
         moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
       }
     } else {
-      moves.push(this.startRule(RuleId.FlipCardAfterBankSequence))
+      if (this.game.players.length === 1) {
+        moves.push(this.startRule(RuleId.SimulateOtherPlayer))
+      } else {
+        moves.push(this.startRule(RuleId.FlipCardAfterBankSequence))
+      }
     }
     return moves
   }

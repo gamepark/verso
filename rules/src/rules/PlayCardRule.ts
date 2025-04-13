@@ -20,7 +20,7 @@ export class PlayCardRule extends PlayerTurnRule {
 
   getPlayerMoves() {
     const moves: MaterialMove[] = []
-    if(this.playerAlreadyHaveCard) {
+    if (this.playerAlreadyHaveCard) {
       return moves
     }
     const { cardColor, cardValue } = this.getCardInfos(this.card)
@@ -41,7 +41,11 @@ export class PlayCardRule extends PlayerTurnRule {
       if (this.remind(Memory.PlayerEndedGame)) {
         moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
       } else {
-        moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+        if(this.game.players.length === 1) {
+          moves.push(this.startRule(RuleId.SimulateOtherPlayer))
+        } else {
+          moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+        }
       }
     }
 

@@ -22,7 +22,7 @@ export class VersoSetup extends MaterialGameSetup<number, MaterialType, Location
 
   setupCards() {
     const cards = shuffle(getCardIds())
-    const numberOfCardsToAdd = this.players.length * 15
+    const numberOfCardsToAdd = this.players.length === 1 ? 35 : this.players.length * 15
     cards.slice(0, numberOfCardsToAdd).forEach((cardId) => {
       this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck, rotation: sample([true, false]) }, id: cardId })
     })
