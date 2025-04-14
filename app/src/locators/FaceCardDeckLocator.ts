@@ -8,6 +8,8 @@ export class FaceCardDeckLocator extends DeckLocator {
       case 1:
       case 2:
         return { y: -18 }
+      case 3:
+        return { x: 0 }
       default:
         return { x: 0, y: 0 }
     }
