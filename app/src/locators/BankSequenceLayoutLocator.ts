@@ -21,6 +21,8 @@ class BankSequenceLayoutLocator extends ListLocator {
         return { x: 6.5, y: -8 }
       case 3:
         return { x: 6.5, y: 10 }
+      case 4:
+        return { x: 6.5, y: 2 }
       default:
         return { x: 0, y: 0 }
     }
