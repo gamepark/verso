@@ -1,20 +1,23 @@
-import { DropAreaDescription, Locator, MaterialContext } from '@gamepark/react-game'
+import { DropAreaDescription, ListLocator, MaterialContext } from '@gamepark/react-game'
 import { Location } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 
-class BankSequenceLayoutLocator extends Locator {
+class BankSequenceLayoutLocator extends ListLocator {
+  gap = { x: 7 }
+  maxCount = 3
   getCoordinates(location: Location, context: MaterialContext) {
     const base = this.getBaseCoordinates(location, context)
     if (location.x === undefined) return { x: base.x, y: base.y }
 
     const xLocation = location.x ?? 0
-    return { x: base.x + xLocation * 7 - 21, y: base.y }
+    return { x: base.x + xLocation - 16, y: base.y }
   }
 
   getBaseCoordinates(_: Location, context: MaterialContext) {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
+      case 2:
         return { x: 6.5, y: -8 }
       default:
         return { x: 0, y: 0 }

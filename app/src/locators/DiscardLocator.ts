@@ -7,6 +7,7 @@ export class DiscardLocator extends PileLocator {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
+      case 2:
         return { x: 6.5, y: -18 }
       default:
         return { x: 0, y: 0 }

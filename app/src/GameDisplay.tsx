@@ -18,6 +18,8 @@ export const GameDisplay: FC<GameDisplayProps> = () => {
     switch (nbPlayers) {
       case 1:
         return { xMin: -30, xMax: 30, yMin: -25, yMax: 25 }
+      case 2:
+        return { xMin: -50, xMax: 50, yMin: -25, yMax: 25 }
       default:
         return { xMin: -30, xMax: 30, yMin: -25, yMax: 25 }
     }
