@@ -11,10 +11,8 @@ export const FlipButton: FC<{ location: Location }> = () => {
   if (animations.length > 0) return null
   return (
     <div css={[button]}>
-      <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss}/>
+      <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss} />
     </div>
-
-
   )
 }
 

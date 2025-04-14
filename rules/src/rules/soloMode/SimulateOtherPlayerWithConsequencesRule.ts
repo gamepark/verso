@@ -1,4 +1,5 @@
-import { ItemMove, MaterialItem, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { FaceCardHelper } from '../helpers/FaceCardHelper'
@@ -12,10 +13,10 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
 
     const playerCards = this.getPlayerLayout()
       .filter((item) => {
-        const cardColor = FaceCardHelper.getCardColor(item.id, item.location.rotation)
-        return cardColor === FaceCardHelper.getCardColor(this.cardInDeck.getItem()?.id, this.cardInDeck.getItem()?.location.rotation)
+        const cardColor = FaceCardHelper.getCardColor(item as CardItem)
+        return cardColor === FaceCardHelper.getCardColor(this.cardInDeck.getItem() as CardItem)
       })
-      .sort((item) => FaceCardHelper.getCardValue(item.id, item.location.rotation))
+      .sort((item) => FaceCardHelper.getCardValue(item as CardItem))
       .getItems()
     if (playerCards.length > 0) {
       const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
@@ -37,15 +38,13 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
             .moveItem((item) => ({ ...item.location, type: LocationType.Discard }))
         )
       } else {
-        const { cardColor, cardValue } = this.getCardInfos(hightestCard, !hightestCard.location.rotation)
+        const { cardColor, cardValue } = this.getCardInfos(hightestCard as CardItem, false)
         const newPlace = playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
-        if (newPlace) {
-          moves.push(
-            this.getPlayerLayout()
-              .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-              .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
-          )
-        }
+        moves.push(
+          this.getPlayerLayout()
+            .filter((item) => item.id === playerCards[playerCards.length - 1].id)
+            .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
+        )
       }
     }
 
@@ -62,17 +61,16 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
     return [this.startRule(RuleId.ChooseAction)]
   }
 
-  getCardInfos(cardToPlay: MaterialItem, isRotated: boolean) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay.id, isRotated)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay.id, isRotated)
+  getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay, currentRotation)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay, currentRotation)
     return { cardColor, cardValue }
   }
 
   get cardInDeck() {
-    const length = this.material(MaterialType.Card).location(LocationType.Deck).length
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
-      .index(length - 1)
+      .maxBy((item) => item.location.x!)
   }
 
   private getPlayerLayout() {

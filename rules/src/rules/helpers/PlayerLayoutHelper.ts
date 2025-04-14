@@ -1,5 +1,5 @@
 import { Location, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
-import { FaceColor, isJoker } from '../../material/Face'
+import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { FaceCardHelper } from './FaceCardHelper'
@@ -16,41 +16,31 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     let availablePlace: Location | undefined
     switch (cardColor) {
       case FaceColor.Sky:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sky, -8)
+        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sky)
         break
       case FaceColor.Land:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Land, 0)
+        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Land)
         break
       case FaceColor.Sea:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sea, 8)
+        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sea)
         break
     }
     return availablePlace
   }
 
-  private getPlaceByColor(playerId: number, cardValue: number, color: FaceColor, y: number) {
+  private getPlaceByColor(playerId: number, cardValue: number, color: FaceColor) {
     let availablePlace: Location | undefined
     const playerCards = this.getCards(playerId)
       .getItems()
-      .filter(({ id, location }) => FaceCardHelper.getCardColor(id, location.rotation) === color)
-      .sort((a, b) => FaceCardHelper.getCardValue(a.id, a.location.rotation) - FaceCardHelper.getCardValue(b.id, b.location.rotation))
+      .filter((item) => FaceCardHelper.getCardColor(item as CardItem) === color)
+      .sort((a, b) => FaceCardHelper.getCardValue(a as CardItem) - FaceCardHelper.getCardValue(b as CardItem))
     if (playerCards.length === 0) {
-      availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: 0, y }
+      availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: 0 }
     } else {
-      const hightestCard = playerCards[playerCards.length - 1]
-      if (cardValue > FaceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation)) {
-        availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: hightestCard.location.x! + 1, y }
-      } else {
-        for (let i = 0; i < playerCards.length; i++) {
-          const card = playerCards[i]
-          const value = FaceCardHelper.getCardValue(card.id, card.location.rotation)
-          const baseX = card.location.x ?? 0
-          if (cardValue < value) {
-            availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: baseX, y }
-            break
-          }
-        }
-      }
+      const x = this.getCards(playerId)
+        .locationId(color)
+        .filter((item) => FaceCardHelper.getCardValue(item as CardItem) < cardValue).length
+      availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x }
     }
     return availablePlace
   }
@@ -61,8 +51,8 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     return this.getCards(this.player)
       .getItems()
       .some((item) => {
-        const itemCurrentId = FaceCardHelper.getCurrentId(item.id, item.location.rotation)
-        const cardCurrentId = FaceCardHelper.getCurrentId(card.id, card.location.rotation)
+        const itemCurrentId = FaceCardHelper.getCurrentId(item as CardItem)
+        const cardCurrentId = FaceCardHelper.getCurrentId(card as CardItem)
         return itemCurrentId === cardCurrentId
       })
   }
@@ -70,12 +60,12 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
   checkSuite(color: FaceColor) {
     const cards = this.getCards(this.player)
       .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
         return cardColor === color
       })
       .getItems()
       .map((item) => {
-        return FaceCardHelper.getCurrentId(item.id, item.location.rotation)
+        return FaceCardHelper.getCurrentId(item as CardItem)
       })
       .sort()
     let maxInSuite: number | null = null
@@ -112,7 +102,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
 
   private getNumberOfCardsByColor(color: FaceColor) {
     return this.getCards(this.player).filter((card) => {
-      const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+      const cardColor = FaceCardHelper.getCardColor(card as CardItem)
       return cardColor === color
     }).length
   }
@@ -120,7 +110,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
   private getCardIndexFromId(cardId: number) {
     return this.getCards(this.player)
       .filter((card) => {
-        const currentId = FaceCardHelper.getCurrentId(card.id, card.location.rotation)
+        const currentId = FaceCardHelper.getCurrentId(card as CardItem)
         return currentId === cardId
       })
       .getIndex()

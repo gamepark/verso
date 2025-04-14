@@ -5,4 +5,3 @@ import { faceCardDescription } from './FaceCardDescription'
 export const Material: Partial<Record<MaterialType, MaterialDescription>> = {
   [MaterialType.Card]: faceCardDescription
 }
-

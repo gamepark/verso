@@ -1,4 +1,4 @@
-import { getEnumValues } from '@gamepark/rules-api'
+import { getEnumValues, MaterialItem } from '@gamepark/rules-api'
 
 export enum Face {
   SeaJoker = 10,
@@ -37,6 +37,8 @@ export type CardId = {
   front: Face
   back: Face
 }
+
+export type CardItem = MaterialItem<number, number, CardId>
 
 export function getCardIds(): CardId[] {
   const colors = getEnumValues(FaceColor)

@@ -13,9 +13,8 @@ export class SimulateOtherPlayerWithoutConsequencesRule extends PlayerTurnRule {
   }
 
   get cardToPlay() {
-    const length = this.material(MaterialType.Card).location(LocationType.Deck).length
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
-      .index(length - 1)
+      .maxBy((item) => item.location.x!)
   }
 }

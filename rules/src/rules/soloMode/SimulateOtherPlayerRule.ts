@@ -1,4 +1,5 @@
-import { ItemMove, Material, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { FaceCardHelper } from '../helpers/FaceCardHelper'
@@ -13,25 +14,24 @@ export class SimulateOtherPlayerRule extends PlayerTurnRule {
   }
 
   afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
-    const { cardValue } = this.getCardInfos(this.cardToPlay)
-    const otherFaceValue = FaceCardHelper.getCardValue(this.cardToPlay.getItem()?.id, !this.cardToPlay.getItem()?.location.rotation)
+    const { cardValue } = this.getCardInfos(this.cardToPlay.getItem() as CardItem)
+    const otherFaceValue = FaceCardHelper.getCardValue(this.cardToPlay.getItem() as CardItem, false)
 
-    if(cardValue === 0 || otherFaceValue === 0 || cardValue <= otherFaceValue) {
+    if (cardValue === 0 || otherFaceValue === 0 || cardValue <= otherFaceValue) {
       return [this.startRule(RuleId.SimulateOtherPlayerWithoutConsequences)]
     }
     return [this.startRule(RuleId.SimulateOtherPlayerWithConsequences)]
   }
 
-  getCardInfos(cardToPlay: Material) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+  getCardInfos(cardToPlay: CardItem) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
     return { cardColor, cardValue }
   }
 
   get cardToPlay() {
-    const length = this.material(MaterialType.Card).location(LocationType.Deck).length
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
-      .index(length - 1)
+      .maxBy((item) => item.location.x!)
   }
 }

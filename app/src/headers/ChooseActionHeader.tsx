@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
-import { isMoveItemType } from '@gamepark/rules-api'
+import { isMoveItemType, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { VersoRules } from '@gamepark/verso/VersoRules'
@@ -13,7 +13,7 @@ export const ChooseActionHeader = () => {
   const activePlayer = rules.game.rule?.player
   const itsMe = player && activePlayer === player
   const name = usePlayerName(activePlayer)
-  const flip = useLegalMove((move) => isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.Deck)
+  const flip = useLegalMove((move: MaterialMove) => isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.Deck)
 
   if (itsMe) {
     return (
@@ -23,7 +23,5 @@ export const ChooseActionHeader = () => {
     )
   }
 
-  return (
-    <Trans defaults="header.choose.action.player" values={{ player: name }} />
-  )
+  return <Trans defaults="header.choose.action.player" values={{ player: name }} />
 }

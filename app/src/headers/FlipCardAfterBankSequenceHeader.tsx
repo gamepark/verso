@@ -12,7 +12,8 @@ export const FlipCardAfterBankSequenceHeader = () => {
   const itsMe = player && activePlayer === player
 
   const getPlayersNear = () => {
-    const otherPlayers: number[] = useRules()?.game.players ?? []
+    const game: VersoRules = useRules()?.game
+    const otherPlayers: number[] = game.players
     if (player === 1) {
       return uniq([otherPlayers.length, 2])
     }
@@ -23,13 +24,17 @@ export const FlipCardAfterBankSequenceHeader = () => {
   }
 
   if (itsMe) {
-    if(getPlayersNear().length === 1) return <Trans defaults="header.after.bank.you.single" values={{next1: usePlayerName(getPlayersNear()[0])}} />
+    if (getPlayersNear().length === 1) return <Trans defaults="header.after.bank.you.single" values={{ next1: usePlayerName(getPlayersNear()[0]) }} />
     return <Trans defaults="header.after.bank.you.multi" values={{ next1: usePlayerName(getPlayersNear()[0]), next2: usePlayerName(getPlayersNear()[1]) }} />
   }
 
-  if(getPlayersNear().length === 1){
+  if (getPlayersNear().length === 1) {
     return <Trans defaults="header.after.bank.player.single" values={{ player: usePlayerName(activePlayer), next1: usePlayerName(getPlayersNear()[0]) }} />
   }
-  return <Trans defaults="header.after.bank.player.multi" values={{ player: usePlayerName(activePlayer), next1: usePlayerName(getPlayersNear()[0]), next2: usePlayerName(getPlayersNear()[1]) }} />
-
+  return (
+    <Trans
+      defaults="header.after.bank.player.multi"
+      values={{ player: usePlayerName(activePlayer), next1: usePlayerName(getPlayersNear()[0]), next2: usePlayerName(getPlayersNear()[1]) }}
+    />
+  )
 }

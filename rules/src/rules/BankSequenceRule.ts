@@ -1,5 +1,5 @@
 import { isMoveItem, ItemMove, MaterialItem, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
-import { FaceColor } from '../material/Face'
+import { CardId, CardItem, FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
@@ -81,15 +81,13 @@ export class BankSequenceRule extends PlayerTurnRule {
       )
     })
 
-    const cardsToRetunToPlayerLayout = bankHelper.getCardsToReturnToPlayerLayout()
+    const cardsToReturnToPlayerLayout: CardItem[] = bankHelper.getCardsToReturnToPlayerLayout()
 
-    for (let i = cardsToRetunToPlayerLayout.length - 1; i >= 0; i--) {
-      const card = cardsToRetunToPlayerLayout[i]
+    for (let i = cardsToReturnToPlayerLayout.length - 1; i >= 0; i--) {
+      const card: MaterialItem<number, number, CardId> = cardsToReturnToPlayerLayout[i]
       const { cardColor, cardValue } = this.getCardInfos(card)
       const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
-      if (availablePlace) {
-        moves.push(this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
-      }
+      moves.push(this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
     }
     this.forget(Memory.SquareBanked, this.player)
     if (this.remind(Memory.PlayerEndedGame)) {
@@ -108,9 +106,9 @@ export class BankSequenceRule extends PlayerTurnRule {
     return moves
   }
 
-  getCardInfos(cardToPlay: MaterialItem) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay.id, cardToPlay.location.rotation)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay.id, cardToPlay.location.rotation)
+  getCardInfos(cardToPlay: CardItem) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
     return { cardColor, cardValue }
   }
 }

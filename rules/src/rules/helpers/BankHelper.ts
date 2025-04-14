@@ -1,5 +1,5 @@
-import { Location, MaterialGame, MaterialItem, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
-import { FaceColor } from '../../material/Face'
+import { Location, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { CardItem, FaceColor } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { FaceCardHelper } from './FaceCardHelper'
@@ -12,7 +12,7 @@ export class BankHelper extends MaterialRulesPart {
     super(game)
   }
 
-  getBankScore() {
+  getBankScore(): number {
     let score = 0
     this.bankCards.getItems().forEach((card) => {
       if (card.location.rotation) {
@@ -24,21 +24,21 @@ export class BankHelper extends MaterialRulesPart {
     return score
   }
 
-  getCardsToDiscard() {
+  getCardsToDiscard(): CardItem[] {
     return this.getCardsSortedByXLocation().slice(Math.max(this.bankCards.length - 2, 0))
   }
 
-  getCardsToReturnToPlayerLayout() {
+  getCardsToReturnToPlayerLayout(): CardItem[] {
     return this.getCardsSortedByXLocation().slice(0, Math.max(this.bankCards.length - 2, 0))
   }
 
-  getCardsSortedByXLocation() {
+  getCardsSortedByXLocation(): CardItem[] {
     return this.bankCards.sort((item) => item.location.x!).getItems()
   }
 
   getPossibleMovesInBank() {
-    const bankCards = this.bankCards.getItems()
-    const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard.id, bankCard.location.rotation))
+    const bankCards: CardItem[] = this.bankCards.getItems()
+    const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))
 
     if (valuesInBank.includes(0)) {
       return this.getPossibleMoveIfBankContainJoker(valuesInBank)
@@ -50,21 +50,21 @@ export class BankHelper extends MaterialRulesPart {
   getPossibleMovesIfBankDontContainJoker(valuesInBank: number[]) {
     const possibleCards = this.playerCards
       .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
         return cardColor === this.getColorInBank()
       })
       .filter((card) => {
-        const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
+        const cardValue = FaceCardHelper.getCardValue(card as CardItem)
         return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || cardValue === 0
       })
-    return possibleCards.moveItems((item) => this.getPlaceInBank(item))
+    return possibleCards.moveItems((item) => this.getPlaceInBank(item as CardItem))
   }
 
   private getPossibleMoveIfBankContainJoker(valuesInBank: number[]) {
     if (valuesInBank.length === 1) {
       return this.playerCards
         .filter((card) => {
-          const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+          const cardColor = FaceCardHelper.getCardColor(card as CardItem)
           return cardColor === this.getColorInBank()
         })
         .moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
@@ -72,11 +72,11 @@ export class BankHelper extends MaterialRulesPart {
     const moves: MaterialMove[] = []
     const possibleCards = this.playerCards
       .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card.id, card.location.rotation)
+        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
         return cardColor === this.getColorInBank()
       })
       .filter((card) => {
-        const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
+        const cardValue = FaceCardHelper.getCardValue(card as CardItem)
         return (
           valuesInBank.includes(cardValue + 2) ||
           valuesInBank.includes(cardValue - 2) ||
@@ -85,11 +85,11 @@ export class BankHelper extends MaterialRulesPart {
         )
       })
     possibleCards.getItems().forEach((card) => {
-      const cardValue = FaceCardHelper.getCardValue(card.id, card.location.rotation)
+      const cardValue = FaceCardHelper.getCardValue(card as CardItem)
       if (valuesInBank.includes(cardValue + 2)) {
         const baseX = this.bankCards
           .filter((item) => {
-            const itemValue = FaceCardHelper.getCardValue(item.id, item.location.rotation)
+            const itemValue = FaceCardHelper.getCardValue(item as CardItem)
             return itemValue === cardValue + 2
           })
           .getItems()[0].location.x!
@@ -110,7 +110,7 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   reorderJocker() {
-    const valuesInBank = this.bankCards.getItems().map((bankCard) => FaceCardHelper.getCardValue(bankCard.id, bankCard.location.rotation))
+    const valuesInBank = this.bankCards.getItems().map((bankCard) => FaceCardHelper.getCardValue(bankCard as CardItem))
 
     const moves: MaterialMove[] = []
 
@@ -121,7 +121,7 @@ export class BankHelper extends MaterialRulesPart {
     for (let i = 0; i < reorderdValues.length; i++) {
       moves.push(
         this.bankCards
-          .filter((card) => FaceCardHelper.getCardValue(card.id, card.location.rotation) === reorderdValues[i])
+          .filter((card) => FaceCardHelper.getCardValue(card as CardItem) === reorderdValues[i])
           .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: i }))
       )
     }
@@ -154,25 +154,19 @@ export class BankHelper extends MaterialRulesPart {
     } else {
       return [0, ...numbers]
     }
-
-    // Si tout échoue, mettre le 0 entre les plus proches
-    return [...numbers.slice(0, 1), 0, ...numbers.slice(1)]
   }
 
-  private getPlaceInBank(cardItem: MaterialItem) {
-    const cardValue = FaceCardHelper.getCardValue(cardItem.id, cardItem.location.rotation)
+  private getPlaceInBank(cardItem: CardItem) {
+    const cardValue = FaceCardHelper.getCardValue(cardItem)
     let availablePlace: Location = { type: LocationType.BankSequenceLayout, rotation: cardItem.location.rotation }
-    const bankCards = this.bankCards
-      .getItems()
-      .sort((a, b) => FaceCardHelper.getCardValue(a.id, a.location.rotation) - FaceCardHelper.getCardValue(b.id, b.location.rotation))
+    const bankCards = this.bankCards.getItems().sort((a, b) => FaceCardHelper.getCardValue(a as CardItem) - FaceCardHelper.getCardValue(b as CardItem))
     if (bankCards.length > 0) {
-      const hightestCard = bankCards[bankCards.length - 1]
-      if (cardValue > FaceCardHelper.getCardValue(hightestCard.id, hightestCard.location.rotation) || cardValue === 0) {
+      const hightestCard: CardItem = bankCards[bankCards.length - 1] as CardItem
+      if (cardValue > FaceCardHelper.getCardValue(hightestCard) || cardValue === 0) {
         availablePlace = { ...availablePlace, x: hightestCard.location.x! + 1 }
       } else {
-        for (let i = 0; i < bankCards.length; i++) {
-          const card = bankCards[i]
-          const value = FaceCardHelper.getCardValue(card.id, card.location.rotation)
+        for (const card of bankCards) {
+          const value = FaceCardHelper.getCardValue(card as CardItem)
           const baseX = card.location.x ?? 0
           if (cardValue < value) {
             availablePlace = { ...availablePlace, x: baseX }
@@ -186,7 +180,7 @@ export class BankHelper extends MaterialRulesPart {
 
   getColorInBank(): FaceColor {
     const bankCards = this.bankCards.getItems()
-    return FaceCardHelper.getCardColor(bankCards[0].id, bankCards[0].location.rotation)
+    return FaceCardHelper.getCardColor(bankCards[0] as CardItem)
   }
 
   get playerCards() {

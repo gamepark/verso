@@ -1,4 +1,5 @@
-import { isMoveItemType, ItemMove, Material, MaterialMove, PlayerTurnRule, PlayMoveContext, RuleMove, RuleStep } from '@gamepark/rules-api'
+import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext, RuleMove, RuleStep } from '@gamepark/rules-api'
+import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
@@ -23,11 +24,10 @@ export class PlayCardRule extends PlayerTurnRule {
     if (this.playerAlreadyHaveCard) {
       return moves
     }
-    const { cardColor, cardValue } = this.getCardInfos(this.card)
+    const { cardColor, cardValue } = this.getCardInfos(this.card.getItem() as CardItem)
     const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
-    if (availablePlace) {
-      moves.push(this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
-    }
+    moves.push(this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
+
     return moves
   }
 
@@ -41,7 +41,7 @@ export class PlayCardRule extends PlayerTurnRule {
       if (this.remind(Memory.PlayerEndedGame)) {
         moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
       } else {
-        if(this.game.players.length === 1) {
+        if (this.game.players.length === 1) {
           moves.push(this.startRule(RuleId.SimulateOtherPlayer))
         } else {
           moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
@@ -62,16 +62,15 @@ export class PlayCardRule extends PlayerTurnRule {
     }
   }
 
-  getCardInfos(cardToPlay: Material) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay.getItem()?.id, cardToPlay.getItem()?.location.rotation)
+  getCardInfos(cardToPlay: CardItem) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
     return { cardColor, cardValue }
   }
 
   get cardToPlay() {
-    const length = this.material(MaterialType.Card).location(LocationType.Deck).length
     return this.material(MaterialType.Card)
       .location(LocationType.Deck)
-      .index(length - 1)
+      .maxBy((item) => item.location.x!)
   }
 }

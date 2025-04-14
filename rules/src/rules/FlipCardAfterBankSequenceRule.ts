@@ -1,5 +1,6 @@
-import { MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { uniq } from 'lodash'
+import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
@@ -14,10 +15,10 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     for (const player of this.getPlayersNear()) {
       const playerCards = this.getPlayerLayoutByPlayerId(player)
         .filter((item) => {
-          const cardColor = FaceCardHelper.getCardColor(item.id, item.location.rotation)
+          const cardColor = FaceCardHelper.getCardColor(item as CardItem)
           return cardColor === color
         })
-        .sort((item) => FaceCardHelper.getCardValue(item.id, item.location.rotation))
+        .sort((item) => FaceCardHelper.getCardValue(item as CardItem))
         .getItems()
       if (playerCards.length > 0) {
         const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
@@ -39,15 +40,13 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
               .moveItem((item) => ({ ...item.location, type: LocationType.Discard }))
           )
         } else {
-          const { cardColor, cardValue } = this.getCardInfos(hightestCard, !hightestCard.location.rotation)
+          const { cardColor, cardValue } = this.getCardInfos(hightestCard as CardItem, false)
           const newPlace = playerLayoutHelper.getPlace(player, cardColor, cardValue)
-          if (newPlace) {
-            moves.push(
-              this.getPlayerLayoutByPlayerId(player)
-                .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-                .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
-            )
-          }
+          moves.push(
+            this.getPlayerLayoutByPlayerId(player)
+              .filter((item) => item.id === playerCards[playerCards.length - 1].id)
+              .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
+          )
         }
       }
     }
@@ -72,9 +71,9 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     }
   }
 
-  getCardInfos(cardToPlay: MaterialItem, isRotated: boolean) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay.id, isRotated)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay.id, isRotated)
+  getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay, currentRotation)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay, currentRotation)
     return { cardColor, cardValue }
   }
 

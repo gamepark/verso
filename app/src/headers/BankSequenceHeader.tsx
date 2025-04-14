@@ -15,7 +15,7 @@ export const BankSequenceHeader = () => {
   const validate = useLegalMove(isCustomMoveType(CustomMoveType.ValidateSequence))
 
   if (itsMe) {
-    if(validate) {
+    if (validate) {
       return (
         <Trans defaults="header.bank.validate.you">
           <PlayMoveButton move={validate} />
@@ -25,7 +25,5 @@ export const BankSequenceHeader = () => {
     return <Trans defaults="header.bank.you" />
   }
 
-  return (
-    <Trans defaults="header.bank.player" values={{ player: name }} />
-  )
+  return <Trans defaults="header.bank.player" values={{ player: name }} />
 }

@@ -1,17 +1,18 @@
-import { FaceColor } from '../../material/Face'
+import { CardItem, FaceColor } from '../../material/Face'
 
-export class FaceCardHelper {
-  static getCardColor(cardId: { front: number; back: number }, rotated: boolean) {
-    const currentId = this.getCurrentId(cardId, rotated)
+export const FaceCardHelper = {
+  getCardColor(item: CardItem, currentRotation = true) {
+    const currentId = this.getCurrentId(item, currentRotation)
     return Math.floor(currentId / 10) as FaceColor
-  }
+  },
 
-  static getCardValue(cardId: { front: number; back: number }, rotated: boolean) {
-    const currentId = this.getCurrentId(cardId, rotated)
+  getCardValue(item: CardItem, currentRotation = true) {
+    const currentId = this.getCurrentId(item, currentRotation)
     return currentId % 10
-  }
+  },
 
-  static getCurrentId(cardId: { front: number; back: number }, rotated: boolean) {
-    return rotated ? cardId.back : cardId.front
+  getCurrentId(item: CardItem, currentRotation = true) {
+    const rotated = currentRotation ? item.location.rotation : !item.location.rotation
+    return rotated ? item.id.back : item.id.front
   }
 }

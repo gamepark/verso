@@ -15,12 +15,12 @@ export const BankLastSequenceHeader = () => {
   const pass = useLegalMove(isCustomMoveType(CustomMoveType.Pass))
 
   if (itsMe) {
-    return <Trans defaults="header.bank.last.you" >
-      <PlayMoveButton move={pass} />
-    </Trans>
+    return (
+      <Trans defaults="header.bank.last.you">
+        <PlayMoveButton move={pass} />
+      </Trans>
+    )
   }
 
-  return (
-    <Trans defaults="header.bank.last.player" values={{ player: name }} />
-  )
+  return <Trans defaults="header.bank.last.player" values={{ player: name }} />
 }

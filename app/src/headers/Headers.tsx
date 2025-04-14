@@ -20,5 +20,5 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.BankLastSequence]: BankLastSequenceHeader,
   [RuleId.SimulateOtherPlayer]: SimulateOtherPlayerHeader,
   [RuleId.SimulateOtherPlayerWithoutConsequences]: SimulateOtherPlayerWithoutConsequencesHeader,
-  [RuleId.SimulateOtherPlayerWithConsequences]: SimulateOtherPlayerWithConsequencesHeader,
+  [RuleId.SimulateOtherPlayerWithConsequences]: SimulateOtherPlayerWithConsequencesHeader
 }

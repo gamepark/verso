@@ -5,12 +5,12 @@ import { LocationType } from '@gamepark/verso/material/LocationType'
 class PlayerLayoutLocator extends Locator {
   getCoordinates(location: Location, context: MaterialContext) {
     const base = this.getBaseCoordinates(location, context)
-    const xBase = base.x ?? 0
+    const xBase = base.x
     const yBase = base.y ?? 0
     if (location.x === undefined) return { x: xBase + 21, y: yBase }
 
     const xLocation = location.x ?? 0
-    const yLocation = location.y ?? 0
+    const yLocation = location.id === 1 ? 8 : location.id === 2 ? 0 : -8
     return { x: xBase + xLocation * 7, y: yBase + yLocation }
   }
   getBaseCoordinates(location: Location, context: MaterialContext) {
