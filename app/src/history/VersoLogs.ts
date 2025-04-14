@@ -1,0 +1,43 @@
+import { LogDescription, MoveComponentContext, MovePlayedLogDescription } from '@gamepark/react-game'
+import { isCustomMoveType, isMoveItem, MaterialMove } from '@gamepark/rules-api'
+import { LocationType } from '@gamepark/verso/material/LocationType'
+import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
+import { RuleId } from '@gamepark/verso/rules/RuleId'
+import { DeclareSquareHistory } from './components/DeclareSquareHistory'
+import { PlayCardHistory } from './components/PlayCardHistory'
+import { ValidateSequenceHistory } from './components/ValidateSequenceHistory'
+
+export class VersoLogs implements LogDescription {
+  getMovePlayedLogDescription(move: MaterialMove, context: MoveComponentContext): MovePlayedLogDescription | undefined {
+    const ruleId: RuleId = context.game.rule.id
+    const actionPlayer = context.action.playerId
+
+    const placeCardRules = [RuleId.PlayCard, RuleId.ChooseAction]
+
+    if (placeCardRules.includes(ruleId) && this.getMoveLocationType(move) === LocationType.PlayerLayout) {
+      return {
+        Component: PlayCardHistory,
+        player: actionPlayer
+      }
+    }
+
+    if (isCustomMoveType(CustomMoveType.ValidateSequence)(move)) {
+      return {
+        Component: ValidateSequenceHistory,
+        player: actionPlayer
+      }
+    }
+
+    if (isCustomMoveType(CustomMoveType.DeclareSquare)(move)) {
+      return {
+        Component: DeclareSquareHistory,
+        player: actionPlayer
+      }
+    }
+    return undefined
+  }
+
+  getMoveLocationType(move: MaterialMove) {
+    return isMoveItem(move) ? move.location.type : undefined
+  }
+}

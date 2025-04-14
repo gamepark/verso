@@ -3,6 +3,7 @@ import { uniq } from 'lodash'
 import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { CustomMoveType } from './CustomMoveType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
@@ -57,7 +58,9 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
   }
 
   onRuleEnd(): MaterialMove[] {
-    this.checkAndBankSquare()
+    if (this.checkAndBankSquare()) {
+      return [this.customMove(CustomMoveType.DeclareSquare)]
+    }
     return []
   }
 
@@ -68,7 +71,9 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     if (isSquare && notAlreadyBankedASquare) {
       this.memorize(Memory.SquareBanked, this.player)
       this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
+      return true
     }
+    return false
   }
 
   getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {

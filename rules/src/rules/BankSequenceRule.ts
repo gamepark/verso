@@ -20,7 +20,8 @@ export class BankSequenceRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
 
     if (cardsInBank.length > 1) {
-      moves.push(this.customMove(CustomMoveType.ValidateSequence))
+      const bankHelper = new BankHelper(this.game, this.player)
+      moves.push(this.customMove(CustomMoveType.ValidateSequence, { color: bankHelper.getColorInBank(), score: bankHelper.getBankScore() }))
     }
 
     moves.push(...new BankHelper(this.game, this.player).getPossibleMovesInBank())

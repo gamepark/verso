@@ -2,6 +2,7 @@ import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext
 import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { CustomMoveType } from './CustomMoveType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
@@ -34,7 +35,6 @@ export class PlayCardRule extends PlayerTurnRule {
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout && move.itemIndex === this.card.getIndex()) {
-      this.checkAndBankSquare()
       if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
         this.memorize(Memory.PlayerEndedGame, this.player)
       }
@@ -52,6 +52,13 @@ export class PlayCardRule extends PlayerTurnRule {
     return moves
   }
 
+  onRuleEnd(): MaterialMove[] {
+    if (this.checkAndBankSquare()) {
+      return [this.customMove(CustomMoveType.DeclareSquare)]
+    }
+    return []
+  }
+
   checkAndBankSquare() {
     const isSquare = this.playerLayoutHelper.checkSquare()
     const notAlreadyBankedASquare = !this.remind(Memory.SquareBanked, this.player)
@@ -59,7 +66,9 @@ export class PlayCardRule extends PlayerTurnRule {
     if (isSquare && notAlreadyBankedASquare) {
       this.memorize(Memory.SquareBanked, 1, this.player)
       this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
+      return true
     }
+    return false
   }
 
   getCardInfos(cardToPlay: CardItem) {
