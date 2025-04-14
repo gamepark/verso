@@ -22,25 +22,25 @@ class PlayerLayoutLocator extends ListLocator {
         if (context.rules.players.length === 2) return { x: -45, y: 12 }
         if (context.rules.players.length === 3) return { x: -50, y: 20 }
         if (context.rules.players.length === 4) return { x: -50, y: 20 }
-        if (context.rules.players.length === 5) return { x: -75, y: 24 }
+        if (context.rules.players.length === 5) return { x: -55, y: 20 }
         return { x: -21, y: 25 }
       case 1:
         if (context.rules.players.length === 2) return { x: 16, y: 12 }
         if (context.rules.players.length === 3) return { x: -14, y: -20 }
         if (context.rules.players.length === 4) return { x: -50, y: -20 }
-        if (context.rules.players.length === 5) return { x: -75, y: -10 }
+        if (context.rules.players.length === 5) return { x: -55, y: -10 }
         return { x: -75, y: 14 }
       case 2:
         if (context.rules.players.length === 3) return { x: 22, y: 20 }
         if (context.rules.players.length === 4) return { x: 22, y: -20 }
-        if (context.rules.players.length === 5) return { x: -21, y: -25 }
+        if (context.rules.players.length === 5) return { x: -14, y: -20 }
         return { x: -75, y: -15 }
       case 3:
         if (context.rules.players.length === 4) return { x: 22, y: 20 }
-        if (context.rules.players.length === 5) return { x: 33, y: -10 }
+        if (context.rules.players.length === 5) return { x: 25, y: -10 }
         return { x: -21, y: -25 }
       case 4:
-        if (context.rules.players.length === 5) return { x: 33, y: 24 }
+        if (context.rules.players.length === 5) return { x: 25, y: 20 }
         return { x: 33, y: -15 }
       case 5:
       default:
