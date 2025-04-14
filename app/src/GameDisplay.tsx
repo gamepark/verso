@@ -32,7 +32,14 @@ export const GameDisplay: FC<GameDisplayProps> = () => {
 
   return (
     <>
-      <GameTable xMin={getTableWidth().xMin} xMax={getTableWidth().xMax} yMin={getTableWidth().yMin} yMax={getTableWidth().yMax} margin={margin} css={process.env.NODE_ENV === 'development' && tableBorder}>
+      <GameTable
+        xMin={getTableWidth().xMin}
+        xMax={getTableWidth().xMax}
+        yMin={getTableWidth().yMin}
+        yMax={getTableWidth().yMax}
+        margin={margin}
+        css={process.env.NODE_ENV === 'development' && tableBorder}
+      >
         <GameTableNavigation />
         <PlayerPanels />
       </GameTable>

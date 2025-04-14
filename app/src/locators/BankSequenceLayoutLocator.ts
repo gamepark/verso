@@ -5,27 +5,19 @@ import { LocationType } from '@gamepark/verso/material/LocationType'
 class BankSequenceLayoutLocator extends ListLocator {
   gap = { x: 7 }
   maxCount = 3
-  getCoordinates(location: Location, context: MaterialContext) {
-    const base = this.getBaseCoordinates(location, context)
-    if (location.x === undefined) return { x: base.x, y: base.y }
-
-    const xLocation = location.x ?? 0
-    return { x: base.x + xLocation - 16, y: base.y }
-  }
-
-  getBaseCoordinates(_: Location, context: MaterialContext) {
+  getCoordinates(_: Location, context: MaterialContext) {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
       case 2:
-        return { x: 6.5, y: -8 }
+        return { x: -5, y: -8 }
       case 3:
       case 5:
-        return { x: 6.5, y: 10 }
+        return { x: -5, y: 10 }
       case 4:
-        return { x: 6.5, y: 2 }
+        return { x: -5, y: 2 }
       default:
-        return { x: 6.5, y: 5 }
+        return { x: -5, y: 5 }
     }
   }
 
@@ -37,7 +29,7 @@ class BankSequenceLayoutLocator extends ListLocator {
 }
 
 export class bankSequenceLayoutDescription extends DropAreaDescription {
-  width = 49
+  width = 21
   height = 8
 }
 

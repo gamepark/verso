@@ -8,8 +8,8 @@ class PlayerLayoutLocator extends ListLocator {
   getCoordinates(location: Location, context: MaterialContext) {
     const base = this.getBaseCoordinates(location, context)
     const xBase = base.x
-    const yBase = base.y ?? 0
-    if (location.x === undefined) return { x: xBase, y: yBase }
+    const yBase = base.y
+    if (location.x === undefined) return { x: xBase + 4, y: yBase }
 
     const yLocation = location.id === 1 ? 8 : location.id === 2 ? 0 : -8
     return { x: xBase, y: yBase + yLocation }
