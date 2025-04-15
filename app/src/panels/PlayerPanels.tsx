@@ -21,7 +21,7 @@ export const PlayerPanels = () => {
           key={player.id}
           player={player}
           color={playerColorCode[player.id]}
-          css={panelPosition(index)}
+          css={panelPosition(index, players.length)}
           counters={[
             {
               image: Star,
@@ -34,12 +34,34 @@ export const PlayerPanels = () => {
     root
   )
 }
-const panelPosition = (index: number) => css`
-  position: absolute;
-  right: 1em;
-  top: ${8.5 + index * 16}em;
-  width: 28em;
-`
+const panelPosition = (index: number, nbPlayers: number) => {
+  if (nbPlayers === 2) {
+    switch (index) {
+      case 0:
+        return css`
+          position: absolute;
+          left: 1em;
+          top: 15.5em;
+          width: 28em;
+        `
+      case 1:
+        return css`
+          position: absolute;
+          right: 1em;
+          top: 15.5em;
+          width: 28em;
+        `
+      default:
+        return css``
+    }
+  }
+  return css`
+    position: absolute;
+    right: 1em;
+    top: ${8.5 + index * 16}em;
+    width: 28em;
+  `
+}
 
 export const playerColorCode: Record<number, string> = {
   1: 'red',

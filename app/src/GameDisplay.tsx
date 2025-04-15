@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { GameTable, GameTableNavigation, useRules } from '@gamepark/react-game'
-import { VersoRules } from '@gamepark/verso/VersoRules'
+import { GameTable, GameTableNavigation } from '@gamepark/react-game'
 import { FC } from 'react'
 import { PlayerPanels } from './panels/PlayerPanels'
 
@@ -9,13 +8,11 @@ type GameDisplayProps = {
   players: number
 }
 
-export const GameDisplay: FC<GameDisplayProps> = () => {
-  const margin = { top: 7, left: 0, right: 30, bottom: 0 }
+export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps) => {
+  const margin = { top: 7, left: 0, right: players === 2 ? 0 : 30, bottom: 0 }
 
   const getTableWidth = (): { xMin: number; xMax: number; yMin: number; yMax: number } => {
-    const game: VersoRules = useRules()?.game
-    const nbPlayers = game.players.length
-    switch (nbPlayers) {
+    switch (players) {
       case 1:
         return { xMin: -30, xMax: 30, yMin: -25, yMax: 25 }
       case 2:

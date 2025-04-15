@@ -58,22 +58,16 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
   }
 
   onRuleEnd(): MaterialMove[] {
-    if (this.checkAndBankSquare()) {
+    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
+    if (playerLayoutHelper.checkAndBankSquare()) {
       return [this.customMove(CustomMoveType.DeclareSquare)]
     }
-    return []
-  }
 
-  checkAndBankSquare() {
-    const isSquare = new PlayerLayoutHelper(this.game, this.player).checkSquare()
-    const notAlreadyBankedASquare = this.remind(Memory.SquareBanked, this.player) === undefined
-
-    if (isSquare && notAlreadyBankedASquare) {
-      this.memorize(Memory.SquareBanked, this.player)
-      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
-      return true
+    if (!playerLayoutHelper.checkSquare()) {
+      this.forget(Memory.SquareBanked, this.player)
     }
-    return false
+
+    return []
   }
 
   getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {

@@ -53,22 +53,11 @@ export class PlayCardRule extends PlayerTurnRule {
   }
 
   onRuleEnd(): MaterialMove[] {
-    if (this.checkAndBankSquare()) {
+    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
+    if (playerLayoutHelper.checkAndBankSquare()) {
       return [this.customMove(CustomMoveType.DeclareSquare)]
     }
     return []
-  }
-
-  checkAndBankSquare() {
-    const isSquare = this.playerLayoutHelper.checkSquare()
-    const notAlreadyBankedASquare = !this.remind(Memory.SquareBanked, this.player)
-
-    if (isSquare && notAlreadyBankedASquare) {
-      this.memorize(Memory.SquareBanked, 1, this.player)
-      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
-      return true
-    }
-    return false
   }
 
   getCardInfos(cardToPlay: CardItem) {

@@ -2,6 +2,7 @@ import { ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepa
 import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
+import { CustomMoveType } from '../CustomMoveType'
 import { FaceCardHelper } from '../helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from '../helpers/PlayerLayoutHelper'
 import { Memory } from '../Memory'
@@ -59,6 +60,19 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
       return [this.startRule(RuleId.BankLastSequence)]
     }
     return [this.startRule(RuleId.ChooseAction)]
+  }
+
+  onRuleEnd(): MaterialMove[] {
+    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
+    if (playerLayoutHelper.checkAndBankSquare()) {
+      return [this.customMove(CustomMoveType.DeclareSquare)]
+    }
+
+    if (!playerLayoutHelper.checkSquare()) {
+      this.forget(Memory.SquareBanked, this.player)
+    }
+
+    return []
   }
 
   getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {

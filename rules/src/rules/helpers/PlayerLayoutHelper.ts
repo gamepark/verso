@@ -2,6 +2,7 @@ import { Location, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepa
 import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
+import { Memory } from '../Memory'
 import { FaceCardHelper } from './FaceCardHelper'
 
 export class PlayerLayoutHelper extends MaterialRulesPart {
@@ -29,20 +30,10 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
   }
 
   private getPlaceByColor(playerId: number, cardValue: number, color: FaceColor) {
-    let availablePlace: Location | undefined
-    const playerCards = this.getCards(playerId)
-      .getItems()
-      .filter((item) => FaceCardHelper.getCardColor(item as CardItem) === color)
-      .sort((a, b) => FaceCardHelper.getCardValue(a as CardItem) - FaceCardHelper.getCardValue(b as CardItem))
-    if (playerCards.length === 0) {
-      availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x: 0 }
-    } else {
-      const x = this.getCards(playerId)
-        .locationId(color)
-        .filter((item) => FaceCardHelper.getCardValue(item as CardItem) < cardValue).length
-      availablePlace = { id: color, type: LocationType.PlayerLayout, player: this.player, x }
-    }
-    return availablePlace
+    const x = this.getCards(playerId)
+      .locationId(color)
+      .filter((item) => FaceCardHelper.getCardValue(item as CardItem) < cardValue).length
+    return { id: color, type: LocationType.PlayerLayout, player: this.player, x }
   }
 
   checkIfPlayerAlreadyHaveCard(card?: MaterialItem) {
@@ -92,6 +83,18 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       }
     }
     return null
+  }
+
+  checkAndBankSquare() {
+    const isSquare = this.checkSquare()
+    const notAlreadyBankedASquare = this.remind(Memory.SquareBanked, this.player) === undefined
+
+    if (isSquare && notAlreadyBankedASquare) {
+      this.memorize(Memory.SquareBanked, this.player)
+      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
+      return true
+    }
+    return false
   }
 
   checkSquare() {

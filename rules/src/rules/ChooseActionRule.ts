@@ -1,4 +1,4 @@
-import { CustomMove, isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -43,6 +43,9 @@ export class ChooseActionRule extends PlayCardRule {
   }
 
   onCustomMove(_move: CustomMove): MaterialMove[] {
-    return [this.startRule(RuleId.BankSequence)]
+    if (isCustomMoveType(CustomMoveType.BankSequence)(_move)) {
+      return [this.startRule(RuleId.BankSequence)]
+    }
+    return []
   }
 }
