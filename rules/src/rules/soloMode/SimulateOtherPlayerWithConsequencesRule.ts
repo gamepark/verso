@@ -1,4 +1,4 @@
-import { ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -54,7 +54,7 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
     return moves
   }
 
-  afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
+  afterItemMove(): MaterialMove[] {
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
       this.memorize(Memory.PlayerEndedGame, this.player)
       return [this.startRule(RuleId.BankLastSequence)]

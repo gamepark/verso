@@ -12,7 +12,7 @@ import { RuleId } from './rules/RuleId'
 export class VersoSetup extends MaterialGameSetup<number, MaterialType, LocationType, VersoOptions> {
   Rules = VersoRules
 
-  setupMaterial(_options: VersoOptions) {
+  setupMaterial() {
     this.setupCards()
   }
 

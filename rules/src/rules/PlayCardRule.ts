@@ -1,4 +1,4 @@
-import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext, RuleMove, RuleStep } from '@gamepark/rules-api'
+import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -12,7 +12,7 @@ export class PlayCardRule extends PlayerTurnRule {
   playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
   card = this.cardToPlay
   playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
-  onRuleStart(_move: RuleMove, _previousRule?: RuleStep, _context?: PlayMoveContext): MaterialMove[] {
+  onRuleStart(): MaterialMove[] {
     if (this.playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
       this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
       return [this.startRule(RuleId.DiscardCard)]

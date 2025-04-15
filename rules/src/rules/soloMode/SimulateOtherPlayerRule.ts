@@ -1,4 +1,4 @@
-import { ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -13,7 +13,7 @@ export class SimulateOtherPlayerRule extends PlayerTurnRule {
     return moves
   }
 
-  afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
+  afterItemMove(): MaterialMove[] {
     const { cardValue } = this.getCardInfos(this.cardToPlay.getItem() as CardItem)
     const otherFaceValue = FaceCardHelper.getCardValue(this.cardToPlay.getItem() as CardItem, false)
 

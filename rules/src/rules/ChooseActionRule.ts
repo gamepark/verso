@@ -42,8 +42,8 @@ export class ChooseActionRule extends PlayCardRule {
     return moves
   }
 
-  onCustomMove(_move: CustomMove): MaterialMove[] {
-    if (isCustomMoveType(CustomMoveType.BankSequence)(_move)) {
+  onCustomMove(move: CustomMove): MaterialMove[] {
+    if (isCustomMoveType(CustomMoveType.BankSequence)(move)) {
       return [this.startRule(RuleId.BankSequence)]
     }
     return []

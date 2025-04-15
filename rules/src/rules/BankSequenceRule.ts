@@ -1,4 +1,4 @@
-import { isMoveItem, ItemMove, MaterialItem, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardId, CardItem, FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
@@ -53,16 +53,16 @@ export class BankSequenceRule extends PlayerTurnRule {
     return this.material(MaterialType.Card).location(LocationType.BankSequenceLayout)
   }
 
-  beforeItemMove(_move: ItemMove): MaterialMove[] {
-    if (this.isLegalMove(this.player, _move)) {
+  beforeItemMove(move: ItemMove): MaterialMove[] {
+    if (this.isLegalMove(this.player, move)) {
       this.forget(Memory.Reordered)
     }
     return []
   }
 
-  afterItemMove(_move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
+  afterItemMove(move: ItemMove): MaterialMove[] {
     const reordered = this.remind(Memory.Reordered)
-    if (!reordered && isMoveItem(_move) && _move.location.type === LocationType.BankSequenceLayout) {
+    if (!reordered && isMoveItem(move) && move.location.type === LocationType.BankSequenceLayout) {
       this.memorize(Memory.Reordered, true)
       return new BankHelper(this.game, this.player).reorderJocker()
     }

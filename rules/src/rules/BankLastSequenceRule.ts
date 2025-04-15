@@ -30,16 +30,16 @@ export class BankLastSequenceRule extends PlayerTurnRule {
     return moves
   }
 
-  onCustomMove(_move: CustomMove): MaterialMove[] {
+  onCustomMove(move: CustomMove): MaterialMove[] {
     const moves: MaterialMove[] = []
-    if (_move.type === CustomMoveType.Pass) {
+    if (move.type === CustomMoveType.Pass) {
       if (this.remind(Memory.PlayerEndedGame) === this.player) {
         moves.push(this.endGame())
       } else {
         moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
       }
     }
-    if (_move.type === CustomMoveType.BankSequence) {
+    if (move.type === CustomMoveType.BankSequence) {
       moves.push(this.startRule(RuleId.BankSequence))
     }
     return moves

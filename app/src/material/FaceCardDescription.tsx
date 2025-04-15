@@ -77,7 +77,7 @@ export class FaceCardDescription extends CardDescription {
     if (bank) {
       return (
         <>
-          <ItemMenuButton label={<Trans defaults="bank" />} angle={50} radius={4} y={-3.7} move={bank}>
+          <ItemMenuButton label={<Trans defaults="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
             <FontAwesomeIcon icon={faMoneyCheckDollar} css={pointerCursorCss} />
           </ItemMenuButton>
         </>
