@@ -41,10 +41,13 @@ export class BankHelper extends MaterialRulesPart {
     const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))
 
     if (valuesInBank.includes(0)) {
-      return this.getPossibleMoveIfBankContainJoker(valuesInBank)
+      const jockerPosition = bankCards.find((card) => FaceCardHelper.getCardValue(card) === 0)?.location.x ?? 0
+      if(jockerPosition === bankCards.length - 1) {
+        return this.getPossibleMoveIfBankContainJoker(valuesInBank)
+      }
     }
 
-    return this.getPossibleMovesIfBankDontContainJoker(valuesInBank)
+    return this.getPossibleMovesIfBankDontContainJoker(valuesInBank.filter((v) => v > 0))
   }
 
   getPossibleMovesIfBankDontContainJoker(valuesInBank: number[]) {

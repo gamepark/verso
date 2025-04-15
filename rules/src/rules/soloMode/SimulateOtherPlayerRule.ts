@@ -104,7 +104,6 @@ export class SimulateOtherPlayerRule extends PlayerTurnRule {
   }
 
   getCardInfos(cardToPlay: CardItem, currentRotation = true) {
-    console.log(cardToPlay)
     const cardColor = FaceCardHelper.getCardColor(cardToPlay, currentRotation)
     const cardValue = FaceCardHelper.getCardValue(cardToPlay, currentRotation)
     return { cardColor, cardValue }
