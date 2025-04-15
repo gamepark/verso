@@ -4,5 +4,6 @@ export enum Memory {
   Score,
   BankedSequence,
   Reordered,
-  PlayerEndedGame
+  PlayerEndedGame,
+  CardToFlipValue
 }

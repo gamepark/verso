@@ -8,8 +8,6 @@ import { DiscardCardHeader } from './DiscardCardHeader'
 import { FlipCardAfterBankSequenceHeader } from './FlipCardAfterBankSequenceHeader'
 import { PlayCardHeader } from './PlayCardHeader'
 import { SimulateOtherPlayerHeader } from './SimulateOtherPlayerHeader'
-import { SimulateOtherPlayerWithoutConsequencesHeader } from './SimulateOtherPlayerWithoutConsequencesHeader'
-import { SimulateOtherPlayerWithConsequencesHeader } from './SimulateOtherPlayerWithConsequencesHeader'
 
 export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.ChooseAction]: ChooseActionHeader,
@@ -18,7 +16,5 @@ export const Headers: Partial<Record<RuleId, ComponentType>> = {
   [RuleId.BankSequence]: BankSequenceHeader,
   [RuleId.FlipCardAfterBankSequence]: FlipCardAfterBankSequenceHeader,
   [RuleId.BankLastSequence]: BankLastSequenceHeader,
-  [RuleId.SimulateOtherPlayer]: SimulateOtherPlayerHeader,
-  [RuleId.SimulateOtherPlayerWithoutConsequences]: SimulateOtherPlayerWithoutConsequencesHeader,
-  [RuleId.SimulateOtherPlayerWithConsequences]: SimulateOtherPlayerWithConsequencesHeader
+  [RuleId.SimulateOtherPlayer]: SimulateOtherPlayerHeader
 }

@@ -5,6 +5,8 @@ import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 import { RuleId } from '@gamepark/verso/rules/RuleId'
 import { DeclareSquareHistory } from './components/DeclareSquareHistory'
 import { PlayCardHistory } from './components/PlayCardHistory'
+import { SimulateOtherPlayerWithConsequenceHistory } from './components/SimulateOtherPlayerWithConsequenceHistory'
+import { SimulateOtherPlayerWithoutConsequenceHistory } from './components/SimulateOtherPlayerWithoutConsequenceHistory'
 import { ValidateSequenceHistory } from './components/ValidateSequenceHistory'
 
 export class VersoLogs implements LogDescription {
@@ -31,6 +33,20 @@ export class VersoLogs implements LogDescription {
     if (isCustomMoveType(CustomMoveType.DeclareSquare)(move)) {
       return {
         Component: DeclareSquareHistory,
+        player: actionPlayer
+      }
+    }
+
+    if (isCustomMoveType(CustomMoveType.SimulateOtherPlayerWithoutConsequence)(move)) {
+      return {
+        Component: SimulateOtherPlayerWithoutConsequenceHistory,
+        player: actionPlayer
+      }
+    }
+
+    if (isCustomMoveType(CustomMoveType.SimulateOtherPlayerWithConsequence)(move)) {
+      return {
+        Component: SimulateOtherPlayerWithConsequenceHistory,
         player: actionPlayer
       }
     }

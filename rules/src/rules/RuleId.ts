@@ -6,6 +6,4 @@ export enum RuleId {
   FlipCardAfterBankSequence,
   BankLastSequence,
   SimulateOtherPlayer,
-  SimulateOtherPlayerWithoutConsequences,
-  SimulateOtherPlayerWithConsequences
 }
