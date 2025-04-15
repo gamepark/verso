@@ -1,4 +1,4 @@
-import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CardItem } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -20,46 +20,46 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
       .sort((item) => FaceCardHelper.getCardValue(item as CardItem))
       .getItems()
     if (playerCards.length > 0) {
-      const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-      const hightestCard = playerCards[playerCards.length - 1]
       moves.push(
         this.getPlayerLayout()
           .filter((item) => item.id === playerCards[playerCards.length - 1].id)
           .moveItem((item) => ({ ...item.location, rotation: !item.location.rotation }))
       )
-      if (
-        playerLayoutHelper.checkIfPlayerAlreadyHaveCard({
-          ...hightestCard,
-          location: { ...hightestCard.location, rotation: !hightestCard.location.rotation }
-        })
-      ) {
-        moves.push(
-          this.getPlayerLayout()
-            .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-            .moveItem((item) => ({ ...item.location, type: LocationType.Discard }))
-        )
-      } else {
-        const { cardColor, cardValue } = this.getCardInfos(hightestCard as CardItem, false)
-        const newPlace = playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
-        moves.push(
-          this.getPlayerLayout()
-            .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-            .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
-        )
-      }
+    } else {
+      moves.push(this.cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
+      moves.push(this.startRule(RuleId.ChooseAction))
     }
-
-    moves.push(this.cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
-    moves.push(this.startRule(RuleId.ChooseAction))
     return moves
   }
 
-  afterItemMove(): MaterialMove[] {
+  afterItemMove(move: ItemMove): MaterialMove[] {
+    const moves: MaterialMove[] = []
+    if (isMoveItem(move) && move.location.type === LocationType.PlayerLayout) {
+      const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
+      const card = this.getPlayerLayout().index(move.itemIndex)
+      const cardItem = card.getItem()!
+      if (
+        playerLayoutHelper.checkIfPlayerAlreadyHaveCard({
+          ...cardItem,
+          location: { ...cardItem.location, rotation: !cardItem.location.rotation }
+        })
+      ) {
+        moves.push(card.moveItem((item) => ({ ...item.location, type: LocationType.Discard })))
+      } else {
+        const { cardColor, cardValue } = this.getCardInfos(card.getItem() as CardItem)
+        const newPlace = playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
+        moves.push(card.moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation })))
+      }
+
+      moves.push(this.cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
+    }
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
       this.memorize(Memory.PlayerEndedGame, this.player)
-      return [this.startRule(RuleId.BankLastSequence)]
+      moves.push(this.startRule(RuleId.BankLastSequence))
+    } else {
+      moves.push(this.startRule(RuleId.ChooseAction))
     }
-    return [this.startRule(RuleId.ChooseAction)]
+    return moves
   }
 
   onRuleEnd(): MaterialMove[] {
@@ -75,9 +75,9 @@ export class SimulateOtherPlayerWithConsequencesRule extends PlayerTurnRule {
     return []
   }
 
-  getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay, currentRotation)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay, currentRotation)
+  getCardInfos(cardToPlay: CardItem) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
     return { cardColor, cardValue }
   }
 
