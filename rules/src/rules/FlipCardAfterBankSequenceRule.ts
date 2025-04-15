@@ -1,4 +1,4 @@
-import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule, PlayMoveContext } from '@gamepark/rules-api'
 import { uniq } from 'lodash'
 import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
@@ -19,45 +19,49 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
           const cardColor = FaceCardHelper.getCardColor(item as CardItem)
           return cardColor === color
         })
-        .sort((item) => FaceCardHelper.getCardValue(item as CardItem))
+        .maxBy((item) => item.location.x!)
         .getItems()
       if (playerCards.length > 0) {
-        const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
-        const hightestCard = playerCards[playerCards.length - 1]
         moves.push(
           this.getPlayerLayoutByPlayerId(player)
             .filter((item) => item.id === playerCards[playerCards.length - 1].id)
             .moveItem((item) => ({ ...item.location, rotation: !item.location.rotation }))
         )
-        if (
-          playerLayoutHelper.checkIfPlayerAlreadyHaveCard({
-            ...hightestCard,
-            location: { ...hightestCard.location, rotation: !hightestCard.location.rotation }
-          })
-        ) {
-          moves.push(
-            this.getPlayerLayoutByPlayerId(player)
-              .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-              .moveItem((item) => ({ ...item.location, type: LocationType.Discard }))
-          )
-        } else {
-          const { cardColor, cardValue } = this.getCardInfos(hightestCard as CardItem, false)
-          const newPlace = playerLayoutHelper.getPlace(player, cardColor, cardValue)
-          moves.push(
-            this.getPlayerLayoutByPlayerId(player)
-              .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-              .moveItem((item) => ({ ...newPlace, rotation: !item.location.rotation }))
-          )
-        }
       }
     }
 
-    moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    if(moves.length === 0) {
+      moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    }
 
     return moves
   }
 
-  onRuleEnd(): MaterialMove[] {
+  afterItemMove(move: ItemMove, _context?: PlayMoveContext): MaterialMove[] {
+    if (!isMoveItem(move) || move.location.type !== LocationType.PlayerLayout) {
+      return []
+    }
+    const player = move.location.player!
+    const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
+    const card = this.material(MaterialType.Card).index(move.itemIndex)
+    if (FaceCardHelper.getCardColor(card.getItem() as CardItem) === move.location.id) {
+      return this.checkSquare()
+    }
+    const moves: MaterialMove[] = []
+    if (
+      playerLayoutHelper.checkIfPlayerAlreadyHaveCard(card.getItem())
+    ) {
+      moves.push(card.moveItem((item) => ({ ...item.location, type: LocationType.Discard })))
+    } else {
+      const { cardColor, cardValue } = this.getCardInfos(card.getItem() as CardItem)
+      const newPlace = playerLayoutHelper.getPlace(player, cardColor, cardValue)
+      moves.push(card.moveItem(() => newPlace))
+    }
+    moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
+    return moves
+  }
+
+  checkSquare(): MaterialMove[] {
     const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
     if (playerLayoutHelper.checkAndBankSquare()) {
       return [this.customMove(CustomMoveType.DeclareSquare)]
@@ -70,9 +74,9 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     return []
   }
 
-  getCardInfos(cardToPlay: CardItem, currentRotation: boolean) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay, currentRotation)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay, currentRotation)
+  getCardInfos(cardToPlay: CardItem) {
+    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
+    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
     return { cardColor, cardValue }
   }
 
