@@ -14,23 +14,18 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
     const color = this.remind(Memory.BankedSequence)
     for (const player of this.getPlayersNear()) {
-      const playerCards = this.getPlayerLayoutByPlayerId(player)
+      const cardToFlip = this.getPlayerLayoutByPlayerId(player)
         .filter((item) => {
           const cardColor = FaceCardHelper.getCardColor(item as CardItem)
           return cardColor === color
         })
         .maxBy((item) => item.location.x!)
-        .getItems()
-      if (playerCards.length > 0) {
-        moves.push(
-          this.getPlayerLayoutByPlayerId(player)
-            .filter((item) => item.id === playerCards[playerCards.length - 1].id)
-            .moveItem((item) => ({ ...item.location, rotation: !item.location.rotation }))
-        )
+      if (cardToFlip.length === 1) {
+        moves.push(cardToFlip.moveItem((item) => ({ ...item.location, rotation: !item.location.rotation })))
       }
     }
 
-    if(moves.length === 0) {
+    if (moves.length === 0) {
       moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
     }
 
@@ -48,9 +43,7 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
       return this.checkSquare()
     }
     const moves: MaterialMove[] = []
-    if (
-      playerLayoutHelper.checkIfPlayerAlreadyHaveCard(card.getItem())
-    ) {
+    if (playerLayoutHelper.checkIfPlayerAlreadyHaveCard(card.getItem())) {
       moves.push(card.moveItem((item) => ({ ...item.location, type: LocationType.Discard })))
     } else {
       const { cardColor, cardValue } = this.getCardInfos(card.getItem() as CardItem)
