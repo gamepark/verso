@@ -42,7 +42,7 @@ export class BankHelper extends MaterialRulesPart {
 
     if (valuesInBank.includes(0)) {
       const jockerPosition = bankCards.find((card) => FaceCardHelper.getCardValue(card) === 0)?.location.x ?? 0
-      if(jockerPosition === bankCards.length - 1) {
+      if (jockerPosition === bankCards.length - 1) {
         return this.getPossibleMoveIfBankContainJoker(valuesInBank)
       }
     }

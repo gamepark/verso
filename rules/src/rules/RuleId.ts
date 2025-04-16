@@ -5,5 +5,5 @@ export enum RuleId {
   BankSequence,
   FlipCardAfterBankSequence,
   BankLastSequence,
-  SimulateOtherPlayer,
+  SimulateOtherPlayer
 }
