@@ -38,7 +38,7 @@ export class FlipCardAfterBankSequenceRule extends PlayerTurnRule {
     const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
     const card = this.material(MaterialType.Card).index(move.itemIndex)
     if (FaceCardHelper.getCardColor(card.getItem() as CardItem) !== move.location.id) {
-      if (playerLayoutHelper.checkIfPlayerAlreadyHaveCard(card.getItem())) {
+      if (playerLayoutHelper.playerHasFace(card)) {
         return [card.moveItem((item) => ({ ...item.location, type: LocationType.Discard }))]
       } else {
         const { cardColor, cardValue } = this.getCardInfos(card.getItem() as CardItem)

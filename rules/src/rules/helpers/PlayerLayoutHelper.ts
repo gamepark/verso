@@ -1,4 +1,4 @@
-import { Location, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
+import { Location, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -34,6 +34,13 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       .locationId(color)
       .filter((item) => FaceCardHelper.getCardValue(item as CardItem) < cardValue).length
     return { id: color, type: LocationType.PlayerLayout, player: this.player, x }
+  }
+
+  playerHasFace(card: Material) {
+    if (!card.length) return false
+    const face = FaceCardHelper.getCurrentId(card.getItem()!)
+    const cardIndex = card.getIndex()
+    return this.getCards(this.player).filter((item, index) => index !== cardIndex && FaceCardHelper.getCurrentId(item as CardItem) === face).length > 0
   }
 
   checkIfPlayerAlreadyHaveCard(card?: MaterialItem) {
