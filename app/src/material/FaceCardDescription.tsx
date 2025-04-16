@@ -49,6 +49,7 @@ import FrontSky5 from '../images/cards/front/Sky5.jpg'
 import FrontSky6 from '../images/cards/front/Sky6.jpg'
 import FrontSkyJoker from '../images/cards/front/SkyJoker.jpg'
 import { Trans } from 'react-i18next'
+import { FaceCardHelp } from './help/FaceCardHelp'
 
 export class FaceCardDescription extends CardDescription {
   height = 7.3
@@ -60,6 +61,8 @@ export class FaceCardDescription extends CardDescription {
   backImages = reverseImages
 
   menuAlwaysVisible = true
+
+  help = FaceCardHelp
 
   getItemMenu(_: MaterialItem, context: ItemContext, legalMoves: MaterialMove[]) {
     const { type, index } = context
@@ -89,6 +92,13 @@ export class FaceCardDescription extends CardDescription {
 
   canShortClick(move: MaterialMove, context: ItemContext) {
     return isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.BankSequenceLayout && move.itemIndex === context.index
+  }
+
+  displayHelp(
+    item: MaterialItem<number, number>,
+    context: ItemContext<number, number, number>
+  ): import('@gamepark/rules-api').DisplayHelp<number, number, number, number, any> {
+    return super.displayHelp(item, context)
   }
 }
 
