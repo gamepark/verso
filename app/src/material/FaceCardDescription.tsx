@@ -5,6 +5,7 @@ import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '
 import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { Face } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
+import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 
 import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
@@ -84,6 +85,10 @@ export class FaceCardDescription extends CardDescription {
       )
     }
     return
+  }
+
+  canShortClick(move: MaterialMove, context: ItemContext) {
+    return isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.BankSequenceLayout && move.itemIndex === context.index
   }
 }
 

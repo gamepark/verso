@@ -13,11 +13,16 @@ export class PlayCardRule extends PlayerTurnRule {
   card = this.cardToPlay
   playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
   onRuleStart(): MaterialMove[] {
-    if (this.playerAlreadyHaveCard && this.game.rule!.id === RuleId.PlayCard) {
-      this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
-      return [this.startRule(RuleId.DiscardCard)]
+    const moves: MaterialMove[] = []
+    if (this.game.rule!.id === RuleId.PlayCard) {
+      if (this.playerAlreadyHaveCard) {
+        this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
+        moves.push(this.startRule(RuleId.DiscardCard))
+      } else {
+        moves.push(this.moveCardToAvailablePlace())
+      }
     }
-    return []
+    return moves
   }
 
   getPlayerMoves() {
@@ -25,11 +30,15 @@ export class PlayCardRule extends PlayerTurnRule {
     if (this.playerAlreadyHaveCard) {
       return moves
     }
-    const { cardColor, cardValue } = this.getCardInfos(this.card.getItem() as CardItem)
-    const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
-    moves.push(this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
+    moves.push(this.moveCardToAvailablePlace())
 
     return moves
+  }
+
+  moveCardToAvailablePlace(): MaterialMove {
+    const { cardColor, cardValue } = this.getCardInfos(this.card.getItem() as CardItem)
+    const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
+    return this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation }))
   }
 
   afterItemMove(move: ItemMove) {
