@@ -2,7 +2,6 @@ import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepar
 import { CardItem } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { CustomMoveType } from './CustomMoveType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
@@ -59,14 +58,6 @@ export class PlayCardRule extends PlayerTurnRule {
     }
 
     return moves
-  }
-
-  onRuleEnd(): MaterialMove[] {
-    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-    if (playerLayoutHelper.checkAndBankSquare()) {
-      return [this.customMove(CustomMoveType.DeclareSquare)]
-    }
-    return []
   }
 
   getCardInfos(cardToPlay: CardItem) {

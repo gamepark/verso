@@ -1,5 +1,6 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
 import { sample, shuffle } from 'lodash'
+import { Memory } from './rules/Memory'
 import { VersoOptions } from './VersoOptions'
 import { VersoRules } from './VersoRules'
 import { getCardIds } from './material/Face'
@@ -14,6 +15,9 @@ export class VersoSetup extends MaterialGameSetup<number, MaterialType, Location
 
   setupMaterial() {
     this.setupCards()
+    for (const player of this.players) {
+      this.memorize(Memory.Score, 0, player)
+    }
   }
 
   start() {

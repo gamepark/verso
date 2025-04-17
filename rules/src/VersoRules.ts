@@ -1,15 +1,32 @@
-import { CompetitiveScore, HiddenMaterialRules, MaterialGame, MaterialItem, MaterialMove, PositiveSequenceStrategy, TimeLimit } from '@gamepark/rules-api'
+import {
+  CompetitiveScore,
+  CustomMove,
+  getEnumValues,
+  HiddenMaterialRules,
+  isMoveItem,
+  ItemMove,
+  MaterialGame,
+  MaterialItem,
+  MaterialMove,
+  MaterialMoveBuilder,
+  PositiveSequenceStrategy,
+  TimeLimit
+} from '@gamepark/rules-api'
+import { CardId, FaceColor } from './material/Face'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { BankLastSequenceRule } from './rules/BankLastSequenceRule'
 import { BankSequenceRule } from './rules/BankSequenceRule'
 import { ChooseActionRule } from './rules/ChooseActionRule'
+import { CustomMoveType } from './rules/CustomMoveType'
 import { DiscardCardRule } from './rules/DiscardCardRule'
 import { FlipCardAfterBankSequenceRule } from './rules/FlipCardAfterBankSequenceRule'
+import { FaceCardHelper } from './rules/helpers/FaceCardHelper'
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
 import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
+import customMove = MaterialMoveBuilder.customMove
 
 /**
  * This class implements the rules of the board game.
@@ -45,6 +62,30 @@ export class VersoRules
       [LocationType.PlayerLayout]: hideIfRotated,
       [LocationType.BankSequenceLayout]: hideIfRotated
     }
+  }
+
+  protected afterItemMove(move: ItemMove) {
+    if (isMoveItem(move) && move.location.type === LocationType.PlayerLayout) {
+      const card = this.material(MaterialType.Card).getItem<CardId>(move.itemIndex)
+      const player = card.location.player!
+      const color = FaceCardHelper.getCardColor(card)
+      const otherColors = getEnumValues(FaceColor).filter((otherColor) => otherColor !== color)
+      if (color === card.location.id && this.lineSize(player, color) === 3 && otherColors.every((otherColor) => this.lineSize(player, otherColor) >= 3)) {
+        return [customMove(CustomMoveType.DeclareSquare, player)]
+      }
+    }
+    return []
+  }
+
+  protected onCustomMove(move: CustomMove) {
+    if (move.type === CustomMoveType.DeclareSquare) {
+      this.getMemory(move.data as number).memorize<number>(Memory.Score, (score) => score + 7)
+    }
+    return []
+  }
+
+  lineSize(player: number, color: FaceColor) {
+    return this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(player).locationId(color).length
   }
 
   giveTime(): number {

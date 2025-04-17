@@ -2,7 +2,6 @@ import { Location, Material, MaterialGame, MaterialItem, MaterialRulesPart } fro
 import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { Memory } from '../Memory'
 import { FaceCardHelper } from './FaceCardHelper'
 
 export class PlayerLayoutHelper extends MaterialRulesPart {
@@ -90,31 +89,6 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       }
     }
     return null
-  }
-
-  checkAndBankSquare() {
-    const isSquare = this.checkSquare()
-    const notAlreadyBankedASquare = this.remind(Memory.SquareBanked, this.player) === undefined
-
-    if (isSquare && notAlreadyBankedASquare) {
-      this.memorize(Memory.SquareBanked, this.player)
-      this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + 7, this.player)
-      return true
-    }
-    return false
-  }
-
-  checkSquare() {
-    return (
-      this.getNumberOfCardsByColor(FaceColor.Land) >= 3 && this.getNumberOfCardsByColor(FaceColor.Sea) >= 3 && this.getNumberOfCardsByColor(FaceColor.Sky) >= 3
-    )
-  }
-
-  private getNumberOfCardsByColor(color: FaceColor) {
-    return this.getCards(this.player).filter((card) => {
-      const cardColor = FaceCardHelper.getCardColor(card as CardItem)
-      return cardColor === color
-    }).length
   }
 
   private getCardIndexFromId(cardId: number) {

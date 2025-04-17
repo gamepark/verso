@@ -5,7 +5,6 @@ import { MaterialType } from '../../material/MaterialType'
 import { CustomMoveType } from '../CustomMoveType'
 import { FlipCardRule } from '../FlipCardRule'
 import { FaceCardHelper } from '../helpers/FaceCardHelper'
-import { PlayerLayoutHelper } from '../helpers/PlayerLayoutHelper'
 import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
@@ -17,7 +16,7 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
     return moves
   }
 
-  afterItemMove(move: ItemMove): MaterialMove[] {
+  afterItemMove(move: ItemMove) {
     if (isMoveItem(move) && move.location.type === LocationType.Deck) {
       const moves: MaterialMove[] = []
       const cardInDeck = this.cardInDeck
@@ -40,14 +39,6 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
 
   onRuleEnd(): MaterialMove[] {
     const moves: MaterialMove[] = []
-    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-    if (playerLayoutHelper.checkAndBankSquare()) {
-      moves.push(this.customMove(CustomMoveType.DeclareSquare))
-    }
-
-    if (!playerLayoutHelper.checkSquare()) {
-      this.forget(Memory.SquareBanked, this.player)
-    }
 
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
       this.memorize(Memory.PlayerEndedGame, this.player)

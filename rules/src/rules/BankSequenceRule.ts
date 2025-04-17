@@ -90,7 +90,7 @@ export class BankSequenceRule extends PlayerTurnRule {
       const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
       moves.push(this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
     }
-    this.forget(Memory.SquareBanked, this.player)
+
     if (this.remind(Memory.PlayerEndedGame)) {
       if (this.remind(Memory.PlayerEndedGame) === this.player) {
         moves.push(this.endGame())

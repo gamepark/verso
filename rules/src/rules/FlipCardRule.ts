@@ -2,10 +2,8 @@ import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/ru
 import { CardItem, FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { CustomMoveType } from './CustomMoveType'
 import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
-import { Memory } from './Memory'
 
 export abstract class FlipCardRule extends PlayerTurnRule {
   flipPlayerCard(player: number, color: FaceColor) {
@@ -16,7 +14,7 @@ export abstract class FlipCardRule extends PlayerTurnRule {
     return cardToFlip.moveItem((item) => ({ ...item.location, rotation: !item.location.rotation }))
   }
 
-  afterItemMove(move: ItemMove) {
+  afterItemMove(move: ItemMove): MaterialMove[] {
     if (!isMoveItem(move) || move.location.type !== LocationType.PlayerLayout) {
       return []
     }
@@ -32,21 +30,8 @@ export abstract class FlipCardRule extends PlayerTurnRule {
         return [card.moveItem((item) => ({ ...newPlace, rotation: item.location.rotation }))]
       }
     } else {
-      return this.checkSquare()
+      return []
     }
-  }
-
-  checkSquare(): MaterialMove[] {
-    const playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-    if (playerLayoutHelper.checkAndBankSquare()) {
-      return [this.customMove(CustomMoveType.DeclareSquare)]
-    }
-
-    if (!playerLayoutHelper.checkSquare()) {
-      this.forget(Memory.SquareBanked, this.player)
-    }
-
-    return []
   }
 
   getCardInfos(cardToPlay: CardItem) {
