@@ -29,7 +29,8 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.deck" components={BaseComponents} />
+        text: () => <Trans defaults="tuto.deck" components={BaseComponents} />,
+        position: { x: -35, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -37,12 +38,13 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
             .location(LocationType.Deck)
             .maxBy((item) => item.location.x!)
         ],
-        scale: 0.5
+        scale: 0.8
       })
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.card" components={BaseComponents} />
+        text: () => <Trans defaults="tuto.card" components={BaseComponents} />,
+        position: { x: -35, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -50,12 +52,13 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
             .location(LocationType.Deck)
             .maxBy((item) => item.location.x!)
         ],
-        scale: 0.5
+        scale: 0.8
       })
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.points" components={BaseComponents} />
+        text: () => <Trans defaults="tuto.points" components={BaseComponents} />,
+        position: { x: -20, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -68,7 +71,8 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.verso" components={BaseComponents} />
+        text: () => <Trans defaults="tuto.verso" components={BaseComponents} />,
+        position: { x: -35, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -76,13 +80,13 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
             .location(LocationType.Deck)
             .maxBy((item) => item.location.x!)
         ],
-        scale: 0.5
+        scale: 0.8
       })
     },
     {
       popup: {
         text: () => <Trans defaults="tuto.flip" components={BaseComponents} />,
-        position: { y: 5 }
+        position: { x: -35, y: 15 }
       },
       focus: (game) => ({
         materials: [
@@ -90,7 +94,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
             .location(LocationType.Deck)
             .maxBy((item) => item.location.x!)
         ],
-        scale: 0.5
+        scale: 0.8
       }),
       move: {
         filter: (move, _) => {
@@ -180,7 +184,8 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     },
     {
       popup: {
-        text: () => <Trans defaults="tuto.joker" components={BaseComponents} />
+        text: () => <Trans defaults="tuto.joker" components={BaseComponents} />,
+        position: { x: -35, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -188,7 +193,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
             .location(LocationType.Deck)
             .maxBy((item) => item.location.x!)
         ],
-        scale: 0.5
+        scale: 0.8
       })
     },
     {
