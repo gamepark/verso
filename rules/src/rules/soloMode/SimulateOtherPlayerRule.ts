@@ -20,10 +20,10 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
     if (isMoveItem(move) && move.location.type === LocationType.Deck) {
       const moves: MaterialMove[] = []
       const cardInDeck = this.cardInDeck
-      const { cardValue } = this.getCardInfos(cardInDeck.getItem<CardId>()!)
+      const { cardValue, isJoker } = this.getCardInfos(cardInDeck.getItem<CardId>()!)
       const otherFaceValue = this.remind(Memory.CardToFlipValue)
 
-      if (cardValue === 0 || otherFaceValue === 0 || cardValue <= otherFaceValue) {
+      if (isJoker || otherFaceValue === 0 || cardValue <= otherFaceValue) {
         moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence))
       } else {
         moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithConsequence))

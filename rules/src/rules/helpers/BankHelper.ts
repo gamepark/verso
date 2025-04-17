@@ -41,7 +41,7 @@ export class BankHelper extends MaterialRulesPart {
     const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))
 
     if (valuesInBank.includes(0)) {
-      const jockerPosition = bankCards.find((card) => FaceCardHelper.getCardValue(card) === 0)?.location.x ?? 0
+      const jockerPosition = bankCards.find((card) => FaceCardHelper.isJoker(card))?.location.x ?? 0
       if (jockerPosition === bankCards.length - 1) {
         return this.getPossibleMoveIfBankContainJoker(valuesInBank)
       }
@@ -58,7 +58,8 @@ export class BankHelper extends MaterialRulesPart {
       })
       .filter((card) => {
         const cardValue = FaceCardHelper.getCardValue(card as CardItem)
-        return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || cardValue === 0
+        const isJoker = FaceCardHelper.isJoker(card as CardItem)
+        return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || isJoker
       })
     return possibleCards.moveItems((item) => this.getPlaceInBank(item as CardItem))
   }
@@ -161,11 +162,12 @@ export class BankHelper extends MaterialRulesPart {
 
   private getPlaceInBank(cardItem: CardItem) {
     const cardValue = FaceCardHelper.getCardValue(cardItem)
+    const isJoker = FaceCardHelper.isJoker(cardItem)
     let availablePlace: Location = { type: LocationType.BankSequenceLayout, rotation: cardItem.location.rotation }
     const bankCards = this.bankCards.getItems().sort((a, b) => FaceCardHelper.getCardValue(a as CardItem) - FaceCardHelper.getCardValue(b as CardItem))
     if (bankCards.length > 0) {
       const hightestCard: CardItem = bankCards[bankCards.length - 1] as CardItem
-      if (cardValue > FaceCardHelper.getCardValue(hightestCard) || cardValue === 0) {
+      if (cardValue > FaceCardHelper.getCardValue(hightestCard) || isJoker) {
         availablePlace = { ...availablePlace, x: hightestCard.location.x! + 1 }
       } else {
         for (const card of bankCards) {

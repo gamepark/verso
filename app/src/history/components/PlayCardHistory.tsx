@@ -14,9 +14,10 @@ export const PlayCardHistory = (props: MoveComponentProps) => {
   const card: CardItem = context.game.items[MaterialType.Card][move.itemIndex]
   const value = FaceCardHelper.getCardValue(card)
   const color = FaceCardHelper.getCardColor(card)
+  const isJoker = FaceCardHelper.isJoker(card)
   const displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
 
-  if (value === 0) {
+  if (isJoker) {
     return (
       <Trans defaults="history.place.joker.player" values={{ player: name, color }}>
         <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, card)} local />

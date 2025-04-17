@@ -37,7 +37,8 @@ export abstract class FlipCardRule extends PlayerTurnRule {
   getCardInfos(cardToPlay: CardItem) {
     const cardColor = FaceCardHelper.getCardColor(cardToPlay)
     const cardValue = FaceCardHelper.getCardValue(cardToPlay)
-    return { cardColor, cardValue }
+    const isJoker = FaceCardHelper.isJoker(cardToPlay)
+    return { cardColor, cardValue, isJoker }
   }
 
   private getPlayerLayoutByPlayerId(playerId: number) {

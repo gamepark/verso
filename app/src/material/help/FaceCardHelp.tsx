@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialHelpProps } from '@gamepark/react-game'
-import { MaterialItem } from '@gamepark/rules-api'
+import { CardItem } from '@gamepark/verso/material/Face'
+import { FaceCardHelper } from '@gamepark/verso/rules/helpers/FaceCardHelper'
 import { FC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -12,21 +13,17 @@ const components = {
 
 export const FaceCardHelp: FC<MaterialHelpProps> = (props) => {
   const { t } = useTranslation()
-  //const rules = useRules<VersoRules>()!
-  //const game = rules.game
   const { item } = props
-  const getCurrentId = (item: Partial<MaterialItem>) => {
-    return item.location!.rotation ? item.id.back : item.id.front
-  }
-  const color = Math.floor(getCurrentId(item) / 10)
-  const value = getCurrentId(item) % 10
+  const color = FaceCardHelper.getCardColor(item as CardItem)
+  const value = FaceCardHelper.getCardValue(item as CardItem)
+  const isJoker = FaceCardHelper.isJoker(item as CardItem)
   const points = item.location?.rotation ? 3 : 1
 
   const lowerValue = value === 1 ? 6 : value - 1
   const higtherValue = value === 6 ? 1 : value + 1
 
   const VersoValue = () => {
-    if (value === 0) {
+    if (isJoker) {
       return <Trans defaults="verso.any" components={components} />
     }
     if (points === 1) {
@@ -39,7 +36,7 @@ export const FaceCardHelp: FC<MaterialHelpProps> = (props) => {
     <>
       <h2>{t(`card.${color}`)}</h2>
       <p>
-        <Trans defaults={value === 0 ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
+        <Trans defaults={isJoker ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
       </p>
       <Trans defaults="verso" />
       <ul css={listCss}>
