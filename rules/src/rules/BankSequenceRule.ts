@@ -84,11 +84,15 @@ export class BankSequenceRule extends PlayerTurnRule {
 
     const cardsToReturnToPlayerLayout: CardItem[] = bankHelper.getCardsToReturnToPlayerLayout()
 
-    for (let i = cardsToReturnToPlayerLayout.length - 1; i >= 0; i--) {
+    for (let i = 0; i < cardsToReturnToPlayerLayout.length; i++) {
       const card: MaterialItem<number, number, CardId> = cardsToReturnToPlayerLayout[i]
       const { cardColor, cardValue } = this.getCardInfos(card)
       const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
-      moves.push(this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation })))
+      moves.push(
+        this.bankCards
+          .filter((bankCard) => bankCard.id === card.id)
+          .moveItem((item) => ({ ...availablePlace, x: (availablePlace.x ?? 0) + i, rotation: item.location.rotation }))
+      )
     }
 
     if (this.remind(Memory.PlayerEndedGame)) {

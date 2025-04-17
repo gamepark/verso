@@ -9,8 +9,9 @@ class BankSequenceLayoutLocator extends ListLocator {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
-      case 2:
         return { x: -5, y: -8 }
+      case 2:
+        return { x: -5, y: -6 }
       case 3:
       case 5:
         return { x: -5, y: 10 }

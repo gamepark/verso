@@ -9,7 +9,7 @@ class PlayerLayoutLocator extends ListLocator {
     const base = this.getBaseCoordinates(location, context)
     const xBase = base.x
     const yBase = base.y
-    if (location.x === undefined) return { x: xBase + 4, y: yBase }
+    if (location.x === undefined) return { x: xBase, y: yBase }
 
     const yLocation = location.id === 1 ? 8 : location.id === 2 ? 0 : -8
     return { x: xBase, y: yBase + yLocation }
@@ -19,13 +19,13 @@ class PlayerLayoutLocator extends ListLocator {
     switch (index) {
       case 0:
         if (context.rules.players.length === 1) return { x: -14.5, y: 12 }
-        if (context.rules.players.length === 2) return { x: -45, y: 12 }
+        if (context.rules.players.length === 2) return { x: -33, y: 12 }
         if (context.rules.players.length === 3) return { x: -50, y: 20 }
         if (context.rules.players.length === 4) return { x: -50, y: 20 }
         if (context.rules.players.length === 5) return { x: -55, y: 20 }
         return { x: -14, y: 25 }
       case 1:
-        if (context.rules.players.length === 2) return { x: 16, y: 12 }
+        if (context.rules.players.length === 2) return { x: 5, y: 12 }
         if (context.rules.players.length === 3) return { x: -14, y: -20 }
         if (context.rules.players.length === 4) return { x: -50, y: -20 }
         if (context.rules.players.length === 5) return { x: -55, y: -10 }
@@ -56,7 +56,7 @@ class PlayerLayoutLocator extends ListLocator {
 }
 
 export class PlayerLayoutSpotDescription extends DropAreaDescription {
-  width = 42
+  width = 35
   height = 24
 }
 

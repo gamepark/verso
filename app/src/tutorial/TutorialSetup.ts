@@ -17,6 +17,5 @@ export class TutorialSetup extends VersoSetup {
     this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck, rotation: true }, id: { front: 23, back: 34 } })
     this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck, rotation: false }, id: { front: 33, back: 24 } })
     this.material(MaterialType.Card).createItem({ location: { type: LocationType.Deck, rotation: false }, id: { front: 14, back: 35 } })
-
   }
 }

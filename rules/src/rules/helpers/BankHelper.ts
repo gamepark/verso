@@ -29,7 +29,9 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   getCardsToReturnToPlayerLayout(): CardItem[] {
-    return this.getCardsSortedByXLocation().slice(0, Math.max(this.bankCards.length - 2, 0))
+    return this.getCardsSortedByXLocation()
+      .slice(0, Math.max(this.bankCards.length - 2, 0))
+      .sort((a, b) => FaceCardHelper.getCardValue(a) - FaceCardHelper.getCardValue(b))
   }
 
   getCardsSortedByXLocation(): CardItem[] {

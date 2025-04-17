@@ -1,6 +1,7 @@
 import {
   CompetitiveScore,
   CustomMove,
+  FillGapStrategy,
   getEnumValues,
   HiddenMaterialRules,
   isMoveItem,
@@ -51,14 +52,16 @@ export class VersoRules
   locationsStrategies = {
     [MaterialType.Card]: {
       [LocationType.Deck]: new PositiveSequenceStrategy(),
+      [LocationType.Discard]: new PositiveSequenceStrategy(),
       [LocationType.PlayerLayout]: new PositiveSequenceStrategy(),
-      [LocationType.BankSequenceLayout]: new PositiveSequenceStrategy()
+      [LocationType.BankSequenceLayout]: new FillGapStrategy()
     }
   }
 
   hidingStrategies = {
     [MaterialType.Card]: {
       [LocationType.Deck]: hideIfRotated,
+      [LocationType.Discard]: hideIfRotated,
       [LocationType.PlayerLayout]: hideIfRotated,
       [LocationType.BankSequenceLayout]: hideIfRotated
     }
