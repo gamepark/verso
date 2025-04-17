@@ -11,6 +11,7 @@ import { VersoLogs } from './history/VersoLogs'
 import { Locators } from './locators/Locators'
 import { Material } from './material/Material'
 import translations from './translations.json'
+import { Tutorial } from './tutorial/Tutorial'
 
 setupTranslation(translations, { debug: false })
 
@@ -23,6 +24,7 @@ ReactDOM.render(
       GameSetup={VersoSetup}
       material={Material}
       locators={Locators}
+      tutorial={new Tutorial()}
       animations={gameAnimations}
       logs={new VersoLogs()}
     >

@@ -93,13 +93,6 @@ export class FaceCardDescription extends CardDescription {
   canShortClick(move: MaterialMove, context: ItemContext) {
     return isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.BankSequenceLayout && move.itemIndex === context.index
   }
-
-  displayHelp(
-    item: MaterialItem<number, number>,
-    context: ItemContext<number, number, number>
-  ): import('@gamepark/rules-api').DisplayHelp<number, number, number, number, any> {
-    return super.displayHelp(item, context)
-  }
 }
 
 const frontImages = {
