@@ -198,7 +198,7 @@
       "card.joker": "Cette carte est un <bold>Joker</bold>, et rapporte <bold>1 point</bold>. Les Jokers peuvent <bold>remplacer n'importe quelle valeur</bold> lorsque vous créez une suite.",
       "verso": "Au verso :",
       "verso.color": "Cette carte est forcément d'une <bold>autre couleur</bold>.",
-      "verso.value": "La valeur de cette carte est forcément <bold>{a} or {b}</bold>, et elle rapporte <bold>3 points</bold>.",
+      "verso.value": "La valeur de cette carte est forcément <bold>{a} ou {b}</bold>, et elle rapporte <bold>3 points</bold>.",
       "verso.joker": "La valeur de cette carte est forcément <bold>{a}, {b} ou Joker</bold>, et elle rapporte <bold>1 point</bold>.",
       "verso.any": "Cette carte peut être de <bold>n'importe quelle valeur</bold> et rapporte <bold>3 points</bold>.",
       "history.place.card.player": "{player} récupère un <0>{value} {color, select, 1{Bleu} 2{Vert} 3{Orange} other{Bleu}}</0>.",
