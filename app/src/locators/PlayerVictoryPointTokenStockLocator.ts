@@ -7,7 +7,7 @@ class PlayerVictoryPointTokenStockLocator extends PileLocator {
     const index = getRelativePlayerIndex(context, location.player)
     switch (index) {
       case 0:
-        if (context.rules.players.length === 1) return { x: -14.5, y: 12 }
+        if (context.rules.players.length === 1) return { x: -24.5, y: 2 }
         if (context.rules.players.length === 2) return { x: -40, y: 3 }
         if (context.rules.players.length === 3) return { x: -50, y: 20 }
         if (context.rules.players.length === 4) return { x: -50, y: 20 }

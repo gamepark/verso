@@ -88,7 +88,6 @@ export class VersoRules
       this.getMemory(move.data.player as number).memorize<number>(Memory.Score, (score) => score + scoreToAdd)
     }
     if (move.type === CustomMoveType.Score) {
-      console.log(move.data)
       return this.material(MaterialType.VictoryPointToken)
         .money(victoryPointTokens)
         .addMoney(move.data.score, { type: LocationType.PlayerVictoryPointTokenStock, player: move.data.player })

@@ -7,7 +7,7 @@ class VictoryPointTokenStockLocator extends PileLocator {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
-        return { x: -5, y: -8 }
+        return { x: -15, y: -18 }
       case 2:
         return { x: 20, y: -6 }
       case 3:
