@@ -89,7 +89,7 @@ export class VersoRules
     }
     if (move.type === CustomMoveType.Score) {
       console.log(move.data)
-      return this.material(MaterialType.VicotryPointToken)
+      return this.material(MaterialType.VictoryPointToken)
         .money(victoryPointTokens)
         .addMoney(move.data.score, { type: LocationType.PlayerVictoryPointTokenStock, player: move.data.player })
     }

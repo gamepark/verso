@@ -5,5 +5,5 @@ import { victoryPointTokenDescription } from './VictoryPointTokenDescription'
 
 export const Material: Partial<Record<MaterialType, MaterialDescription>> = {
   [MaterialType.Card]: faceCardDescription,
-  [MaterialType.VicotryPointToken]: victoryPointTokenDescription
+  [MaterialType.VictoryPointToken]: victoryPointTokenDescription
 }

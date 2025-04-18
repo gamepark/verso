@@ -3,10 +3,12 @@ import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons/faMoneyChe
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
-import { Face } from '@gamepark/verso/material/Face'
+import { CardItem, Face } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
+import { FaceCardHelper } from '@gamepark/verso/rules/helpers/FaceCardHelper'
+import { PlayerLayoutHelper } from '@gamepark/verso/rules/helpers/PlayerLayoutHelper'
 
 import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
 import ReverseLand2 from '../images/cards/reverse/Land2.jpg'
@@ -68,7 +70,9 @@ export class FaceCardDescription extends CardDescription {
     const { type, index } = context
     const moves = legalMoves.filter(isMoveItemType(type)).filter((move) => move.itemIndex === index)
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
-    const bank = legalMoves.filter(isCustomMoveType(CustomMoveType.BankSequence)).find((move) => move.data === index)
+    const bank = legalMoves.find(isCustomMoveType(CustomMoveType.BankSequence))
+    const card: CardItem = context.rules.material(MaterialType.Card).getItem(index)
+    const suite = new PlayerLayoutHelper(context.rules.game, context.player!).checkSuite(FaceCardHelper.getCardColor(card))
     if (flip) {
       return (
         <>
@@ -78,7 +82,7 @@ export class FaceCardDescription extends CardDescription {
         </>
       )
     }
-    if (bank) {
+    if (bank && index === suite?.maxInSuite) {
       return (
         <>
           <ItemMenuButton label={<Trans defaults="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
