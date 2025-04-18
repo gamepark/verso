@@ -2,5 +2,7 @@ export enum LocationType {
   Deck = 1,
   Discard,
   PlayerLayout,
-  BankSequenceLayout
+  BankSequenceLayout,
+  VictoryPointTokenStock,
+  PlayerVictoryPointTokenStock
 }

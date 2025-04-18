@@ -1,8 +1,7 @@
 export enum CustomMoveType {
   BankSequence = 1,
-  ValidateSequence,
+  Score,
   Pass,
-  DeclareSquare,
   SimulateOtherPlayerWithoutConsequence,
   SimulateOtherPlayerWithConsequence
 }

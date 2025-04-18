@@ -9,7 +9,7 @@ export class DiscardLocator extends PileLocator {
       case 1:
         return { x: 6.5, y: -18 }
       case 2:
-        return { x: -13.5, y: -6 }
+        return { x: -15.5, y: -6 }
       case 3:
       case 5:
         return { x: 6.5 }

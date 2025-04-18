@@ -8,6 +8,7 @@ import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
+import { ScoreType } from './ScoreType'
 
 export class BankSequenceRule extends PlayerTurnRule {
   getPlayerMoves() {
@@ -21,7 +22,14 @@ export class BankSequenceRule extends PlayerTurnRule {
 
     if (cardsInBank.length > 1) {
       const bankHelper = new BankHelper(this.game, this.player)
-      moves.push(this.customMove(CustomMoveType.ValidateSequence, { color: bankHelper.getColorInBank(), score: bankHelper.getBankScore() }))
+      moves.push(
+        this.customMove(CustomMoveType.Score, {
+          type: ScoreType.Sequence,
+          color: bankHelper.getColorInBank(),
+          score: bankHelper.getBankScore(),
+          player: this.player
+        })
+      )
     }
 
     moves.push(...new BankHelper(this.game, this.player).getPossibleMovesInBank())

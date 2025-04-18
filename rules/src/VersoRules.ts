@@ -16,6 +16,7 @@ import {
 import { CardId, FaceColor } from './material/Face'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
+import { victoryPointTokens } from './material/VictoryPointToken'
 import { BankLastSequenceRule } from './rules/BankLastSequenceRule'
 import { BankSequenceRule } from './rules/BankSequenceRule'
 import { ChooseActionRule } from './rules/ChooseActionRule'
@@ -26,6 +27,7 @@ import { FaceCardHelper } from './rules/helpers/FaceCardHelper'
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
+import { ScoreType } from './rules/ScoreType'
 import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
 import customMove = MaterialMoveBuilder.customMove
 
@@ -74,15 +76,22 @@ export class VersoRules
       const color = FaceCardHelper.getCardColor(card)
       const otherColors = getEnumValues(FaceColor).filter((otherColor) => otherColor !== color)
       if (color === card.location.id && this.lineSize(player, color) === 3 && otherColors.every((otherColor) => this.lineSize(player, otherColor) >= 3)) {
-        return [customMove(CustomMoveType.DeclareSquare, player)]
+        return [customMove(CustomMoveType.Score, { type: ScoreType.Square, score: 7, player })]
       }
     }
     return []
   }
 
   protected onCustomMove(move: CustomMove) {
-    if (move.type === CustomMoveType.DeclareSquare) {
-      this.getMemory(move.data as number).memorize<number>(Memory.Score, (score) => score + 7)
+    if (move.type === CustomMoveType.Score && move.data.type === ScoreType.Square) {
+      const scoreToAdd: number = move.data.score ?? 7
+      this.getMemory(move.data.player as number).memorize<number>(Memory.Score, (score) => score + scoreToAdd)
+    }
+    if (move.type === CustomMoveType.Score) {
+      console.log(move.data)
+      return this.material(MaterialType.VicotryPointToken)
+        .money(victoryPointTokens)
+        .addMoney(move.data.score, { type: LocationType.PlayerVictoryPointTokenStock, player: move.data.player })
     }
     return []
   }

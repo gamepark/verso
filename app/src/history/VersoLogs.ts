@@ -3,6 +3,7 @@ import { isCustomMoveType, isMoveItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 import { RuleId } from '@gamepark/verso/rules/RuleId'
+import { ScoreType } from '@gamepark/verso/rules/ScoreType'
 import { DeclareSquareHistory } from './components/DeclareSquareHistory'
 import { PlayCardHistory } from './components/PlayCardHistory'
 import { SimulateOtherPlayerWithConsequenceHistory } from './components/SimulateOtherPlayerWithConsequenceHistory'
@@ -23,14 +24,14 @@ export class VersoLogs implements LogDescription {
       }
     }
 
-    if (isCustomMoveType(CustomMoveType.ValidateSequence)(move)) {
+    if (isCustomMoveType(CustomMoveType.Score)(move) && move.data.type === ScoreType.Sequence) {
       return {
         Component: ValidateSequenceHistory,
         player: actionPlayer
       }
     }
 
-    if (isCustomMoveType(CustomMoveType.DeclareSquare)(move)) {
+    if (isCustomMoveType(CustomMoveType.Score)(move) && move.data.type === ScoreType.Square) {
       return {
         Component: DeclareSquareHistory,
         player: actionPlayer

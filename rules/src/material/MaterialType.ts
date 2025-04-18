@@ -1,3 +1,4 @@
 export enum MaterialType {
-  Card = 1
+  Card = 1,
+  VicotryPointToken
 }

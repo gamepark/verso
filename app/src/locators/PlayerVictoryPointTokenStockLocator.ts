@@ -1,31 +1,20 @@
-import { DropAreaDescription, getRelativePlayerIndex, ListLocator, MaterialContext } from '@gamepark/react-game'
-import { Location } from '@gamepark/rules-api'
-import { LocationType } from '@gamepark/verso/material/LocationType'
+import { getRelativePlayerIndex, MaterialContext, PileLocator } from '@gamepark/react-game'
+import { Location, MaterialItem } from '@gamepark/rules-api'
 
-class PlayerLayoutLocator extends ListLocator {
-  gap = { x: 7 }
-  maxCount = 5
+class PlayerVictoryPointTokenStockLocator extends PileLocator {
+  radius = 3
   getCoordinates(location: Location, context: MaterialContext) {
-    const base = this.getBaseCoordinates(location, context)
-    const xBase = base.x
-    const yBase = base.y
-    if (location.x === undefined) return { x: xBase, y: yBase }
-
-    const yLocation = location.id === 1 ? 8 : location.id === 2 ? 0 : -8
-    return { x: xBase, y: yBase + yLocation }
-  }
-  getBaseCoordinates(location: Location, context: MaterialContext) {
     const index = getRelativePlayerIndex(context, location.player)
     switch (index) {
       case 0:
         if (context.rules.players.length === 1) return { x: -14.5, y: 12 }
-        if (context.rules.players.length === 2) return { x: -33, y: 17 }
+        if (context.rules.players.length === 2) return { x: -40, y: 3 }
         if (context.rules.players.length === 3) return { x: -50, y: 20 }
         if (context.rules.players.length === 4) return { x: -50, y: 20 }
         if (context.rules.players.length === 5) return { x: -55, y: 20 }
         return { x: -14, y: 25 }
       case 1:
-        if (context.rules.players.length === 2) return { x: 5, y: 17 }
+        if (context.rules.players.length === 2) return { x: 40, y: 3 }
         if (context.rules.players.length === 3) return { x: -14, y: -20 }
         if (context.rules.players.length === 4) return { x: -50, y: -20 }
         if (context.rules.players.length === 5) return { x: -55, y: -10 }
@@ -48,16 +37,10 @@ class PlayerLayoutLocator extends ListLocator {
     }
   }
 
-  getDropLocations() {
-    return [{ type: LocationType.PlayerLayout }]
+  getPileId(item: MaterialItem) {
+    return `${item.location.player}-${item.id}`
   }
-
-  locationDescription = new PlayerLayoutSpotDescription()
 }
 
-export class PlayerLayoutSpotDescription extends DropAreaDescription {
-  width = 35
-  height = 24
-}
 
-export const playerLayoutLocator = new PlayerLayoutLocator()
+export const playerVictoryPointTokenStockLocator = new PlayerVictoryPointTokenStockLocator()
