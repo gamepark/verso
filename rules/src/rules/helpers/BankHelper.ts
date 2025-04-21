@@ -116,11 +116,17 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   reorderJocker() {
-    const valuesInBank = this.bankCards.getItems().map((bankCard) => FaceCardHelper.getCardValue(bankCard as CardItem))
+    const valuesInBank = this.bankCards
+      .sort((item) => item.location.x ?? 0)
+      .getItems()
+      .map((bankCard) => FaceCardHelper.getCardValue(bankCard as CardItem))
 
     const moves: MaterialMove[] = []
-
     if (!valuesInBank.includes(0)) return moves
+
+    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
+
+    if (jokerIndex === 0 && !valuesInBank.includes(1)) return moves
 
     const reorderdValues = this.reorder(valuesInBank)
 
