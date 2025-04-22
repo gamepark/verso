@@ -1,4 +1,4 @@
-import { Location, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
+import { getEnumValues, Location, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -89,6 +89,10 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       }
     }
     return null
+  }
+
+  atLeastOneColorAsSequence() {
+    return getEnumValues(FaceColor).some((color) => this.checkSuite(color) !== null)
   }
 
   private getCardIndexFromId(cardId: number) {

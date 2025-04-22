@@ -1,5 +1,6 @@
 import { CustomMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { CustomMoveType } from './CustomMoveType'
+import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
@@ -7,7 +8,9 @@ export class BankLastSequenceRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = super.getPlayerMoves()
 
-    moves.push(this.customMove(CustomMoveType.BankSequence))
+    if (new PlayerLayoutHelper(this.game, this.player).atLeastOneColorAsSequence()) {
+      moves.push(this.customMove(CustomMoveType.BankSequence))
+    }
 
     moves.push(this.customMove(CustomMoveType.Pass))
     return moves
