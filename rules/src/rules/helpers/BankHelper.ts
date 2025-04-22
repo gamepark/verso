@@ -124,6 +124,7 @@ export class BankHelper extends MaterialRulesPart {
     const moves: MaterialMove[] = []
 
     const reorderdValues = this.reorder(valuesInBank)
+    console.log(reorderdValues)
 
     for (let i = 0; i < reorderdValues.length; i++) {
       moves.push(
@@ -143,8 +144,7 @@ export class BankHelper extends MaterialRulesPart {
 
     // Si pas de 0, on retourne simplement les chiffres triés
 
-    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
-    if (!hasJoker || (jokerIndex === 0 && !valuesInBank.includes(1))) {
+    if (!hasJoker) {
       return numbers
     }
 
@@ -158,6 +158,11 @@ export class BankHelper extends MaterialRulesPart {
 
     // Si aucun emplacement entre des nombres non consécutifs n'est trouvé
     // Placer le 0 au début si 1 est absent, sinon à la fin si 6 est absent
+    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
+    if (jokerIndex === 0 && !valuesInBank.includes(1)) {
+      return [0, ...numbers]
+    }
+
     if (!numbers.includes(6)) {
       return [...numbers, 0]
     } else {
