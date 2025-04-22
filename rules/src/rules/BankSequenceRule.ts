@@ -82,7 +82,6 @@ export class BankSequenceRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
 
     this.memorize(Memory.BankedSequence, bankHelper.getColorInBank())
-    this.memorize(Memory.Score, (oldScore?: number) => (oldScore ?? 0) + bankHelper.getBankScore(), this.player)
 
     bankHelper.getCardsToDiscard().forEach((card) => {
       moves.push(

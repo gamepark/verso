@@ -27,7 +27,7 @@ import { FaceCardHelper } from './rules/helpers/FaceCardHelper'
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { RuleId } from './rules/RuleId'
-import { ScoreType } from './rules/ScoreType'
+import { Scoring, ScoreType } from './rules/ScoreType'
 import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
 import customMove = MaterialMoveBuilder.customMove
 
@@ -83,14 +83,12 @@ export class VersoRules
   }
 
   protected onCustomMove(move: CustomMove) {
-    if (move.type === CustomMoveType.Score && move.data.type === ScoreType.Square) {
-      const scoreToAdd: number = move.data.score ?? 7
-      this.getMemory(move.data.player as number).memorize<number>(Memory.Score, (score) => score + scoreToAdd)
-    }
     if (move.type === CustomMoveType.Score) {
+      const { player, score } = move.data as Scoring
+      this.getMemory(player).memorize<number>(Memory.Score, (previousScore) => previousScore + score)
       return this.material(MaterialType.VictoryPointToken)
         .money(victoryPointTokens)
-        .addMoney(move.data.score, { type: LocationType.PlayerVictoryPointTokenStock, player: move.data.player })
+        .addMoney(score, { type: LocationType.PlayerVictoryPointTokenStock, player: player })
     }
     return []
   }
