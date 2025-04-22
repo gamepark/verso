@@ -23,7 +23,7 @@ export abstract class FlipCardRule extends PlayerTurnRule {
     const card = this.material(MaterialType.Card).index(move.itemIndex)
     if (FaceCardHelper.getCardColor(card.getItem() as CardItem) !== move.location.id) {
       if (playerLayoutHelper.playerHasFace(card)) {
-        return [card.moveItem((item) => ({ ...item.location, type: LocationType.Discard }))]
+        return [card.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation }))]
       } else {
         const { cardColor, cardValue } = this.getCardInfos(card.getItem() as CardItem)
         const newPlace = playerLayoutHelper.getPlace(player, cardColor, cardValue)

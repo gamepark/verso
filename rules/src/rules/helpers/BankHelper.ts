@@ -122,11 +122,6 @@ export class BankHelper extends MaterialRulesPart {
       .map((bankCard) => FaceCardHelper.getCardValue(bankCard as CardItem))
 
     const moves: MaterialMove[] = []
-    if (!valuesInBank.includes(0)) return moves
-
-    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
-
-    if (jokerIndex === 0 && !valuesInBank.includes(1)) return moves
 
     const reorderdValues = this.reorder(valuesInBank)
 
@@ -147,7 +142,9 @@ export class BankHelper extends MaterialRulesPart {
     const hasJoker = valuesInBank.includes(0)
 
     // Si pas de 0, on retourne simplement les chiffres triés
-    if (!hasJoker) {
+
+    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
+    if (!hasJoker || (jokerIndex === 0 && !valuesInBank.includes(1))) {
       return numbers
     }
 
