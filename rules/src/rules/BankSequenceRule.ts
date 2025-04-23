@@ -1,5 +1,5 @@
-import { MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardId, CardItem, getItemFaceColor, getItemFaceValue, JOKER } from '../material/Face'
+import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { CardId, CardItem, getItemFace, getItemFaceColor, getItemFaceValue, isValidSequence, JOKER } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
@@ -10,15 +10,13 @@ import { ScoreType } from './ScoreType'
 
 export class BankSequenceRule extends PlayerTurnRule {
   getPlayerMoves() {
-    const cardsInBank = this.bankCards
+    const moves: MaterialMove[] = this.cardsICanBank.moveItems((item) => ({
+      type: LocationType.BankSequenceLayout,
+      rotation: item.location.rotation
+    }))
 
-    if (cardsInBank.length === 0) {
-      return this.getMovesIfBankIsEmpty()
-    }
-
-    const moves: MaterialMove[] = []
-
-    if (cardsInBank.length > 1) {
+    const bankCards = this.bankCards
+    if (bankCards.length > 1) {
       const bankHelper = new BankHelper(this.game, this.player)
       moves.push(
         this.customMove(CustomMoveType.Score, {
@@ -30,15 +28,14 @@ export class BankSequenceRule extends PlayerTurnRule {
       )
     }
 
-    moves.push(...new BankHelper(this.game, this.player).getPossibleMovesInBank())
-
     return moves
   }
 
-  getMovesIfBankIsEmpty() {
+  get cardsICanBank() {
+    const sequence = this.bankCards.getItems<CardId>().map(getItemFace)
     const playerCards = this.playerCards
-    return playerCards
-      .filter((card, index) => {
+    if (!sequence.length) {
+      return playerCards.filter((card, index) => {
         const color = getItemFaceColor(card as CardItem)
         const otherValues = playerCards
           .filter((card2, index2) => index2 !== index && getItemFaceColor(card2 as CardItem) === color)
@@ -49,7 +46,9 @@ export class BankSequenceRule extends PlayerTurnRule {
         if (value === JOKER) return true
         return otherValues.some((otherValue) => otherValue === JOKER || otherValue === value - 1 || otherValue === value + 1)
       })
-      .moveItems(({ location }: MaterialItem) => ({ type: LocationType.BankSequenceLayout, rotation: location.rotation }))
+    } else {
+      return playerCards.filter((item) => isValidSequence([...sequence, getItemFace(item as CardItem)]))
+    }
   }
 
   get playerCards() {
