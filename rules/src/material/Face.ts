@@ -30,8 +30,10 @@ export enum FaceColor {
   Sky
 }
 
+export const JOKER = 0
 export const getFaceColor = (face: Face) => Math.floor(face / 10) as FaceColor
-export const isJoker = (face: Face) => face % 10 === 0
+export const getFaceValue = (face: Face) => face % 10
+export const isJoker = (face: Face) => getFaceValue(face) === JOKER
 
 export type CardId = {
   front: Face
@@ -73,3 +75,7 @@ export function getCardIds(): CardId[] {
       { back: Face.Sky6, front: Face.LandJoker }
     ])
 }
+
+export const getItemFace = (item: CardItem): Face => (item.location.rotation ? item.id.back : item.id.front)
+export const getItemFaceColor = (item: CardItem): FaceColor => getFaceColor(getItemFace(item))
+export const getItemFaceValue = (item: CardItem): number => getFaceValue(getItemFace(item))

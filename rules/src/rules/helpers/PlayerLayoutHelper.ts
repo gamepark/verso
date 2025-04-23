@@ -1,8 +1,7 @@
-import { getEnumValues, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
-import { CardItem, FaceColor, isJoker } from '../../material/Face'
+import { getEnumValues, Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { FaceCardHelper } from './FaceCardHelper'
 
 export class PlayerLayoutHelper extends MaterialRulesPart {
   constructor(
@@ -14,33 +13,24 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
 
   playerHasFace(card: Material) {
     if (!card.length) return false
-    const face = FaceCardHelper.getCurrentId(card.getItem()!)
+    const face = getItemFace(card.getItem<CardId>()!)
     const cardIndex = card.getIndex()
-    return this.getCards(this.player).filter((item, index) => index !== cardIndex && FaceCardHelper.getCurrentId(item as CardItem) === face).length > 0
+    return this.getCards(this.player).entries.some(([index, item]) => index !== cardIndex && getItemFace(item as CardItem) === face)
   }
 
-  checkIfPlayerAlreadyHaveCard(card?: MaterialItem) {
+  checkIfPlayerAlreadyHaveCard(card?: CardItem) {
     if (!card) return false
-
+    const cardFace = getItemFace(card)
     return this.getCards(this.player)
-      .getItems()
-      .some((item) => {
-        const itemCurrentId = FaceCardHelper.getCurrentId(item as CardItem)
-        const cardCurrentId = FaceCardHelper.getCurrentId(card as CardItem)
-        return itemCurrentId === cardCurrentId
-      })
+      .getItems<CardId>()
+      .some((item) => getItemFace(item) === cardFace)
   }
 
   checkSuite(color: FaceColor) {
     const cards = this.getCards(this.player)
-      .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
-        return cardColor === color
-      })
-      .getItems()
-      .map((item) => {
-        return FaceCardHelper.getCurrentId(item as CardItem)
-      })
+      .filter((card) => getItemFaceColor(card as CardItem) === color)
+      .getItems<CardId>()
+      .map(getItemFace)
       .sort()
     let maxInSuite: number | null = null
     const suites = new Set<number>()
@@ -74,10 +64,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
 
   private getCardIndexFromId(cardId: number) {
     return this.getCards(this.player)
-      .filter((card) => {
-        const currentId = FaceCardHelper.getCurrentId(card as CardItem)
-        return currentId === cardId
-      })
+      .filter((card) => getItemFace(card as CardItem) === cardId)
       .getIndex()
   }
 

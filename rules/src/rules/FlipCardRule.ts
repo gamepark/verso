@@ -1,14 +1,13 @@
 import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardItem, FaceColor } from '../material/Face'
+import { CardId, CardItem, FaceColor, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 
 export abstract class FlipCardRule extends PlayerTurnRule {
   flipPlayerCard(player: number, color: FaceColor) {
     const cardToFlip = this.getPlayerLayoutByPlayerId(player)
-      .filter((item) => FaceCardHelper.getCardColor(item as CardItem) === color)
+      .filter((item) => getItemFaceColor(item as CardItem) === color)
       .maxBy((item) => item.location.x!)
     if (!cardToFlip.length) return
     return cardToFlip.moveItem((item) => ({ ...item.location, rotation: !item.location.rotation }))
@@ -21,23 +20,16 @@ export abstract class FlipCardRule extends PlayerTurnRule {
     const player = move.location.player!
     const playerLayoutHelper = new PlayerLayoutHelper(this.game, player)
     const card = this.material(MaterialType.Card).index(move.itemIndex)
-    if (FaceCardHelper.getCardColor(card.getItem() as CardItem) !== move.location.id) {
+    const color = getItemFaceColor(card.getItem<CardId>()!)
+    if (color !== move.location.id) {
       if (playerLayoutHelper.playerHasFace(card)) {
         return [card.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation }))]
       } else {
-        const { cardColor } = this.getCardInfos(card.getItem() as CardItem)
-        return [card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: item.location.player, id: cardColor, rotation: item.location.rotation }))]
+        return [card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: item.location.player, id: color, rotation: item.location.rotation }))]
       }
     } else {
       return []
     }
-  }
-
-  getCardInfos(cardToPlay: CardItem) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
-    const isJoker = FaceCardHelper.isJoker(cardToPlay)
-    return { cardColor, cardValue, isJoker }
   }
 
   private getPlayerLayoutByPlayerId(playerId: number) {

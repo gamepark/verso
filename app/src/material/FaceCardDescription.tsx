@@ -1,34 +1,14 @@
-import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
 import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons/faMoneyCheckDollar'
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
-import { CardItem, Face } from '@gamepark/verso/material/Face'
+import { CardItem, Face, getItemFaceColor } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
-import { FaceCardHelper } from '@gamepark/verso/rules/helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from '@gamepark/verso/rules/helpers/PlayerLayoutHelper'
-
-import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
-import ReverseLand2 from '../images/cards/reverse/Land2.jpg'
-import ReverseLand3 from '../images/cards/reverse/Land3.jpg'
-import ReverseLand4 from '../images/cards/reverse/Land4.jpg'
-import ReverseLand5 from '../images/cards/reverse/Land5.jpg'
-import ReverseLand6 from '../images/cards/reverse/Land6.jpg'
-import ReverseSea1 from '../images/cards/reverse/Sea1.jpg'
-import ReverseSea2 from '../images/cards/reverse/Sea2.jpg'
-import ReverseSea3 from '../images/cards/reverse/Sea3.jpg'
-import ReverseSea4 from '../images/cards/reverse/Sea4.jpg'
-import ReverseSea5 from '../images/cards/reverse/Sea5.jpg'
-import ReverseSea6 from '../images/cards/reverse/Sea6.jpg'
-import ReverseSky1 from '../images/cards/reverse/Sky1.jpg'
-import ReverseSky2 from '../images/cards/reverse/Sky2.jpg'
-import ReverseSky3 from '../images/cards/reverse/Sky3.jpg'
-import ReverseSky4 from '../images/cards/reverse/Sky4.jpg'
-import ReverseSky5 from '../images/cards/reverse/Sky5.jpg'
-import ReverseSky6 from '../images/cards/reverse/Sky6.jpg'
-
+import { Trans } from 'react-i18next'
 import FrontLand1 from '../images/cards/front/Land1.jpg'
 import FrontLand2 from '../images/cards/front/Land2.jpg'
 import FrontLand3 from '../images/cards/front/Land3.jpg'
@@ -50,7 +30,24 @@ import FrontSky4 from '../images/cards/front/Sky4.jpg'
 import FrontSky5 from '../images/cards/front/Sky5.jpg'
 import FrontSky6 from '../images/cards/front/Sky6.jpg'
 import FrontSkyJoker from '../images/cards/front/SkyJoker.jpg'
-import { Trans } from 'react-i18next'
+import ReverseLand1 from '../images/cards/reverse/Land1.jpg'
+import ReverseLand2 from '../images/cards/reverse/Land2.jpg'
+import ReverseLand3 from '../images/cards/reverse/Land3.jpg'
+import ReverseLand4 from '../images/cards/reverse/Land4.jpg'
+import ReverseLand5 from '../images/cards/reverse/Land5.jpg'
+import ReverseLand6 from '../images/cards/reverse/Land6.jpg'
+import ReverseSea1 from '../images/cards/reverse/Sea1.jpg'
+import ReverseSea2 from '../images/cards/reverse/Sea2.jpg'
+import ReverseSea3 from '../images/cards/reverse/Sea3.jpg'
+import ReverseSea4 from '../images/cards/reverse/Sea4.jpg'
+import ReverseSea5 from '../images/cards/reverse/Sea5.jpg'
+import ReverseSea6 from '../images/cards/reverse/Sea6.jpg'
+import ReverseSky1 from '../images/cards/reverse/Sky1.jpg'
+import ReverseSky2 from '../images/cards/reverse/Sky2.jpg'
+import ReverseSky3 from '../images/cards/reverse/Sky3.jpg'
+import ReverseSky4 from '../images/cards/reverse/Sky4.jpg'
+import ReverseSky5 from '../images/cards/reverse/Sky5.jpg'
+import ReverseSky6 from '../images/cards/reverse/Sky6.jpg'
 import { FaceCardHelp } from './help/FaceCardHelp'
 
 export class FaceCardDescription extends CardDescription {
@@ -72,7 +69,7 @@ export class FaceCardDescription extends CardDescription {
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
     const bank = legalMoves.find(isCustomMoveType(CustomMoveType.BankSequence))
     const card: CardItem = context.rules.material(MaterialType.Card).getItem(index)
-    const suite = new PlayerLayoutHelper(context.rules.game, context.player!).checkSuite(FaceCardHelper.getCardColor(card))
+    const suite = new PlayerLayoutHelper(context.rules.game, context.player!).checkSuite(getItemFaceColor(card))
     if (flip) {
       return (
         <>

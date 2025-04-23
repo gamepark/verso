@@ -1,8 +1,7 @@
 import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardItem } from '../material/Face'
+import { CardId, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
@@ -35,8 +34,8 @@ export class PlayCardRule extends PlayerTurnRule {
   }
 
   moveCardToAvailablePlace(): MaterialMove {
-    const { cardColor } = this.getCardInfos(this.card.getItem() as CardItem)
-    return this.card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: cardColor, rotation: item.location.rotation }))
+    const color = getItemFaceColor(this.card.getItem<CardId>()!)
+    return this.card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: color, rotation: item.location.rotation }))
   }
 
   afterItemMove(move: ItemMove) {
@@ -57,12 +56,6 @@ export class PlayCardRule extends PlayerTurnRule {
     }
 
     return moves
-  }
-
-  getCardInfos(cardToPlay: CardItem) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
-    return { cardColor, cardValue }
   }
 
   get cardToPlay() {

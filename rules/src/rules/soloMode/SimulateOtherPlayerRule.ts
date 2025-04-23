@@ -1,17 +1,16 @@
 import { isMoveItem, ItemMove, MaterialMove } from '@gamepark/rules-api'
-import { CardId, CardItem } from '../../material/Face'
+import { CardId, getItemFaceColor, getItemFaceValue, JOKER } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 import { CustomMoveType } from '../CustomMoveType'
 import { FlipCardRule } from '../FlipCardRule'
-import { FaceCardHelper } from '../helpers/FaceCardHelper'
 import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
 export class SimulateOtherPlayerRule extends FlipCardRule {
   onRuleStart(): MaterialMove[] {
     const moves: MaterialMove[] = []
-    this.memorize(Memory.CardToFlipValue, FaceCardHelper.getCardValue(this.cardInDeck.getItem() as CardItem))
+    this.memorize(Memory.CardToFlipValue, getItemFaceValue(this.cardInDeck.getItem<CardId>()!))
     moves.push(this.cardInDeck.moveItem((item) => ({ ...item.location, rotation: !item.location.rotation })))
     return moves
   }
@@ -20,14 +19,14 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
     if (isMoveItem(move) && move.location.type === LocationType.Deck) {
       const moves: MaterialMove[] = []
       const cardInDeck = this.cardInDeck
-      const { cardValue, isJoker } = this.getCardInfos(cardInDeck.getItem<CardId>()!)
+      const value = getItemFaceValue(cardInDeck.getItem<CardId>()!)
       const otherFaceValue = this.remind(Memory.CardToFlipValue)
 
-      if (isJoker || otherFaceValue === 0 || cardValue <= otherFaceValue) {
+      if (otherFaceValue === JOKER || value <= otherFaceValue) {
         moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence))
       } else {
         moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithConsequence))
-        const flip = this.flipPlayerCard(this.player, FaceCardHelper.getCardColor(cardInDeck.getItem<CardId>()!))
+        const flip = this.flipPlayerCard(this.player, getItemFaceColor(cardInDeck.getItem<CardId>()!))
         if (flip) moves.push(flip)
       }
       moves.push(cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))

@@ -1,9 +1,8 @@
 import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
-import { CardItem, FaceColor } from '../../material/Face'
+import { CardItem, FaceColor, getItemFaceColor, getItemFaceValue, JOKER } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
-import { FaceCardHelper } from './FaceCardHelper'
 
 export class BankHelper extends MaterialRulesPart {
   constructor(
@@ -19,10 +18,10 @@ export class BankHelper extends MaterialRulesPart {
 
   getPossibleMovesInBank() {
     const bankCards: CardItem[] = this.bankCards.getItems()
-    const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))
+    const valuesInBank = bankCards.map(getItemFaceValue)
 
-    if (valuesInBank.includes(0)) {
-      const jokerPosition = bankCards.find((card) => FaceCardHelper.isJoker(card))?.location.x ?? 0
+    if (valuesInBank.includes(JOKER)) {
+      const jokerPosition = bankCards.find((card) => getItemFaceValue(card) === JOKER)?.location.x ?? 0
       if (jokerPosition === bankCards.length - 1) {
         return this.getPossibleMoveIfBankContainJoker(valuesInBank)
       }
@@ -33,34 +32,25 @@ export class BankHelper extends MaterialRulesPart {
 
   getPossibleMovesIfBankDontContainJoker(valuesInBank: number[]) {
     const possibleCards = this.playerCards
+      .filter((card) => getItemFaceColor(card as CardItem) === this.getColorInBank())
       .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
-        return cardColor === this.getColorInBank()
-      })
-      .filter((card) => {
-        const cardValue = FaceCardHelper.getCardValue(card as CardItem)
-        const isJoker = FaceCardHelper.isJoker(card as CardItem)
-        return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || isJoker
+        const cardValue = getItemFaceValue(card as CardItem)
+        return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || cardValue === JOKER
       })
     return possibleCards.moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
   }
 
   private getPossibleMoveIfBankContainJoker(valuesInBank: number[]) {
+    const colorInBank = this.getColorInBank()
     if (valuesInBank.length === 1) {
       return this.playerCards
-        .filter((card) => {
-          const cardColor = FaceCardHelper.getCardColor(card as CardItem)
-          return cardColor === this.getColorInBank()
-        })
+        .filter((card) => getItemFaceColor(card as CardItem) === colorInBank)
         .moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
     }
     const possibleCards = this.playerCards
+      .filter((card) => getItemFaceColor(card as CardItem) === colorInBank)
       .filter((card) => {
-        const cardColor = FaceCardHelper.getCardColor(card as CardItem)
-        return cardColor === this.getColorInBank()
-      })
-      .filter((card) => {
-        const cardValue = FaceCardHelper.getCardValue(card as CardItem)
+        const cardValue = getItemFaceValue(card as CardItem)
         return (
           valuesInBank.includes(cardValue + 2) ||
           valuesInBank.includes(cardValue - 2) ||
@@ -73,7 +63,7 @@ export class BankHelper extends MaterialRulesPart {
 
   getColorInBank(): FaceColor {
     const bankCards = this.bankCards.getItems()
-    return FaceCardHelper.getCardColor(bankCards[0] as CardItem)
+    return getItemFaceColor(bankCards[0] as CardItem)
   }
 
   get playerCards() {

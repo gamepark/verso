@@ -1,14 +1,11 @@
 import { Material, MaterialItem, PositiveSequenceStrategy } from '@gamepark/rules-api'
-import { CardId, CardItem } from '../material/Face'
-import { FaceCardHelper } from './helpers/FaceCardHelper'
-
-const JOKER = 0
+import { CardId, CardItem, getItemFaceValue, JOKER } from '../material/Face'
 
 export class BankSequenceLayoutLocationStrategy extends PositiveSequenceStrategy {
-  addItem(material: Material, item: MaterialItem) {
-    const cardValue = FaceCardHelper.getCardValue(item as CardItem)
+  addItem(material: Material, item: CardItem) {
+    const cardValue = getItemFaceValue(item)
     const sequence = material.sort((item) => item.location.x!).getItems<CardId>()
-    const values = sequence.map((item) => FaceCardHelper.getCardValue(item))
+    const values = sequence.map(getItemFaceValue)
     if (values.includes(JOKER)) {
       if (sequence.length === 1) {
         if (cardValue === 1) {

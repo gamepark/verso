@@ -12,7 +12,7 @@ import {
   PositiveSequenceStrategy,
   TimeLimit
 } from '@gamepark/rules-api'
-import { CardId, FaceColor } from './material/Face'
+import { CardId, FaceColor, getItemFaceColor } from './material/Face'
 import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { victoryPointTokens } from './material/VictoryPointToken'
@@ -23,7 +23,6 @@ import { ChooseActionRule } from './rules/ChooseActionRule'
 import { CustomMoveType } from './rules/CustomMoveType'
 import { DiscardCardRule } from './rules/DiscardCardRule'
 import { FlipCardAfterBankSequenceRule } from './rules/FlipCardAfterBankSequenceRule'
-import { FaceCardHelper } from './rules/helpers/FaceCardHelper'
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { PlayerLayoutLocationStrategy } from './rules/PlayerLayoutLocationStrategy'
@@ -74,7 +73,7 @@ export class VersoRules
     if (isMoveItem(move) && move.location.type === LocationType.PlayerLayout) {
       const card = this.material(MaterialType.Card).getItem<CardId>(move.itemIndex)
       const player = card.location.player!
-      const color = FaceCardHelper.getCardColor(card)
+      const color = getItemFaceColor(card)
       const otherColors = getEnumValues(FaceColor).filter((otherColor) => otherColor !== color)
       if (color === card.location.id && this.lineSize(player, color) === 3 && otherColors.every((otherColor) => this.lineSize(player, otherColor) >= 3)) {
         return [customMove(CustomMoveType.Score, { type: ScoreType.Square, score: 7, player })]

@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialHelpProps } from '@gamepark/react-game'
-import { CardItem } from '@gamepark/verso/material/Face'
-import { FaceCardHelper } from '@gamepark/verso/rules/helpers/FaceCardHelper'
+import { CardItem, getItemFaceColor, getItemFaceValue, JOKER } from '@gamepark/verso/material/Face'
 import { FC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
@@ -14,29 +13,28 @@ const components = {
 export const FaceCardHelp: FC<MaterialHelpProps> = (props) => {
   const { t } = useTranslation()
   const { item } = props
-  const color = FaceCardHelper.getCardColor(item as CardItem)
-  const value = FaceCardHelper.getCardValue(item as CardItem)
-  const isJoker = FaceCardHelper.isJoker(item as CardItem)
+  const color = getItemFaceColor(item as CardItem)
+  const value = getItemFaceValue(item as CardItem)
   const points = item.location?.rotation ? 3 : 1
 
   const lowerValue = value === 1 ? 6 : value - 1
-  const higtherValue = value === 6 ? 1 : value + 1
+  const higherValue = value === 6 ? 1 : value + 1
 
   const VersoValue = () => {
-    if (isJoker) {
+    if (value === JOKER) {
       return <Trans defaults="verso.any" components={components} />
     }
     if (points === 1) {
-      return <Trans defaults="verso.value" values={{ a: lowerValue, b: higtherValue }} components={components} />
+      return <Trans defaults="verso.value" values={{ a: lowerValue, b: higherValue }} components={components} />
     }
-    return <Trans defaults="verso.joker" values={{ a: lowerValue, b: higtherValue }} components={components} />
+    return <Trans defaults="verso.joker" values={{ a: lowerValue, b: higherValue }} components={components} />
   }
 
   return (
     <>
       <h2>{t(`card.${color}`)}</h2>
       <p>
-        <Trans defaults={isJoker ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
+        <Trans defaults={value === JOKER ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
       </p>
       <Trans defaults="verso" />
       <ul css={listCss}>
