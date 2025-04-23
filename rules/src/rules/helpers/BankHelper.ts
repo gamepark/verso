@@ -1,6 +1,6 @@
 import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
-import { CardItem, FaceColor, getItemFaceColor } from '../../material/Face'
+import { CardId, FaceColor, getItemFaceColor } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
 
@@ -17,8 +17,7 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   getColorInBank(): FaceColor {
-    const bankCards = this.bankCards.getItems()
-    return getItemFaceColor(bankCards[0] as CardItem)
+    return getItemFaceColor(this.bankCards.getItem<CardId>()!)
   }
 
   get bankCards() {
