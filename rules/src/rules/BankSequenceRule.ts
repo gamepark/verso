@@ -1,9 +1,9 @@
 import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardId, CardItem, getItemFace, getItemFaceColor, getItemFaceValue, isValidSequence, JOKER } from '../material/Face'
+import { sumBy } from 'lodash'
+import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, getItemFaceValue, isValidSequence, JOKER } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
-import { BankHelper } from './helpers/BankHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 import { ScoreType } from './ScoreType'
@@ -15,14 +15,12 @@ export class BankSequenceRule extends PlayerTurnRule {
       rotation: item.location.rotation
     }))
 
-    const bankCards = this.bankCards
-    if (bankCards.length > 1) {
-      const bankHelper = new BankHelper(this.game, this.player)
+    if (this.sequenceCards.length > 1) {
       moves.push(
         this.customMove(CustomMoveType.Score, {
           type: ScoreType.Sequence,
-          color: bankHelper.getColorInBank(),
-          score: bankHelper.getBankScore(),
+          color: this.sequenceColor,
+          score: this.sequenceScore,
           player: this.player
         })
       )
@@ -32,7 +30,7 @@ export class BankSequenceRule extends PlayerTurnRule {
   }
 
   get cardsICanBank() {
-    const sequence = this.bankCards.getItems<CardId>().map(getItemFace)
+    const sequence = this.sequenceCards.getItems<CardId>().map(getItemFace)
     const playerCards = this.playerCards
     if (!sequence.length) {
       return playerCards.filter((card, index) => {
@@ -55,23 +53,30 @@ export class BankSequenceRule extends PlayerTurnRule {
     return this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(this.player)
   }
 
-  get bankCards() {
+  get sequenceCards() {
     return this.material(MaterialType.Card).location(LocationType.BankSequenceLayout)
   }
 
+  get sequenceScore(): number {
+    return sumBy(this.sequenceCards.getItems(), (card) => (card.location.rotation ? 3 : 1))
+  }
+
+  get sequenceColor(): FaceColor {
+    return getItemFaceColor(this.sequenceCards.getItem<CardId>()!)
+  }
+
   onCustomMove(): MaterialMove[] {
-    const bankHelper = new BankHelper(this.game, this.player)
-    const sequenceColor = bankHelper.getColorInBank()
+    const sequenceColor = this.sequenceColor
     const moves: MaterialMove[] = []
 
-    this.memorize(Memory.BankedSequence, bankHelper.getColorInBank())
+    this.memorize(Memory.BankedSequence, sequenceColor)
 
-    const bankCards = bankHelper.bankCards
+    const sequenceCards = this.sequenceCards
 
-    const cardsToDiscard = bankCards.sort((item) => -item.location.x!).limit(2)
+    const cardsToDiscard = sequenceCards.sort((item) => -item.location.x!).limit(2)
     moves.push(...cardsToDiscard.moveItems((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
 
-    const cardsToTakeBack = bankCards.sort((item) => item.location.x!).limit(bankCards.length - 2)
+    const cardsToTakeBack = sequenceCards.sort((item) => item.location.x!).limit(sequenceCards.length - 2)
     moves.push(
       ...cardsToTakeBack.moveItems((item) => ({
         type: LocationType.PlayerLayout,
