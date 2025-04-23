@@ -26,6 +26,7 @@ import { FlipCardAfterBankSequenceRule } from './rules/FlipCardAfterBankSequence
 import { FaceCardHelper } from './rules/helpers/FaceCardHelper'
 import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
+import { PlayerLayoutLocationStrategy } from './rules/PlayerLayoutLocationStrategy'
 import { RuleId } from './rules/RuleId'
 import { Scoring, ScoreType } from './rules/ScoreType'
 import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
@@ -55,7 +56,7 @@ export class VersoRules
     [MaterialType.Card]: {
       [LocationType.Deck]: new PositiveSequenceStrategy(),
       [LocationType.Discard]: new PositiveSequenceStrategy(),
-      [LocationType.PlayerLayout]: new PositiveSequenceStrategy(),
+      [LocationType.PlayerLayout]: new PlayerLayoutLocationStrategy(),
       [LocationType.BankSequenceLayout]: new FillGapStrategy()
     }
   }

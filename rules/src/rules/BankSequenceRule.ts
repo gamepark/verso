@@ -1,5 +1,5 @@
 import { isMoveItem, ItemMove, MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardId, CardItem, FaceColor } from '../material/Face'
+import { CardItem, FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
@@ -91,14 +91,12 @@ export class BankSequenceRule extends PlayerTurnRule {
 
     const cardsToReturnToPlayerLayout: CardItem[] = bankHelper.getCardsToReturnToPlayerLayout()
 
-    for (let i = 0; i < cardsToReturnToPlayerLayout.length; i++) {
-      const card: MaterialItem<number, number, CardId> = cardsToReturnToPlayerLayout[i]
-      const { cardColor, cardValue } = this.getCardInfos(card)
-      const availablePlace = new PlayerLayoutHelper(this.game, this.player).getPlace(this.player, cardColor, cardValue)
+    for (const card of cardsToReturnToPlayerLayout) {
+      const { cardColor } = this.getCardInfos(card)
       moves.push(
         this.bankCards
           .filter((bankCard) => bankCard.id === card.id)
-          .moveItem((item) => ({ ...availablePlace, x: (availablePlace.x ?? 0) + i, rotation: item.location.rotation }))
+          .moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: cardColor, rotation: item.location.rotation }))
       )
     }
 

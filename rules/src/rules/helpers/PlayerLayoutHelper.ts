@@ -1,4 +1,4 @@
-import { getEnumValues, Location, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
+import { getEnumValues, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardItem, FaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -10,29 +10,6 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     readonly player: number
   ) {
     super(game)
-  }
-
-  getPlace(playerId: number, cardColor: FaceColor, cardValue: number) {
-    let availablePlace: Location | undefined
-    switch (cardColor) {
-      case FaceColor.Sky:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sky)
-        break
-      case FaceColor.Land:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Land)
-        break
-      case FaceColor.Sea:
-        availablePlace = this.getPlaceByColor(playerId, cardValue, FaceColor.Sea)
-        break
-    }
-    return availablePlace
-  }
-
-  private getPlaceByColor(playerId: number, cardValue: number, color: FaceColor) {
-    const x = this.getCards(playerId)
-      .locationId(color)
-      .filter((item) => FaceCardHelper.getCardValue(item as CardItem) < cardValue).length
-    return { id: color, type: LocationType.PlayerLayout, player: this.player, x }
   }
 
   playerHasFace(card: Material) {

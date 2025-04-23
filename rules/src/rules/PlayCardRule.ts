@@ -35,9 +35,8 @@ export class PlayCardRule extends PlayerTurnRule {
   }
 
   moveCardToAvailablePlace(): MaterialMove {
-    const { cardColor, cardValue } = this.getCardInfos(this.card.getItem() as CardItem)
-    const availablePlace = this.playerLayoutHelper.getPlace(this.player, cardColor, cardValue)
-    return this.card.moveItem((item) => ({ ...availablePlace, rotation: item.location.rotation }))
+    const { cardColor } = this.getCardInfos(this.card.getItem() as CardItem)
+    return this.card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: cardColor, rotation: item.location.rotation }))
   }
 
   afterItemMove(move: ItemMove) {
