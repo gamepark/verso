@@ -18,10 +18,11 @@ export class BankSequenceLayoutLocationStrategy extends PositiveSequenceStrategy
         const indexOfJoker = values.indexOf(JOKER)
         const jokerValue = values[0] === JOKER ? values[1] - 1 : values[indexOfJoker - 1] + 1
         if (jokerValue === cardValue) {
-          item.location.x = indexOfJoker
           if (values[0] !== 1 && indexOfJoker < values.length / 2) {
+            item.location.x = indexOfJoker + 1
             this.putJokerToStart(sequence, indexOfJoker)
           } else {
+            item.location.x = indexOfJoker
             this.putJokerToEnd(sequence, indexOfJoker)
           }
         } else {
