@@ -1,4 +1,4 @@
-import { Location, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
 import { CardItem, FaceColor } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
@@ -42,7 +42,7 @@ export class BankHelper extends MaterialRulesPart {
         const isJoker = FaceCardHelper.isJoker(card as CardItem)
         return valuesInBank.includes(cardValue + 1) || valuesInBank.includes(cardValue - 1) || isJoker
       })
-    return possibleCards.moveItems((item) => this.getPlaceInBank(item as CardItem))
+    return possibleCards.moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
   }
 
   private getPossibleMoveIfBankContainJoker(valuesInBank: number[]) {
@@ -69,29 +69,6 @@ export class BankHelper extends MaterialRulesPart {
         )
       })
     return possibleCards.moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
-  }
-
-  private getPlaceInBank(cardItem: CardItem) {
-    const cardValue = FaceCardHelper.getCardValue(cardItem)
-    const isJoker = FaceCardHelper.isJoker(cardItem)
-    let availablePlace: Location = { type: LocationType.BankSequenceLayout, rotation: cardItem.location.rotation }
-    const bankCards = this.bankCards.getItems().sort((a, b) => FaceCardHelper.getCardValue(a as CardItem) - FaceCardHelper.getCardValue(b as CardItem))
-    if (bankCards.length > 0) {
-      const hightestCard: CardItem = bankCards[bankCards.length - 1] as CardItem
-      if (cardValue > FaceCardHelper.getCardValue(hightestCard) || isJoker) {
-        availablePlace = { ...availablePlace, x: hightestCard.location.x! + 1 }
-      } else {
-        for (const card of bankCards) {
-          const value = FaceCardHelper.getCardValue(card as CardItem)
-          const baseX = card.location.x ?? 0
-          if (cardValue < value) {
-            availablePlace = { ...availablePlace, x: baseX }
-            break
-          }
-        }
-      }
-    }
-    return availablePlace
   }
 
   getColorInBank(): FaceColor {
