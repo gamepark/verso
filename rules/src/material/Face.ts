@@ -1,4 +1,5 @@
 import { getEnumValues, MaterialItem } from '@gamepark/rules-api'
+import { uniq } from 'lodash'
 
 export enum Face {
   SeaJoker = 10,
@@ -79,3 +80,14 @@ export function getCardIds(): CardId[] {
 export const getItemFace = (item: CardItem): Face => (item.location.rotation ? item.id.back : item.id.front)
 export const getItemFaceColor = (item: CardItem): FaceColor => getFaceColor(getItemFace(item))
 export const getItemFaceValue = (item: CardItem): number => getFaceValue(getItemFace(item))
+
+export function isValidSequence(faces: Face[]) {
+  if (faces.length < 2 || faces.length > 6) return false
+  const sequenceColor = getFaceColor(faces[0])
+  if (faces.some((face) => getFaceColor(face) !== sequenceColor)) return false
+  const values = faces.map(getFaceValue).sort()
+  if (uniq(values).length !== values.length) return false
+  const minValue = values[0] === JOKER ? values[1] : values[0]
+  const maxValue = values[values.length - 1]
+  return maxValue - minValue < values.length
+}
