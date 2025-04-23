@@ -17,20 +17,6 @@ export class BankHelper extends MaterialRulesPart {
     return sumBy(this.bankCards.getItems(), (card) => (card.location.rotation ? 3 : 1))
   }
 
-  getCardsToDiscard(): CardItem[] {
-    return this.getCardsSortedByXLocation().slice(Math.max(this.bankCards.length - 2, 0))
-  }
-
-  getCardsToReturnToPlayerLayout(): CardItem[] {
-    return this.getCardsSortedByXLocation()
-      .slice(0, Math.max(this.bankCards.length - 2, 0))
-      .sort((a, b) => FaceCardHelper.getCardValue(a) - FaceCardHelper.getCardValue(b))
-  }
-
-  getCardsSortedByXLocation(): CardItem[] {
-    return this.bankCards.sort((item) => item.location.x!).getItems()
-  }
-
   getPossibleMovesInBank() {
     const bankCards: CardItem[] = this.bankCards.getItems()
     const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))

@@ -1,10 +1,9 @@
 import { MaterialItem, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardItem, FaceColor } from '../material/Face'
+import { FaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
 import { BankHelper } from './helpers/BankHelper'
-import { FaceCardHelper } from './helpers/FaceCardHelper'
 import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
@@ -63,26 +62,25 @@ export class BankSequenceRule extends PlayerTurnRule {
 
   onCustomMove(): MaterialMove[] {
     const bankHelper = new BankHelper(this.game, this.player)
+    const sequenceColor = bankHelper.getColorInBank()
     const moves: MaterialMove[] = []
 
     this.memorize(Memory.BankedSequence, bankHelper.getColorInBank())
 
-    bankHelper.getCardsToDiscard().forEach((card) => {
-      moves.push(
-        this.bankCards.filter((bankCard) => bankCard.id === card.id).moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation }))
-      )
-    })
+    const bankCards = bankHelper.bankCards
 
-    const cardsToReturnToPlayerLayout: CardItem[] = bankHelper.getCardsToReturnToPlayerLayout()
+    const cardsToDiscard = bankCards.sort((item) => -item.location.x!).limit(2)
+    moves.push(...cardsToDiscard.moveItems((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
 
-    for (const card of cardsToReturnToPlayerLayout) {
-      const { cardColor } = this.getCardInfos(card)
-      moves.push(
-        this.bankCards
-          .filter((bankCard) => bankCard.id === card.id)
-          .moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: cardColor, rotation: item.location.rotation }))
-      )
-    }
+    const cardsToTakeBack = bankCards.sort((item) => item.location.x!).limit(bankCards.length - 2)
+    moves.push(
+      ...cardsToTakeBack.moveItems((item) => ({
+        type: LocationType.PlayerLayout,
+        player: this.player,
+        id: sequenceColor,
+        rotation: item.location.rotation
+      }))
+    )
 
     if (this.remind(Memory.PlayerEndedGame)) {
       if (this.remind(Memory.PlayerEndedGame) === this.player) {
@@ -98,11 +96,5 @@ export class BankSequenceRule extends PlayerTurnRule {
       }
     }
     return moves
-  }
-
-  getCardInfos(cardToPlay: CardItem) {
-    const cardColor = FaceCardHelper.getCardColor(cardToPlay)
-    const cardValue = FaceCardHelper.getCardValue(cardToPlay)
-    return { cardColor, cardValue }
   }
 }
