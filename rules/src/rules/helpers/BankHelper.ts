@@ -1,4 +1,5 @@
 import { Location, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { sumBy } from 'lodash'
 import { CardItem, FaceColor } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -13,15 +14,7 @@ export class BankHelper extends MaterialRulesPart {
   }
 
   getBankScore(): number {
-    let score = 0
-    this.bankCards.getItems().forEach((card) => {
-      if (card.location.rotation) {
-        score += 3
-      } else {
-        score += 1
-      }
-    })
-    return score
+    return sumBy(this.bankCards.getItems(), (card) => (card.location.rotation ? 3 : 1))
   }
 
   getCardsToDiscard(): CardItem[] {
