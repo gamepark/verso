@@ -1,7 +1,6 @@
 import {
   CompetitiveScore,
   CustomMove,
-  FillGapStrategy,
   getEnumValues,
   HiddenMaterialRules,
   isMoveItem,
@@ -18,6 +17,7 @@ import { LocationType } from './material/LocationType'
 import { MaterialType } from './material/MaterialType'
 import { victoryPointTokens } from './material/VictoryPointToken'
 import { BankLastSequenceRule } from './rules/BankLastSequenceRule'
+import { BankSequenceLayoutLocationStrategy } from './rules/BankSequenceLayoutLocationStrategy'
 import { BankSequenceRule } from './rules/BankSequenceRule'
 import { ChooseActionRule } from './rules/ChooseActionRule'
 import { CustomMoveType } from './rules/CustomMoveType'
@@ -28,7 +28,7 @@ import { Memory } from './rules/Memory'
 import { PlayCardRule } from './rules/PlayCardRule'
 import { PlayerLayoutLocationStrategy } from './rules/PlayerLayoutLocationStrategy'
 import { RuleId } from './rules/RuleId'
-import { Scoring, ScoreType } from './rules/ScoreType'
+import { ScoreType, Scoring } from './rules/ScoreType'
 import { SimulateOtherPlayerRule } from './rules/soloMode/SimulateOtherPlayerRule'
 import customMove = MaterialMoveBuilder.customMove
 
@@ -57,7 +57,7 @@ export class VersoRules
       [LocationType.Deck]: new PositiveSequenceStrategy(),
       [LocationType.Discard]: new PositiveSequenceStrategy(),
       [LocationType.PlayerLayout]: new PlayerLayoutLocationStrategy(),
-      [LocationType.BankSequenceLayout]: new FillGapStrategy()
+      [LocationType.BankSequenceLayout]: new BankSequenceLayoutLocationStrategy()
     }
   }
 

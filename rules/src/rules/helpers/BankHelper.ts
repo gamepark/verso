@@ -1,4 +1,4 @@
-import { Location, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
+import { Location, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
 import { CardItem, FaceColor } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
@@ -36,8 +36,8 @@ export class BankHelper extends MaterialRulesPart {
     const valuesInBank = bankCards.map((bankCard) => FaceCardHelper.getCardValue(bankCard))
 
     if (valuesInBank.includes(0)) {
-      const jockerPosition = bankCards.find((card) => FaceCardHelper.isJoker(card))?.location.x ?? 0
-      if (jockerPosition === bankCards.length - 1) {
+      const jokerPosition = bankCards.find((card) => FaceCardHelper.isJoker(card))?.location.x ?? 0
+      if (jokerPosition === bankCards.length - 1) {
         return this.getPossibleMoveIfBankContainJoker(valuesInBank)
       }
     }
@@ -68,7 +68,6 @@ export class BankHelper extends MaterialRulesPart {
         })
         .moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
     }
-    const moves: MaterialMove[] = []
     const possibleCards = this.playerCards
       .filter((card) => {
         const cardColor = FaceCardHelper.getCardColor(card as CardItem)
@@ -83,84 +82,7 @@ export class BankHelper extends MaterialRulesPart {
           valuesInBank.includes(cardValue - 1)
         )
       })
-    possibleCards.getItems().forEach((card) => {
-      const cardValue = FaceCardHelper.getCardValue(card as CardItem)
-      if (valuesInBank.includes(cardValue + 2)) {
-        const baseX = this.bankCards
-          .filter((item) => {
-            const itemValue = FaceCardHelper.getCardValue(item as CardItem)
-            return itemValue === cardValue + 2
-          })
-          .getItems()[0].location.x!
-        moves.push(
-          possibleCards
-            .filter((item) => item.id === card.id)
-            .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: baseX }))
-        )
-      } else {
-        moves.push(
-          possibleCards
-            .filter((item) => item.id === card.id)
-            .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: this.bankCards.length }))
-        )
-      }
-    })
-    return moves
-  }
-
-  reorderJocker() {
-    const valuesInBank = this.bankCards
-      .sort((item) => item.location.x ?? 0)
-      .getItems()
-      .map((bankCard) => FaceCardHelper.getCardValue(bankCard as CardItem))
-
-    const moves: MaterialMove[] = []
-
-    const reorderdValues = this.reorder(valuesInBank)
-    console.log(reorderdValues)
-
-    for (let i = 0; i < reorderdValues.length; i++) {
-      moves.push(
-        this.bankCards
-          .filter((card) => FaceCardHelper.getCardValue(card as CardItem) === reorderdValues[i])
-          .moveItem((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation, x: i }))
-      )
-    }
-
-    return moves
-  }
-
-  reorder(valuesInBank: number[]) {
-    // Séparer le 0 des autres chiffres
-    const numbers = valuesInBank.filter((n) => n !== 0).sort((a, b) => a - b)
-    const hasJoker = valuesInBank.includes(0)
-
-    // Si pas de 0, on retourne simplement les chiffres triés
-
-    if (!hasJoker) {
-      return numbers
-    }
-
-    // Vérifier les positions où inclure le 0
-    for (let i = 0; i < numbers.length - 1; i++) {
-      if (numbers[i + 1] - numbers[i] > 1) {
-        // Insérer le 0 ici si deux nombres ne sont pas consécutifs
-        return [...numbers.slice(0, i + 1), 0, ...numbers.slice(i + 1)]
-      }
-    }
-
-    // Si aucun emplacement entre des nombres non consécutifs n'est trouvé
-    // Placer le 0 au début si 1 est absent, sinon à la fin si 6 est absent
-    const jokerIndex = valuesInBank.findIndex((value) => value === 0)
-    if (jokerIndex === 0 && !valuesInBank.includes(1)) {
-      return [0, ...numbers]
-    }
-
-    if (!numbers.includes(6)) {
-      return [...numbers, 0]
-    } else {
-      return [0, ...numbers]
-    }
+    return possibleCards.moveItems((item) => ({ type: LocationType.BankSequenceLayout, rotation: item.location.rotation }))
   }
 
   private getPlaceInBank(cardItem: CardItem) {
