@@ -7,15 +7,18 @@ import { PlayCardRule } from './PlayCardRule'
 import { RuleId } from './RuleId'
 
 export class ChooseActionRule extends PlayCardRule {
-  getPlayerMoves() {
-    const cardToPlay = this.cardToPlay
-    const moves: MaterialMove[] = super.getPlayerMoves()
+  onRuleStart() {
+    return [] // Prevent super.onRuleStart
+  }
 
+  getPlayerMoves() {
+    const moves: MaterialMove[] = [this.card.rotateItem((item) => !item.location.rotation)]
+    if (!this.playerAlreadyHaveFace) {
+      moves.push(this.moveCardToPlayerLayout())
+    }
     if (new PlayerLayoutHelper(this.game, this.player).atLeastOneColorAsSequence()) {
       moves.push(this.customMove(CustomMoveType.BankSequence))
     }
-
-    moves.push(cardToPlay.rotateItem((item) => !item.location.rotation))
     return moves
   }
 

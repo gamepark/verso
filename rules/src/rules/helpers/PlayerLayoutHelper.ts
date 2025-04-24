@@ -11,14 +11,6 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     super(game)
   }
 
-  checkIfPlayerAlreadyHaveCard(card?: CardItem) {
-    if (!card) return false
-    const cardFace = getItemFace(card)
-    return this.getCards(this.player)
-      .getItems<CardId>()
-      .some((item) => getItemFace(item) === cardFace)
-  }
-
   checkSuite(color: FaceColor) {
     const cards = this.getCards(this.player)
       .filter((card) => getItemFaceColor(card as CardItem) === color)

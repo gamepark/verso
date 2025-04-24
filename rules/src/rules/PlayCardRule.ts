@@ -1,45 +1,43 @@
 import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
-import { CardId, getItemFaceColor } from '../material/Face'
+import { CardId, CardItem, getItemFace, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
-  playerLayoutHelper = new PlayerLayoutHelper(this.game, this.player)
-  card = this.cardToPlay
-  playerAlreadyHaveCard = this.playerLayoutHelper.checkIfPlayerAlreadyHaveCard(this.cardToPlay.getItem())
-  onRuleStart(): MaterialMove[] {
-    const moves: MaterialMove[] = []
-    if (this.game.rule!.id === RuleId.PlayCard) {
-      if (this.playerAlreadyHaveCard) {
-        moves.push(this.startRule(RuleId.DiscardCard))
-      } else {
-        moves.push(this.moveCardToAvailablePlace())
-      }
+  onRuleStart() {
+    if (this.playerAlreadyHaveFace) {
+      return [this.startRule(RuleId.DiscardCard)]
+    } else {
+      return [this.moveCardToPlayerLayout()]
     }
-    return moves
   }
 
-  getPlayerMoves() {
-    const moves: MaterialMove[] = []
-    if (this.playerAlreadyHaveCard) {
-      return moves
-    }
-    moves.push(this.moveCardToAvailablePlace())
-
-    return moves
+  get card() {
+    return this.material(MaterialType.Card)
+      .location(LocationType.Deck)
+      .maxBy((item) => item.location.x!)
   }
 
-  moveCardToAvailablePlace(): MaterialMove {
-    const color = getItemFaceColor(this.card.getItem<CardId>()!)
-    return this.card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: this.player, id: color, rotation: item.location.rotation }))
+  get playerAlreadyHaveFace() {
+    const faceToPlay = getItemFace(this.card.getItem<CardId>()!)
+    const playerCards = this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(this.player).getItems<CardId>()
+    return playerCards.some((card) => getItemFace(card) === faceToPlay)
+  }
+
+  moveCardToPlayerLayout(): MaterialMove {
+    return this.card.moveItem((item) => ({
+      type: LocationType.PlayerLayout,
+      player: this.player,
+      id: getItemFaceColor(item as CardItem),
+      rotation: item.location.rotation
+    }))
   }
 
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
-    if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout && move.itemIndex === this.card.getIndex()) {
+    if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
       if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
         this.memorize(Memory.PlayerEndedGame, this.player)
       }
@@ -55,11 +53,5 @@ export class PlayCardRule extends PlayerTurnRule {
     }
 
     return moves
-  }
-
-  get cardToPlay() {
-    return this.material(MaterialType.Card)
-      .location(LocationType.Deck)
-      .maxBy((item) => item.location.x!)
   }
 }
