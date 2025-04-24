@@ -40,8 +40,7 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
     const moves: MaterialMove[] = []
 
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
-      this.memorize(Memory.PlayerEndedGame, this.player)
-      moves.push(this.startRule(RuleId.BankLastSequence))
+      moves.push(this.startSimultaneousRule(RuleId.BankLastSequence))
     } else {
       moves.push(this.startRule(RuleId.ChooseAction))
     }

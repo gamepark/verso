@@ -2,7 +2,6 @@ import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepar
 import { CardId, CardItem, getItemFace, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
@@ -38,11 +37,9 @@ export class PlayCardRule extends PlayerTurnRule {
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
+      console.log(this.material(MaterialType.Card).location(LocationType.Deck).length === 0)
       if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
-        this.memorize(Memory.PlayerEndedGame, this.player)
-      }
-      if (this.remind(Memory.PlayerEndedGame)) {
-        moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
+        moves.push(this.startSimultaneousRule(RuleId.BankLastSequence))
       } else {
         if (this.game.players.length === 1) {
           moves.push(this.startRule(RuleId.SimulateOtherPlayer))

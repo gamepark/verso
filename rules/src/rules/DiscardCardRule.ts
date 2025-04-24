@@ -1,7 +1,6 @@
 import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
-import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class DiscardCardRule extends PlayerTurnRule {
@@ -19,10 +18,7 @@ export class DiscardCardRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
     if (isMoveItem(move) && move.location.type === LocationType.Discard) {
       if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
-        this.memorize(Memory.PlayerEndedGame, this.player)
-      }
-      if (this.remind(Memory.PlayerEndedGame)) {
-        moves.push(this.startPlayerTurn(RuleId.BankLastSequence, this.nextPlayer))
+        moves.push(this.startSimultaneousRule(RuleId.BankLastSequence))
       } else {
         if (this.game.players.length === 1) {
           moves.push(this.startRule(RuleId.SimulateOtherPlayer))

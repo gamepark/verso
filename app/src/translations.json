@@ -15,7 +15,7 @@
       "header.after.bank.you.multi": "You banked a sequence, {next1} and {next2} flip a card",
       "header.after.bank.player.single": "{player} bank a sequence, {next1} flip a card",
       "header.after.bank.player.multi": "{player} bank a sequence, {next1} and {next2} flip a card",
-      "header.bank.last.you": "You can bank a last sequence or <0>Pass</0>",
+      "header.bank.last.you": "You can bank a last sequence or <0>Pass</0> <1>Validate</1>",
       "header.bank.last.player": "{player} can bank a last sequence",
       "header.simulate.other.player.you": "The first card is flipped",
       "button.bank": "Bank the sequence",
