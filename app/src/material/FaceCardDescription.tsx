@@ -3,7 +3,7 @@ import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
-import { CardItem, Face, getItemFaceColor } from '@gamepark/verso/material/Face'
+import { CardItem, Face, getItemFaceColor, getItemFaceValue } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
@@ -67,8 +67,9 @@ export class FaceCardDescription extends CardDescription {
     const { type, index } = context
     const moves = legalMoves.filter(isMoveItemType(type)).filter((move) => move.itemIndex === index)
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
+    const isInPlayerLayout = card.location.type === LocationType.PlayerLayout && card.location.player === context.player
     const bank = legalMoves.find(isCustomMoveType(CustomMoveType.BankSequence))
-    const suite = new PlayerLayoutHelper(context.rules.game, context.player!).checkSuite(getItemFaceColor(card))
+    const helper = new PlayerLayoutHelper(context.rules.game, context.player!)
     if (flip) {
       return (
         <>
@@ -78,14 +79,19 @@ export class FaceCardDescription extends CardDescription {
         </>
       )
     }
-    if (bank && index === suite?.maxInSuite) {
-      return (
-        <>
-          <ItemMenuButton label={<Trans defaults="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
-            <FontAwesomeIcon icon={faMoneyCheckDollar} css={pointerCursorCss} />
-          </ItemMenuButton>
-        </>
-      )
+    if (bank && isInPlayerLayout && helper.canCardMakeSequence(card, context.index)) {
+      const color = getItemFaceColor(card)
+      const value = getItemFaceValue(card)
+      const higherCardsInColor = helper.playerCards.filter((item) => getItemFaceColor(item as CardItem) === color && getItemFaceValue(item as CardItem) > value)
+      if (!higherCardsInColor.entries.some(([index, card]) => helper.canCardMakeSequence(card, index))) {
+        return (
+          <>
+            <ItemMenuButton label={<Trans defaults="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
+              <FontAwesomeIcon icon={faMoneyCheckDollar} css={pointerCursorCss} />
+            </ItemMenuButton>
+          </>
+        )
+      }
     }
     return
   }
