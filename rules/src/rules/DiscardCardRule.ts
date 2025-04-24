@@ -32,6 +32,8 @@ export class DiscardCardRule extends PlayerTurnRule {
   }
 
   get cardToDiscard() {
-    return this.material(MaterialType.Card).index(this.remind(Memory.DiscardedCard))
+    return this.material(MaterialType.Card)
+      .location(LocationType.Deck)
+      .maxBy((item) => item.location.x!)
   }
 }

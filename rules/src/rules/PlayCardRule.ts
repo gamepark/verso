@@ -14,7 +14,6 @@ export class PlayCardRule extends PlayerTurnRule {
     const moves: MaterialMove[] = []
     if (this.game.rule!.id === RuleId.PlayCard) {
       if (this.playerAlreadyHaveCard) {
-        this.memorize(Memory.DiscardedCard, this.cardToPlay.getIndex())
         moves.push(this.startRule(RuleId.DiscardCard))
       } else {
         moves.push(this.moveCardToAvailablePlace())
