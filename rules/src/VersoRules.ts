@@ -56,7 +56,7 @@ export class VersoRules
       [LocationType.Deck]: new PositiveSequenceStrategy(),
       [LocationType.Discard]: new PositiveSequenceStrategy(),
       [LocationType.PlayerLayout]: new PlayerLayoutLocationStrategy(),
-      [LocationType.BankSequenceLayout]: new BankSequenceLayoutLocationStrategy()
+      [LocationType.PlayerBankSequenceLayout]: new BankSequenceLayoutLocationStrategy()
     }
   }
 
@@ -65,7 +65,7 @@ export class VersoRules
       [LocationType.Deck]: hideIfRotated,
       [LocationType.Discard]: hideIfRotated,
       [LocationType.PlayerLayout]: hideIfRotated,
-      [LocationType.BankSequenceLayout]: hideIfRotated
+      [LocationType.PlayerBankSequenceLayout]: hideIfRotated
     }
   }
 

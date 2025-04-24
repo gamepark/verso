@@ -97,7 +97,7 @@ export class FaceCardDescription extends CardDescription {
   }
 
   canShortClick(move: MaterialMove, context: ItemContext) {
-    return isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.BankSequenceLayout && move.itemIndex === context.index
+    return isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerBankSequenceLayout && move.itemIndex === context.index
   }
 }
 

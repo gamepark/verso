@@ -12,8 +12,9 @@ import { ScoreType } from './ScoreType'
 export class BankSequenceRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = this.cardsICanBank.moveItems((item) => ({
-      type: LocationType.BankSequenceLayout,
-      rotation: item.location.rotation
+      type: LocationType.PlayerBankSequenceLayout,
+      rotation: item.location.rotation,
+      player: this.player
     }))
 
     if (this.sequenceCards.length > 1) {
@@ -41,7 +42,7 @@ export class BankSequenceRule extends PlayerTurnRule {
   }
 
   get sequenceCards() {
-    return this.material(MaterialType.Card).location(LocationType.BankSequenceLayout)
+    return this.material(MaterialType.Card).location(LocationType.PlayerBankSequenceLayout).player(this.player)
   }
 
   get sequenceScore(): number {

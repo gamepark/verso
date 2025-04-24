@@ -41,14 +41,14 @@ const panelPosition = (index: number, nbPlayers: number) => {
         return css`
           position: absolute;
           left: 1em;
-          top: 15.5em;
+          top: 8.5em;
           width: 28em;
         `
       case 1:
         return css`
           position: absolute;
           right: 1em;
-          top: 15.5em;
+          top: 8.5em;
           width: 28em;
         `
       default:
