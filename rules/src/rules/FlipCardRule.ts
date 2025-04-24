@@ -2,10 +2,11 @@ import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/ru
 import { CardId, CardItem, FaceColor, getFaceColor, getItemFace, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 
 export abstract class FlipCardRule extends PlayerTurnRule {
   flipPlayerCard(player: number, color: FaceColor) {
-    const cardToFlip = this.getPlayerLayoutByPlayerId(player)
+    const cardToFlip = new PlayerLayoutHelper(this.game, player).playerCards
       .filter((item) => getItemFaceColor(item as CardItem) === color)
       .maxBy((item) => item.location.x!)
     if (!cardToFlip.length) return
@@ -33,9 +34,5 @@ export abstract class FlipCardRule extends PlayerTurnRule {
     } else {
       return [card.moveItem((item) => ({ type: LocationType.PlayerLayout, player: item.location.player, id: color, rotation: item.location.rotation }))]
     }
-  }
-
-  private getPlayerLayoutByPlayerId(playerId: number) {
-    return this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(playerId)
   }
 }
