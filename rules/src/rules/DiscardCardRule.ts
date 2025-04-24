@@ -1,15 +1,18 @@
-import { isMoveItem, ItemMove, Material, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
+import { isMoveItem, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 
 export class DiscardCardRule extends PlayerTurnRule {
-  onRuleStart(): MaterialMove[] {
-    const moves: MaterialMove[] = []
-    const cardToDiscard: Material = this.cardToDiscard
-    moves.push(cardToDiscard.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
-    return moves
+  onRuleStart() {
+    return [this.cardToDiscard.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation }))]
+  }
+
+  get cardToDiscard() {
+    return this.material(MaterialType.Card)
+      .location(LocationType.Deck)
+      .maxBy((item) => item.location.x!)
   }
 
   afterItemMove(move: ItemMove): MaterialMove[] {
@@ -29,11 +32,5 @@ export class DiscardCardRule extends PlayerTurnRule {
       }
     }
     return moves
-  }
-
-  get cardToDiscard() {
-    return this.material(MaterialType.Card)
-      .location(LocationType.Deck)
-      .maxBy((item) => item.location.x!)
   }
 }
