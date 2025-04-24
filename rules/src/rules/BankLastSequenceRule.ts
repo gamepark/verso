@@ -1,4 +1,4 @@
-import { MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
+import { CustomMove, MaterialMove, SimultaneousRule } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
 import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, isValidSequence } from '../material/Face'
 import { LocationType } from '../material/LocationType'
@@ -13,12 +13,12 @@ export class BankLastSequenceRule extends SimultaneousRule {
     this.player = player
     const moves: MaterialMove[] = []
 
-    moves.push(this.customMove(CustomMoveType.Pass))
+    moves.push(this.customMove(CustomMoveType.Pass, { player }))
     moves.push(
       ...this.cardsICanBank.moveItems((item) => ({
         type: LocationType.PlayerBankSequenceLayout,
         rotation: item.location.rotation,
-        player: player
+        player
       }))
     )
 
@@ -28,7 +28,7 @@ export class BankLastSequenceRule extends SimultaneousRule {
           type: ScoreType.Sequence,
           color: this.sequenceColor,
           score: this.sequenceScore,
-          player: player
+          player
         })
       )
     }
@@ -56,6 +56,10 @@ export class BankLastSequenceRule extends SimultaneousRule {
 
   get sequenceColor(): FaceColor {
     return getItemFaceColor(this.sequenceCards.getItem<CardId>()!)
+  }
+
+  onCustomMove(move: CustomMove): MaterialMove[] {
+    return [this.endPlayerTurn(move.data.player)]
   }
 
   getMovesAfterPlayersDone(): MaterialMove[] {
