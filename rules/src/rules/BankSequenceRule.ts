@@ -1,9 +1,10 @@
 import { MaterialMove, PlayerTurnRule } from '@gamepark/rules-api'
 import { sumBy } from 'lodash'
-import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, getItemFaceValue, isValidSequence, JOKER } from '../material/Face'
+import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, isValidSequence } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
 import { CustomMoveType } from './CustomMoveType'
+import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { Memory } from './Memory'
 import { RuleId } from './RuleId'
 import { ScoreType } from './ScoreType'
@@ -30,27 +31,13 @@ export class BankSequenceRule extends PlayerTurnRule {
   }
 
   get cardsICanBank() {
+    const helper = new PlayerLayoutHelper(this.game, this.player)
     const sequence = this.sequenceCards.getItems<CardId>().map(getItemFace)
-    const playerCards = this.playerCards
     if (!sequence.length) {
-      return playerCards.filter((card, index) => {
-        const color = getItemFaceColor(card as CardItem)
-        const otherValues = playerCards
-          .filter((card2, index2) => index2 !== index && getItemFaceColor(card2 as CardItem) === color)
-          .getItems<CardId>()
-          .map(getItemFaceValue)
-        if (!otherValues.length) return false
-        const value = getItemFaceValue(card as CardItem)
-        if (value === JOKER) return true
-        return otherValues.some((otherValue) => otherValue === JOKER || otherValue === value - 1 || otherValue === value + 1)
-      })
+      return helper.playerCards.filter((card, index) => helper.canCardMakeSequence(card, index))
     } else {
-      return playerCards.filter((item) => isValidSequence([...sequence, getItemFace(item as CardItem)]))
+      return helper.playerCards.filter((item) => isValidSequence([...sequence, getItemFace(item as CardItem)]))
     }
-  }
-
-  get playerCards() {
-    return this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(this.player)
   }
 
   get sequenceCards() {
