@@ -2,7 +2,7 @@ import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons/faMoneyChe
 import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
-import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
 import { CardItem, Face, getItemFaceColor } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
@@ -63,12 +63,11 @@ export class FaceCardDescription extends CardDescription {
 
   help = FaceCardHelp
 
-  getItemMenu(_: MaterialItem, context: ItemContext, legalMoves: MaterialMove[]) {
+  getItemMenu(card: CardItem, context: ItemContext, legalMoves: MaterialMove[]) {
     const { type, index } = context
     const moves = legalMoves.filter(isMoveItemType(type)).filter((move) => move.itemIndex === index)
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
     const bank = legalMoves.find(isCustomMoveType(CustomMoveType.BankSequence))
-    const card: CardItem = context.rules.material(MaterialType.Card).getItem(index)
     const suite = new PlayerLayoutHelper(context.rules.game, context.player!).checkSuite(getItemFaceColor(card))
     if (flip) {
       return (
