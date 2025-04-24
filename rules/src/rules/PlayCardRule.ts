@@ -37,7 +37,6 @@ export class PlayCardRule extends PlayerTurnRule {
   afterItemMove(move: ItemMove) {
     const moves: MaterialMove[] = []
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
-      console.log(this.material(MaterialType.Card).location(LocationType.Deck).length === 0)
       if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
         moves.push(this.startSimultaneousRule(RuleId.BankLastSequence))
       } else {
