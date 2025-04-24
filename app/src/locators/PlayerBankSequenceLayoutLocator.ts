@@ -10,13 +10,13 @@ class PlayerBankSequenceLayoutLocator extends ListLocator {
     switch (index) {
       case 0:
         if (context.rules.players.length === 1) return { x: -5.5, y: -5 }
-        if (context.rules.players.length === 2) return { x: -40, y: 3 }
+        if (context.rules.players.length === 2) return { x: -25, y: 5 }
         if (context.rules.players.length === 3) return { x: -50, y: 3 }
         if (context.rules.players.length === 4) return { x: -50, y: 3 }
         if (context.rules.players.length === 5) return { x: -18, y: 28 }
         return { x: -22, y: 33 }
       case 1:
-        if (context.rules.players.length === 2) return { x: 40, y: 3 }
+        if (context.rules.players.length === 2) return { x: 10, y: 5 }
         if (context.rules.players.length === 3) return { x: -22, y: -30 }
         if (context.rules.players.length === 4) return { x: -14, y: -30 }
         if (context.rules.players.length === 5) return { x: -55, y: -26 }

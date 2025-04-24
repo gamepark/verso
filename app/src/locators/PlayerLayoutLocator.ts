@@ -19,13 +19,13 @@ class PlayerLayoutLocator extends ListLocator {
     switch (index) {
       case 0:
         if (context.rules.players.length === 1) return { x: -14.5, y: 12 }
-        if (context.rules.players.length === 2) return { x: -33, y: 17 }
+        if (context.rules.players.length === 2) return { x: -33, y: 22 }
         if (context.rules.players.length === 3) return { x: -50, y: 20 }
         if (context.rules.players.length === 4) return { x: -50, y: 20 }
         if (context.rules.players.length === 5) return { x: -55, y: 20 }
         return { x: -14, y: 25 }
       case 1:
-        if (context.rules.players.length === 2) return { x: 5, y: 17 }
+        if (context.rules.players.length === 2) return { x: 5, y: 22 }
         if (context.rules.players.length === 3) return { x: -14, y: -20 }
         if (context.rules.players.length === 4) return { x: -50, y: -20 }
         if (context.rules.players.length === 5) return { x: -55, y: -10 }

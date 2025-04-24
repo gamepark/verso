@@ -9,7 +9,7 @@ class VictoryPointTokenStockLocator extends PileLocator {
       case 1:
         return { x: -15, y: -18 }
       case 2:
-        return { x: 20, y: -6 }
+        return { x: 10, y: -6 }
       case 3:
       case 5:
         return { x: -10, y: 0 }
