@@ -1,4 +1,4 @@
-import { getEnumValues, Material, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
+import { getEnumValues, MaterialGame, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, isJoker } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -9,13 +9,6 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     readonly player: number
   ) {
     super(game)
-  }
-
-  playerHasFace(card: Material) {
-    if (!card.length) return false
-    const face = getItemFace(card.getItem<CardId>()!)
-    const cardIndex = card.getIndex()
-    return this.getCards(this.player).entries.some(([index, item]) => index !== cardIndex && getItemFace(item as CardItem) === face)
   }
 
   checkIfPlayerAlreadyHaveCard(card?: CardItem) {
