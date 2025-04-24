@@ -1,4 +1,4 @@
-import { getEnumValues, Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
+import { Material, MaterialGame, MaterialItem, MaterialRulesPart } from '@gamepark/rules-api'
 import { CardId, CardItem, FaceColor, getItemFace, getItemFaceColor, getItemFaceValue, isJoker, JOKER } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -25,6 +25,10 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
     const value = getItemFaceValue(card as CardItem)
     if (value === JOKER) return true
     return otherValues.some((otherValue) => otherValue === JOKER || otherValue === value - 1 || otherValue === value + 1)
+  }
+
+  canMakeSequence() {
+    return this.playerCards.entries.some(([index, card]) => this.canCardMakeSequence(card, index))
   }
 
   checkSuite(color: FaceColor) {
@@ -57,10 +61,6 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       }
     }
     return null
-  }
-
-  atLeastOneColorAsSequence() {
-    return getEnumValues(FaceColor).some((color) => this.checkSuite(color) !== null)
   }
 
   private getCardIndexFromId(cardId: number) {
