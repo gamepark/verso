@@ -6,16 +6,15 @@ export class FaceCardDeckLocator extends DeckLocator {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
-        return { y: -18 }
+        return { x: 0, y: -18 }
       case 2:
-        return { x: -10, y: -6 }
+        return { x: 0, y: -6 }
       case 3:
       case 5:
-        return { x: 0 }
+        return { x: 0, y: 10 }
       case 4:
-        return { y: -8 }
       default:
-        return { y: -5 }
+        return { x: 0, y: 0 }
     }
   }
 }
