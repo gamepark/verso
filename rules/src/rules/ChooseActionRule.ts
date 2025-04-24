@@ -16,7 +16,7 @@ export class ChooseActionRule extends PlayCardRule {
     if (!this.playerAlreadyHaveFace) {
       moves.push(this.moveCardToPlayerLayout())
     }
-    if (new PlayerLayoutHelper(this.game, this.player).canMakeSequence()) {
+    if (new PlayerLayoutHelper(this.game).canMakeSequence()) {
       moves.push(this.customMove(CustomMoveType.BankSequence))
     }
     return moves

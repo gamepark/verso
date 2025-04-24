@@ -6,12 +6,9 @@ import { MaterialType } from '../../material/MaterialType'
 export class PlayerLayoutHelper extends MaterialRulesPart {
   playerCards: Material
 
-  constructor(
-    game: MaterialGame,
-    readonly player: number
-  ) {
+  constructor(game: MaterialGame, player = game.rule?.player) {
     super(game)
-    this.playerCards = this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(this.player)
+    this.playerCards = this.material(MaterialType.Card).location(LocationType.PlayerLayout).player(player)
   }
 
   canCardMakeSequence(card: MaterialItem, cardIndex: number) {
@@ -23,8 +20,7 @@ export class PlayerLayoutHelper extends MaterialRulesPart {
       .map(getItemFaceValue)
     if (!otherValues.length) return false
     const value = getItemFaceValue(card as CardItem)
-    if (value === JOKER) return true
-    return otherValues.some((otherValue) => otherValue === JOKER || otherValue === value - 1 || otherValue === value + 1)
+    return value === JOKER || otherValues.some((otherValue) => otherValue === JOKER || otherValue === value - 1 || otherValue === value + 1)
   }
 
   canMakeSequence() {

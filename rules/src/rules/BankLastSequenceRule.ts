@@ -8,7 +8,7 @@ export class BankLastSequenceRule extends PlayerTurnRule {
   getPlayerMoves() {
     const moves: MaterialMove[] = super.getPlayerMoves()
 
-    if (new PlayerLayoutHelper(this.game, this.player).canMakeSequence()) {
+    if (new PlayerLayoutHelper(this.game).canMakeSequence()) {
       moves.push(this.customMove(CustomMoveType.BankSequence))
     }
 

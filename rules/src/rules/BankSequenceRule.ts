@@ -31,7 +31,7 @@ export class BankSequenceRule extends PlayerTurnRule {
   }
 
   get cardsICanBank() {
-    const helper = new PlayerLayoutHelper(this.game, this.player)
+    const helper = new PlayerLayoutHelper(this.game)
     const sequence = this.sequenceCards.getItems<CardId>().map(getItemFace)
     if (!sequence.length) {
       return helper.playerCards.filter((card, index) => helper.canCardMakeSequence(card, index))
