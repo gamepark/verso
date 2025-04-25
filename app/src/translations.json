@@ -2,14 +2,13 @@
   "en": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "You must place the card, <0>flip it</0>, or bank a sequence",
+      "header.choose.action.you": "You must place the card, <flip>flip it</flip>, or bank a sequence",
       "header.choose.action.player": "{player} must choose an action",
       "header.place.you": "Place your card",
       "header.place.player": "{player} must place his card",
       "header.discard.you": "You already have the card, it is discarded",
       "header.discard.player": "{player} already have the card, it is discarded",
-      "header.bank.you": "You must choose the sequence to bank",
-      "header.bank.validate.you": "You must choose the sequence to bank <0>Validate</0>",
+      "header.bank.you": "You must choose the sequence to bank <validate>Validate</validate>",
       "header.bank.player": "{player} choose the sequence to bank",
       "header.after.bank.you.single": "You banked a sequence, {next1} flip a card",
       "header.after.bank.you.multi": "You banked a sequence, {next1} and {next2} flip a card",
@@ -174,14 +173,13 @@
   "fr": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "Vous devez placer la carte, <0>la retourner</0>, ou valider une série",
+      "header.choose.action.you": "Vous devez placer la carte, <flip>la retourner</flip>, ou valider une série",
       "header.choose.action.player": "{player} doit choisir une action",
       "header.place.you": "Placez votre carte",
       "header.place.player": "{player} doit placer sa carte",
       "header.discard.you": "Vous possédez déjà la carte, elle est défaussée",
       "header.discard.player": "{player} possède déjà la carte, elle est défaussée",
-      "header.bank.you": "Vous devez choisir la série à valider",
-      "header.bank.validate.you": "Vous devez choisir la série à valider <0>Valider</0>",
+      "header.bank.you": "Vous devez choisir la série à valider <validate>Valider</validate>",
       "header.bank.player": "{player} Choisi la série à valider",
       "header.after.bank.you.single": "Vous avez validé une série, {next1} retourne une carte",
       "header.after.bank.you.multi": "Vous avez validé une série, {next1} et {next2} retournent une carte",
