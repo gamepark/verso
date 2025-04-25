@@ -2,7 +2,7 @@ import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons/faMoneyChe
 import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CardDescription, ItemContext, ItemMenuButton, pointerCursorCss } from '@gamepark/react-game'
-import { isCustomMoveType, isMoveItemType, MaterialMove } from '@gamepark/rules-api'
+import { isCustomMoveType, isMoveItemType, MaterialItem, MaterialMove } from '@gamepark/rules-api'
 import { CardItem, Face, getItemFaceColor, getItemFaceValue } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
@@ -94,6 +94,10 @@ export class FaceCardDescription extends CardDescription {
       }
     }
     return
+  }
+
+  isFlipped(item: Partial<MaterialItem>) {
+    return !!item.location?.rotation
   }
 
   canShortClick(move: MaterialMove, context: ItemContext) {
