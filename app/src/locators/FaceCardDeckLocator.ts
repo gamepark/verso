@@ -17,6 +17,8 @@ export class FaceCardDeckLocator extends DeckLocator {
         return { x: 0, y: 0 }
     }
   }
+
+  navigationSorts = []
 }
 
 export const faceCardDeckLocator = new FaceCardDeckLocator()
