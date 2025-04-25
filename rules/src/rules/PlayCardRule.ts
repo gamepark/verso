@@ -2,6 +2,7 @@ import { isMoveItemType, ItemMove, MaterialMove, PlayerTurnRule } from '@gamepar
 import { CardId, CardItem, getItemFace, getItemFaceColor } from '../material/Face'
 import { LocationType } from '../material/LocationType'
 import { MaterialType } from '../material/MaterialType'
+import { PlayerLayoutHelper } from './helpers/PlayerLayoutHelper'
 import { RuleId } from './RuleId'
 
 export class PlayCardRule extends PlayerTurnRule {
@@ -43,7 +44,8 @@ export class PlayCardRule extends PlayerTurnRule {
 
   endPlayerTurn() {
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
-      return this.startSimultaneousRule(RuleId.BankLastSequence)
+      const playersWithSequence = this.game.players.filter((player) => new PlayerLayoutHelper(this.game, player).canMakeSequence())
+      return this.startSimultaneousRule(RuleId.BankLastSequence, playersWithSequence)
     } else if (this.game.players.length === 1) {
       return this.startRule(RuleId.SimulateOtherPlayer)
     } else {

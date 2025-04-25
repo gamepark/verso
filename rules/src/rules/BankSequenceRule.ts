@@ -20,7 +20,6 @@ export class BankSequenceRule extends PlayerTurnRule {
   }
 
   onCustomMove(_move: CustomMove): MaterialMove[] {
-    console.trace(this.sequenceCards.length)
     const moves: MaterialMove[] = []
 
     const sequenceColor = this.sequenceColor
