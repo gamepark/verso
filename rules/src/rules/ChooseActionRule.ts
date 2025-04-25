@@ -25,12 +25,11 @@ export class ChooseActionRule extends PlayCardRule {
   }
 
   afterItemMove(move: ItemMove) {
-    const moves: MaterialMove[] = super.afterItemMove(move)
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.Deck) {
-      moves.push(this.startRule(RuleId.PlayCard))
+      return [this.startRule(RuleId.PlayCard)]
+    } else {
+      return super.afterItemMove(move)
     }
-
-    return moves
   }
 
   onCustomMove(move: CustomMove): MaterialMove[] {

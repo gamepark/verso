@@ -34,20 +34,20 @@ export class PlayCardRule extends PlayerTurnRule {
     }))
   }
 
-  afterItemMove(move: ItemMove) {
-    const moves: MaterialMove[] = []
+  afterItemMove(move: ItemMove): MaterialMove[] {
     if (isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout) {
-      if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
-        moves.push(this.startSimultaneousRule(RuleId.BankLastSequence))
-      } else {
-        if (this.game.players.length === 1) {
-          moves.push(this.startRule(RuleId.SimulateOtherPlayer))
-        } else {
-          moves.push(this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer))
-        }
-      }
+      return [this.endPlayerTurn()]
     }
+    return []
+  }
 
-    return moves
+  endPlayerTurn() {
+    if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
+      return this.startSimultaneousRule(RuleId.BankLastSequence)
+    } else if (this.game.players.length === 1) {
+      return this.startRule(RuleId.SimulateOtherPlayer)
+    } else {
+      return this.startPlayerTurn(RuleId.ChooseAction, this.nextPlayer)
+    }
   }
 }
