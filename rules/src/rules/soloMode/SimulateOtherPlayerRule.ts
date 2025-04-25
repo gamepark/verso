@@ -19,31 +19,39 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
   afterItemMove(move: ItemMove) {
     if (isMoveItemType(MaterialType.Card)(move)) {
       if (move.location.type === LocationType.Deck) {
-        const moves: MaterialMove[] = []
-        const cardInDeck = this.cardInDeck
-        const value = getItemFaceValue(cardInDeck.getItem<CardId>()!)
-        const otherFaceValue = this.remind(Memory.CardToFlipValue)
-
-        if (otherFaceValue === JOKER || value <= otherFaceValue) {
-          moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence))
-        } else {
-          moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithConsequence))
-          const flip = this.flipPlayerCard(this.player, getItemFaceColor(cardInDeck.getItem<CardId>()!))
-          if (flip) moves.push(flip)
-        }
-        moves.push(cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
-        return moves
+        return this.onCardFlipped()
       } else if (move.location.type === LocationType.Discard) {
-        if (this.material(MaterialType.Card).location(LocationType.Deck).length) {
-          return [this.startRule(RuleId.ChooseAction)]
-        } else if (new PlayerLayoutHelper(this.game).canMakeSequence()) {
-          return [this.startSimultaneousRule(RuleId.BankLastSequence)]
-        } else {
-          return [this.endGame()]
-        }
+        return [this.endRule()]
       }
     }
     return super.afterItemMove(move)
+  }
+
+  onCardFlipped() {
+    const moves: MaterialMove[] = []
+    const cardInDeck = this.cardInDeck
+    const value = getItemFaceValue(cardInDeck.getItem<CardId>()!)
+    const otherFaceValue = this.remind(Memory.CardToFlipValue)
+
+    if (otherFaceValue === JOKER || value <= otherFaceValue) {
+      moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence))
+    } else {
+      moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithConsequence))
+      const flip = this.flipPlayerCard(this.player, getItemFaceColor(cardInDeck.getItem<CardId>()!))
+      if (flip) moves.push(flip)
+    }
+    moves.push(cardInDeck.moveItem((item) => ({ type: LocationType.Discard, rotation: item.location.rotation })))
+    return moves
+  }
+
+  endRule() {
+    if (this.material(MaterialType.Card).location(LocationType.Deck).length) {
+      return this.startRule(RuleId.ChooseAction)
+    } else if (new PlayerLayoutHelper(this.game).canMakeSequence()) {
+      return this.startSimultaneousRule(RuleId.BankLastSequence)
+    } else {
+      return this.endGame()
+    }
   }
 
   get cardInDeck() {
