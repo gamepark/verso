@@ -19,8 +19,9 @@ class PlayerBankSequenceLayoutLocator extends ListLocator {
 }
 
 export class bankSequenceLayoutDescription extends DropAreaDescription {
-  width = 21
+  width = 28
   height = 8
+  borderRadius = 0.3
 }
 
 export const playerBankSequenceLayoutLocator = new PlayerBankSequenceLayoutLocator()
