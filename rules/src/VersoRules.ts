@@ -70,7 +70,12 @@ export class VersoRules
   }
 
   protected afterItemMove(move: ItemMove) {
-    if (isMoveItem(move) && move.location.type === LocationType.PlayerLayout) {
+    if (
+      isMoveItem(move) &&
+      move.location.type === LocationType.PlayerLayout &&
+      this.game.rule?.id !== RuleId.BankLastSequence &&
+      (this.game.rule?.id !== RuleId.BankSequence || this.getActivePlayer() !== move.location.player)
+    ) {
       const card = this.material(MaterialType.Card).getItem<CardId>(move.itemIndex)
       const player = card.location.player!
       const color = getItemFaceColor(card)
