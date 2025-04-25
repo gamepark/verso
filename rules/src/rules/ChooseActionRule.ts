@@ -12,7 +12,9 @@ export class ChooseActionRule extends PlayCardRule {
   }
 
   getPlayerMoves() {
-    const moves: MaterialMove[] = [this.card.rotateItem((item) => !item.location.rotation)]
+    const card = this.card
+    if (!card.length) return []
+    const moves: MaterialMove[] = [card.rotateItem((item) => !item.location.rotation)]
     if (!this.playerAlreadyHaveFace) {
       moves.push(this.moveCardToPlayerLayout())
     }
