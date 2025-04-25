@@ -45,7 +45,11 @@ export class PlayCardRule extends PlayerTurnRule {
   endPlayerTurn() {
     if (this.material(MaterialType.Card).location(LocationType.Deck).length === 0) {
       const playersWithSequence = this.game.players.filter((player) => new PlayerLayoutHelper(this.game, player).canMakeSequence())
-      return this.startSimultaneousRule(RuleId.BankLastSequence, playersWithSequence)
+      if (playersWithSequence.length) {
+        return this.startSimultaneousRule(RuleId.BankLastSequence, playersWithSequence)
+      } else {
+        return this.endGame()
+      }
     } else if (this.game.players.length === 1) {
       return this.startRule(RuleId.SimulateOtherPlayer)
     } else {
