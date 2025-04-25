@@ -2,7 +2,7 @@
   "en": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "You must place the card, <0>Flip it</0>, or bank a sequence",
+      "header.choose.action.you": "You must place the card, <0>flip it</0>, or bank a sequence",
       "header.choose.action.player": "{player} must choose an action",
       "header.place.you": "Place your card",
       "header.place.player": "{player} must place his card",
@@ -15,7 +15,7 @@
       "header.after.bank.you.multi": "You banked a sequence, {next1} and {next2} flip a card",
       "header.after.bank.player.single": "{player} bank a sequence, {next1} flip a card",
       "header.after.bank.player.multi": "{player} bank a sequence, {next1} and {next2} flip a card",
-      "header.bank.last.you": "You can bank a last sequence or <0>Pass</0> <1>Validate</1>",
+      "header.bank.last.you": "You can bank a last sequence <validate>Validate</validate>",
       "header.bank.last.player": "{player} can bank a last sequence",
       "header.simulate.other.player.you": "The first card is flipped",
       "button.bank": "Bank the sequence",
@@ -47,7 +47,7 @@
       "tuto.opponent.place": "Your opponent added this card to their collection without turning it over.",
       "tuto.place.without.flip": "It's up to you. Add this card to your collection, without turning it over.",
       "tuto.choose.action": "It's your turn again.\nIn turn, you have the choice between:\n• take a map\n• validate a series",
-      "tuto.sequence": "A series is made up of a sequence of 2 to 6 cards of the same suit whose values ​​are consecutive.",
+      "tuto.sequence": "A series is made up of a sequence of 2 to 6 <bold>cards of the same color</bold> whose values ​​are <bold>consecutive</bold>.",
       "tuto.bank.validate": "By validating a series, you score as many points as the number of victory points present at the top of the cards forming the series.",
       "tuto.bank.discard": "After validating a series, <bold>you discard the 2 highest value cards of this series</bold>.",
       "tuto.bank.flip": "Finally, when you validate a series, your opponent must turn over his strongest card of the color of this series.\n<bold>If the back is a duplicate of a card he already has, he discards it!</bold>\n<italic>With 4 or more players, only the left and right neighbors turn over a card</italic>",
@@ -174,7 +174,7 @@
   "fr": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "Vous devez placer la carte, <0>La retourner</0>, ou valider une série",
+      "header.choose.action.you": "Vous devez placer la carte, <0>la retourner</0>, ou valider une série",
       "header.choose.action.player": "{player} doit choisir une action",
       "header.place.you": "Placez votre carte",
       "header.place.player": "{player} doit placer sa carte",
@@ -187,7 +187,7 @@
       "header.after.bank.you.multi": "Vous avez validé une série, {next1} et {next2} retournent une carte",
       "header.after.bank.player.single": "{player} a validé une série, {next1} retourne une carte",
       "header.after.bank.player.multi": "{player} a validé une série, {next1} et {next2} retournent une carte",
-      "header.bank.last.you": "Vous pouvez valider une dernière série ou <0>Passer</0>",
+      "header.bank.last.you": "Vous pouvez valider une dernière série <validate>Valider</validate>",
       "header.bank.last.player": "{player} peut valider une dernière série",
       "header.simulate.other.player.you": "La première carte est retournée",
       "button.bank": "Valider la série",
