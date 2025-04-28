@@ -14,13 +14,14 @@ export const FlipCardAfterBankSequenceHeader = () => {
   const getPlayersNear = () => {
     const game: VersoRules = useRules()?.game
     const otherPlayers: number[] = game.players
-    if (player === 1) {
-      return uniq([otherPlayers.length, 2])
+    const index = otherPlayers.findIndex((p) => p === activePlayer)
+    if (index === 0) {
+      return uniq([otherPlayers[otherPlayers.length - 1], otherPlayers[1]])
     }
-    if (player === otherPlayers.length) {
-      return uniq([otherPlayers.length - 1, 1])
+    if (index === otherPlayers.length - 1) {
+      return uniq([otherPlayers[otherPlayers.length - 2], otherPlayers[0]])
     }
-    return uniq([player! - 1, player! + 1])
+    return uniq([otherPlayers[index - 1], otherPlayers[index + 1]])
   }
 
   if (itsMe) {

@@ -18,12 +18,13 @@ export class FlipCardAfterBankSequenceRule extends FlipCardRule {
   }
 
   getPlayersNear() {
-    if (this.player === 1) {
-      return uniq([this.game.players.length, 2])
+    const index = this.game.players.findIndex((p) => p === this.player)
+    if (index === 0) {
+      return uniq([this.game.players[this.game.players.length - 1], this.game.players[1]])
     }
-    if (this.player === this.game.players.length) {
-      return uniq([this.game.players.length - 1, 1])
+    if (index === this.game.players.length - 1) {
+      return uniq([this.game.players[this.game.players.length - 2], this.game.players[0]])
     }
-    return uniq([this.player - 1, this.player + 1])
+    return uniq([this.game.players[index - 1], this.game.players[index + 1]])
   }
 }
