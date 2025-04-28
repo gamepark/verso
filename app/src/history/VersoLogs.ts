@@ -5,6 +5,8 @@ import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 import { RuleId } from '@gamepark/verso/rules/RuleId'
 import { ScoreType } from '@gamepark/verso/rules/ScoreType'
 import { DeclareSquareHistory } from './components/DeclareSquareHistory'
+import { DiscardCardHistory } from './components/DiscardCardHistory'
+import { FlipCardHistory } from './components/FlipCardHistory'
 import { PlayCardHistory } from './components/PlayCardHistory'
 import { SimulateOtherPlayerWithConsequenceHistory } from './components/SimulateOtherPlayerWithConsequenceHistory'
 import { SimulateOtherPlayerWithoutConsequenceHistory } from './components/SimulateOtherPlayerWithoutConsequenceHistory'
@@ -17,9 +19,23 @@ export class VersoLogs implements LogDescription {
 
     const placeCardRules = [RuleId.PlayCard, RuleId.ChooseAction]
 
-    if (placeCardRules.includes(ruleId) && this.getMoveLocationType(move) === LocationType.PlayerLayout) {
+    if (placeCardRules.includes(ruleId)) {
+      if (this.getMoveLocationType(move) === LocationType.PlayerLayout) {
+        return {
+          Component: PlayCardHistory,
+          player: actionPlayer
+        }
+      }
+      if (this.getMoveLocationType(move) === LocationType.Deck) {
+        return {
+          Component: FlipCardHistory,
+          player: actionPlayer
+        }
+      }
+    }
+    if ((ruleId === RuleId.DiscardCard && this.getMoveLocationType(move)) === LocationType.Discard) {
       return {
-        Component: PlayCardHistory,
+        Component: DiscardCardHistory,
         player: actionPlayer
       }
     }
