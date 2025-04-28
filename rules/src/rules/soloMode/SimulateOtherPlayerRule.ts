@@ -34,7 +34,7 @@ export class SimulateOtherPlayerRule extends FlipCardRule {
     const otherFaceValue = this.remind(Memory.CardToFlipValue)
 
     if (otherFaceValue === JOKER || value <= otherFaceValue) {
-      moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence))
+      moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithoutConsequence, { value, otherFaceValue }))
     } else {
       moves.push(this.customMove(CustomMoveType.SimulateOtherPlayerWithConsequence))
       const flip = this.flipPlayerCard(this.player, getItemFaceColor(cardInDeck.getItem<CardId>()!))
