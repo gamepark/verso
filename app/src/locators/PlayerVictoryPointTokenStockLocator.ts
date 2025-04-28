@@ -14,5 +14,4 @@ class PlayerVictoryPointTokenStockLocator extends PileLocator {
   }
 }
 
-
 export const playerVictoryPointTokenStockLocator = new PlayerVictoryPointTokenStockLocator()

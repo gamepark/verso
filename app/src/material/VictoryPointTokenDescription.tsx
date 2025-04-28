@@ -22,7 +22,7 @@ class VictoryPointTokenDescription extends MoneyDescription {
     { id: VictoryPointToken.victoryPointToken1, quantity: 10, location: this.stockLocation },
     { id: VictoryPointToken.victoryPointToken3, quantity: 10, location: this.stockLocation },
     { id: VictoryPointToken.victoryPointToken7, quantity: 10, location: this.stockLocation },
-    { id: VictoryPointToken.victoryPointToken10, quantity: 10, location: this.stockLocation },
+    { id: VictoryPointToken.victoryPointToken10, quantity: 10, location: this.stockLocation }
   ]
 }
 

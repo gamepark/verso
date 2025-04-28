@@ -69,7 +69,7 @@ export class FaceCardDescription extends CardDescription {
     const flip = moves.find((move) => move.location.type === LocationType.Deck)
     const isInPlayerLayout = card.location.type === LocationType.PlayerLayout && card.location.player === context.player
     const bank = legalMoves.find(isCustomMoveType(CustomMoveType.BankSequence))
-    const helper = new PlayerLayoutHelper(context.rules.game, context.player!)
+    const helper = new PlayerLayoutHelper(context.rules.game, context.player)
     if (flip) {
       return (
         <>

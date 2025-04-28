@@ -15,5 +15,4 @@ class VictoryPointTokenStockLocator extends PileLocator {
   }
 }
 
-
 export const victoryPointTokenStockLocator = new VictoryPointTokenStockLocator()
