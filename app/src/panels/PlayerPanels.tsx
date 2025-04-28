@@ -34,33 +34,76 @@ export const PlayerPanels = () => {
     root
   )
 }
-const panelPosition = (index: number, nbPlayers: number) => {
-  if (nbPlayers === 2) {
-    switch (index) {
-      case 0:
-        return css`
-          position: absolute;
-          left: 1em;
-          top: 8.5em;
-          width: 28em;
-        `
-      case 1:
-        return css`
-          position: absolute;
-          right: 1em;
-          top: 8.5em;
-          width: 28em;
-        `
-      default:
-        return css``
-    }
+
+const panelPosition = (players: number, index: number) => css`
+  position: absolute;
+  width: 28em;
+  height: 8.3em;
+  border: 0;
+  ${getPanelPosition(players, index)};
+`
+
+const bottomRight = css`
+  bottom: 1em;
+  right: 1em;
+`
+
+const bottomLeft = css`
+  bottom: 1em;
+  left: 1em;
+`
+
+const topRight = css`
+  top: 8.5em;
+  right: 1em;
+`
+
+const topLeft = css`
+  top: 8.5em;
+  left: 1em;
+`
+
+const topCenter = css`
+  top: 8.5em;
+  left: calc(50dvw - 14em);
+`
+
+const bottomCenter = css`
+  bottom: 1em;
+  left: calc(50dvw - 14em);
+`
+
+const getPanelPosition = (index: number, nbPlayers: number) => {
+  switch (index) {
+    case 0:
+      if (nbPlayers === 1) return topRight
+      if (nbPlayers === 2) return topLeft
+      if (nbPlayers === 3) return bottomLeft
+      if (nbPlayers === 4) return bottomLeft
+      if (nbPlayers === 5) return bottomLeft
+      return bottomCenter
+    case 1:
+      if (nbPlayers === 2) return topRight
+      if (nbPlayers === 3) return topCenter
+      if (nbPlayers === 4) return topLeft
+      if (nbPlayers === 5) return topLeft
+      return bottomLeft
+    case 2:
+      if (nbPlayers === 3) return bottomRight
+      if (nbPlayers === 4) return topRight
+      if (nbPlayers === 5) return topCenter
+      return topLeft
+    case 3:
+      if (nbPlayers === 4) return bottomRight
+      if (nbPlayers === 5) return topRight
+      return topCenter
+    case 4:
+      if (nbPlayers === 5) return bottomRight
+      return topRight
+    case 5:
+    default:
+      return bottomRight
   }
-  return css`
-    position: absolute;
-    right: 1em;
-    top: ${8.5 + index * 16}em;
-    width: 28em;
-  `
 }
 
 export const playerColorCode: Record<number, string> = {

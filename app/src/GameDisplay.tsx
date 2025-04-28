@@ -9,7 +9,7 @@ type GameDisplayProps = {
 }
 
 export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps) => {
-  const margin = { top: 7, left: 0, right: players === 2 ? 0 : 30, bottom: 0 }
+  const margin = { top: 7, left: 0, right: 0, bottom: 0 }
 
   const getTableWidth = (): { xMin: number; xMax: number; yMin: number; yMax: number } => {
     switch (players) {
@@ -19,11 +19,11 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
         return { xMin: -40, xMax: 40, yMin: -12, yMax: 35 }
       case 3:
       case 4:
-        return { xMin: -55, xMax: 55, yMin: -35, yMax: 35 }
+        return { xMin: -55, xMax: 55, yMin: -45, yMax: 45 }
       case 5:
-        return { xMin: -60, xMax: 60, yMin: -35, yMax: 35 }
-      default:
         return { xMin: -60, xMax: 60, yMin: -45, yMax: 45 }
+      default:
+        return { xMin: -60, xMax: 60, yMin: -55, yMax: 55 }
     }
   }
 
