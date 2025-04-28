@@ -5,7 +5,7 @@ import { VersoSetup } from '@gamepark/verso/VersoSetup'
 import { GameProvider, setupTranslation } from '@gamepark/react-game'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
-import { gameAnimations } from './animations/GameAnimations'
+import { versoAnimations } from './animations/VersoAnimations'
 import App from './App'
 import { VersoLogs } from './history/VersoLogs'
 import { Locators } from './locators/Locators'
@@ -25,7 +25,7 @@ ReactDOM.render(
       material={Material}
       locators={Locators}
       tutorial={new Tutorial()}
-      animations={gameAnimations}
+      animations={versoAnimations}
       logs={new VersoLogs()}
     >
       <App />
