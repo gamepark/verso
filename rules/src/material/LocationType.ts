@@ -4,5 +4,6 @@ export enum LocationType {
   PlayerLayout,
   PlayerBankSequenceLayout,
   VictoryPointTokenStock,
-  PlayerVictoryPointTokenStock
+  PlayerVictoryPointTokenStock,
+  FaceCardPoints
 }

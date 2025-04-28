@@ -1,6 +1,7 @@
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { Locator } from '@gamepark/react-game'
+import { faceCardPointsLocator } from './FaceCardPointsLocator'
 import { playerBankSequenceLayoutLocator } from './PlayerBankSequenceLayoutLocator'
 import { discardLocator } from './DiscardLocator'
 import { faceCardDeckLocator } from './FaceCardDeckLocator'
@@ -14,5 +15,6 @@ export const Locators: Partial<Record<LocationType, Locator<number, MaterialType
   [LocationType.PlayerLayout]: playerLayoutLocator,
   [LocationType.PlayerBankSequenceLayout]: playerBankSequenceLayoutLocator,
   [LocationType.VictoryPointTokenStock]: victoryPointTokenStockLocator,
-  [LocationType.PlayerVictoryPointTokenStock]: playerVictoryPointTokenStockLocator
+  [LocationType.PlayerVictoryPointTokenStock]: playerVictoryPointTokenStockLocator,
+  [LocationType.FaceCardPoints]: faceCardPointsLocator
 }

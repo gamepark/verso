@@ -30,7 +30,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     {
       popup: {
         text: () => <Trans defaults="tuto.deck" components={BaseComponents} />,
-        position: { x: -35, y: 10 }
+        position: { x: -20, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -44,7 +44,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     {
       popup: {
         text: () => <Trans defaults="tuto.card" components={BaseComponents} />,
-        position: { x: -35, y: 10 }
+        position: { x: -20, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -61,18 +61,20 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
         position: { x: -20, y: 10 }
       },
       focus: (game) => ({
-        materials: [
-          this.material(game, MaterialType.Card)
-            .location(LocationType.Deck)
-            .maxBy((item) => item.location.x!)
-        ],
+        locations: this.material(game, MaterialType.Card)
+          .location(LocationType.Deck)
+          .getIndexes()
+          .map((parent) => ({
+            type: LocationType.FaceCardPoints,
+            parent
+          })),
         scale: 1
       })
     },
     {
       popup: {
         text: () => <Trans defaults="tuto.verso" components={BaseComponents} />,
-        position: { x: -35, y: 10 }
+        position: { x: -20, y: 10 }
       },
       focus: (game) => ({
         materials: [
@@ -86,7 +88,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     {
       popup: {
         text: () => <Trans defaults="tuto.flip" components={BaseComponents} />,
-        position: { x: -35, y: 15 }
+        position: { x: -20, y: 15 }
       },
       focus: (game) => ({
         materials: [
@@ -185,7 +187,7 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     {
       popup: {
         text: () => <Trans defaults="tuto.joker" components={BaseComponents} />,
-        position: { x: -35, y: 10 }
+        position: { x: -20, y: 10 }
       },
       focus: (game) => ({
         materials: [
