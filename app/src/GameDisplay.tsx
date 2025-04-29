@@ -38,7 +38,7 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
         margin={margin}
         css={process.env.NODE_ENV === 'development' && tableBorder}
       >
-        {players !== 2 && <GameTableNavigation />}
+        <GameTableNavigation css={navigationCss} />
         <PlayerPanels />
       </GameTable>
     </>
@@ -47,4 +47,9 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
 
 const tableBorder = css`
   border: 1px solid white;
+`
+
+const navigationCss = css`
+  left: 10em;
+  top: 1em;
 `
