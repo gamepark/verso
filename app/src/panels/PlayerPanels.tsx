@@ -84,7 +84,7 @@ const getPanelPosition = (index: number, nbPlayers: number) => {
       return bottomCenter
     case 1:
       if (nbPlayers === 2) return topRight
-      if (nbPlayers === 3) return topCenter
+      if (nbPlayers === 3) return bottomCenter
       if (nbPlayers === 4) return topLeft
       if (nbPlayers === 5) return topLeft
       return bottomLeft
