@@ -5,8 +5,12 @@ import { faceCardDeckLocator } from './FaceCardDeckLocator'
 class VictoryPointTokenStockLocator extends PileLocator {
   radius = 4
   getCoordinates(_: Location, context: MaterialContext) {
+    const nbPlayers = context.rules.players.length
     const deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
 
+    if(nbPlayers === 6) {
+      return { x: deckCoordinates.x!, y: deckCoordinates.y! - 10 }
+    }
     return { x: deckCoordinates.x! - 10, y: deckCoordinates.y }
   }
 

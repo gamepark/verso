@@ -18,12 +18,13 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
       case 2:
         return { xMin: -40, xMax: 40, yMin: -12, yMax: 35 }
       case 3:
-      case 4:
         return { xMin: -65, xMax: 65, yMin: -20, yMax: 40 }
+      case 4:
+        return { xMin: -78, xMax: 78, yMin: -35, yMax: 35 }
       case 5:
-        return { xMin: -60, xMax: 60, yMin: -45, yMax: 45 }
+        return { xMin: -75, xMax: 75, yMin: -45, yMax: 45 }
       default:
-        return { xMin: -60, xMax: 60, yMin: -55, yMax: 55 }
+        return { xMin: -85, xMax: 70, yMin: -45, yMax: 45 }
     }
   }
 

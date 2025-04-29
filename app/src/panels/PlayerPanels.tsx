@@ -81,28 +81,28 @@ const getPanelPosition = (index: number, nbPlayers: number) => {
       if (nbPlayers === 3) return bottomLeft
       if (nbPlayers === 4) return bottomLeft
       if (nbPlayers === 5) return bottomLeft
-      return bottomCenter
+      return bottomLeft
     case 1:
       if (nbPlayers === 2) return topRight
       if (nbPlayers === 3) return bottomCenter
       if (nbPlayers === 4) return topLeft
       if (nbPlayers === 5) return topLeft
-      return bottomLeft
+      return topLeft
     case 2:
       if (nbPlayers === 3) return bottomRight
       if (nbPlayers === 4) return topRight
       if (nbPlayers === 5) return topCenter
-      return topLeft
+      return topCenter
     case 3:
       if (nbPlayers === 4) return bottomRight
       if (nbPlayers === 5) return topRight
-      return topCenter
+      return topRight
     case 4:
       if (nbPlayers === 5) return bottomRight
-      return topRight
+      return bottomRight
     case 5:
     default:
-      return bottomRight
+      return bottomCenter
   }
 }
 

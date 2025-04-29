@@ -10,11 +10,13 @@ export class FaceCardDeckLocator extends DeckLocator {
       case 2:
         return { x: 0, y: -6 }
       case 3:
-      case 5:
         return { x: 0, y: -10 }
       case 4:
-      default:
         return { x: 0, y: 0 }
+      case 5:
+        return { x: 0, y: 20 }
+      default:
+        return { x: -77, y: 0 }
     }
   }
 
