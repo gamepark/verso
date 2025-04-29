@@ -1,11 +1,13 @@
 import { LogDescription, MoveComponentContext, MovePlayedLogDescription } from '@gamepark/react-game'
 import { isCustomMoveType, isMoveItem, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
+import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
 import { RuleId } from '@gamepark/verso/rules/RuleId'
 import { ScoreType } from '@gamepark/verso/rules/ScoreType'
 import { DeclareSquareHistory } from './components/DeclareSquareHistory'
 import { DiscardCardHistory } from './components/DiscardCardHistory'
+import { FlipCardAfterBankSequenceHistory } from './components/FlipCardAfterBankSequenceHistory'
 import { FlipCardHistory } from './components/FlipCardHistory'
 import { PlayCardHistory } from './components/PlayCardHistory'
 import { SimulateOtherPlayerWithConsequenceHistory } from './components/SimulateOtherPlayerWithConsequenceHistory'
@@ -37,6 +39,16 @@ export class VersoLogs implements LogDescription {
       return {
         Component: DiscardCardHistory,
         player: actionPlayer
+      }
+    }
+    if (ruleId === RuleId.FlipCardAfterBankSequence && this.getMoveLocationType(move) === LocationType.PlayerLayout && isMoveItem(move)) {
+      const actualRotation = context.game.items[MaterialType.Card][move.itemIndex].location.rotation
+      const cibleRotation = move.location.rotation
+      if (actualRotation !== cibleRotation) {
+        return {
+          Component: FlipCardAfterBankSequenceHistory,
+          player: actionPlayer
+        }
       }
     }
 
