@@ -5,6 +5,12 @@ import { Memory } from '@gamepark/verso/rules/Memory'
 import { VersoRules } from '@gamepark/verso/VersoRules'
 import Star from '../images/tokens/star.png'
 import { createPortal } from 'react-dom'
+import panel1 from '../images/panels/panel1.jpg'
+import panel2 from '../images/panels/panel2.jpg'
+import panel3 from '../images/panels/panel3.jpg'
+import panel4 from '../images/panels/panel4.jpg'
+import panel5 from '../images/panels/panel5.jpg'
+import panel6 from '../images/panels/panel6.jpg'
 
 export const PlayerPanels = () => {
   const players = usePlayers<number>({ sortFromMe: true })
@@ -22,6 +28,7 @@ export const PlayerPanels = () => {
           player={player}
           color={playerColorCode[player.id]}
           css={panelPosition(index, players.length)}
+          backgroundImage={images[player.id]}
           counters={[
             {
               image: Star,
@@ -111,4 +118,13 @@ export const playerColorCode: Record<number, string> = {
   2: 'blue',
   3: 'green',
   4: 'yellow'
+}
+
+const images: Record<number, string> = {
+  1: panel1,
+  2: panel2,
+  3: panel3,
+  4: panel4,
+  5: panel5,
+  6: panel6
 }
