@@ -8,7 +8,7 @@ export class DiscardLocator extends PileLocator {
     const nbPlayers = context.rules.players.length
     const deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
 
-    if(nbPlayers === 6) {
+    if (nbPlayers === 6) {
       return { x: deckCoordinates.x!, y: deckCoordinates.y! + 8 }
     }
     return { x: deckCoordinates.x! + 7, y: deckCoordinates.y }

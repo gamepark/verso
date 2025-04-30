@@ -28,6 +28,29 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
     }
   }
 
+  const getNavigationCss = () => {
+    switch (players) {
+      case 1:
+      case 3:
+        return css`
+          left: 1em;
+          top: 12em;
+        `
+      case 4:
+        return css`
+          left: 1em;
+          top: 18em;
+        `
+      case 2:
+      case 5:
+      default:
+        return css`
+          left: 31em;
+          top: 8em;
+        `
+    }
+  }
+
   return (
     <>
       <GameTable
@@ -38,7 +61,7 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
         margin={margin}
         css={process.env.NODE_ENV === 'development' && tableBorder}
       >
-        <GameTableNavigation css={navigationCss} />
+        <GameTableNavigation css={getNavigationCss()} />
         <PlayerPanels />
       </GameTable>
     </>
@@ -47,9 +70,4 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
 
 const tableBorder = css`
   border: 1px solid white;
-`
-
-const navigationCss = css`
-  left: 10em;
-  top: 1em;
 `
