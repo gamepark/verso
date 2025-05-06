@@ -2,7 +2,7 @@
   "en": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "You must place the card, <flip>flip it</flip>, or bank a sequence",
+      "header.choose.action.you": "You must <place>place the card</place>, <flip>flip it</flip>, or bank a sequence",
       "header.choose.action.player": "{player} must choose an action",
       "header.place.you": "Place your card",
       "header.place.player": "{player} must place his card",
@@ -180,7 +180,7 @@
   "fr": {
     "translation": {
       "Name": "Verso",
-      "header.choose.action.you": "Vous devez placer la carte, <flip>la retourner</flip>, ou valider une série",
+      "header.choose.action.you": "Vous devez <place>placer la carte</place>, <flip>la retourner</flip>, ou valider une série",
       "header.choose.action.player": "{player} doit choisir une action",
       "header.place.you": "Placez votre carte",
       "header.place.player": "{player} doit placer sa carte",

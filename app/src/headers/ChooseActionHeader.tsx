@@ -12,6 +12,7 @@ export const ChooseActionHeader = () => {
   const activePlayer = rules.game.rule?.player
   const itsMe = player && activePlayer === player
   const name = usePlayerName(activePlayer)
+  const place = useLegalMove((move: MaterialMove) => isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.PlayerLayout)
   const flip = useLegalMove((move: MaterialMove) => isMoveItemType(MaterialType.Card)(move) && move.location.type === LocationType.Deck)
 
   if (itsMe) {
@@ -19,6 +20,7 @@ export const ChooseActionHeader = () => {
       <Trans
         defaults="header.choose.action.you"
         components={{
+          place: <PlayMoveButton move={place} />,
           flip: <PlayMoveButton move={flip} />
         }}
       />
