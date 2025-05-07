@@ -6,8 +6,7 @@ export class DiscardLocator extends PileLocator {
   maxAngle = 10
   getCoordinates(_: Location, context: MaterialContext): Partial<Coordinates> {
     const nbPlayers = context.rules.players.length
-    let deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
-    deckCoordinates = { x: deckCoordinates.x! + 2, y: deckCoordinates.y! - 2 }
+    const deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
 
     if (nbPlayers === 6) {
       return { x: deckCoordinates.x!, y: deckCoordinates.y! + 8 }

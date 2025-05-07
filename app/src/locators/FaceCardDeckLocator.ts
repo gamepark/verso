@@ -7,7 +7,7 @@ import { StackSpotCounter } from './component/StackSpotCounter'
 export class FaceCardDeckLocator extends DeckLocator {
   getCoordinates(location: Location, context: MaterialContext): Partial<Coordinates> {
     const coordinates = this.getBaseCoordinates(context)
-    if (location.x) return coordinates
+    if (location.x !== undefined) return coordinates
     return { x: coordinates.x! - 2, y: coordinates.y! + 2 }
   }
   getBaseCoordinates(context: MaterialContext): Partial<Coordinates> {
