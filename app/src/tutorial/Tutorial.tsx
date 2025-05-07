@@ -18,7 +18,26 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     players: [{ id: me }, { id: opponent }]
   }
 
-  players = [{ id: me }, { id: opponent }]
+  players = [
+    { id: me },
+    {
+      id: opponent,
+      name: 'Zongoh',
+      avatar: {
+        topType: 'NoHair',
+        accessoriesType: 'Blank',
+        facialHairType: 'BeardMajestic',
+        facialHairColor: 'Red',
+        clotheType: 'Overall',
+        clotheColor: 'Black',
+        eyeType: 'Surprised',
+        eyebrowType: 'RaisedExcited',
+        mouthType: 'ScreamOpen',
+        skinColor: 'Light'
+      }
+    }
+  ]
+
   setup = new TutorialSetup()
 
   steps: TutorialStep[] = [
@@ -206,6 +225,11 @@ export class Tutorial extends MaterialTutorial<number, MaterialType, LocationTyp
     {
       popup: {
         text: () => <Trans defaults="tuto.square" components={BaseComponents} />
+      }
+    },
+    {
+      popup: {
+        text: () => <Trans defaults="tuto.end" components={BaseComponents} />
       }
     },
     {
