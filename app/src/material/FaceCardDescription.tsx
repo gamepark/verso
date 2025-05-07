@@ -87,20 +87,16 @@ export class FaceCardDescription extends CardDescription {
     }
     return (
       <>
-        {
-          place && (
-            <ItemMenuButton angle={50} radius={4} move={place}>
-              <FontAwesomeIcon icon={faArrowDown} css={pointerCursorCss} />
-            </ItemMenuButton>
-          )
-        }
-        {
-          flip && (
-            <ItemMenuButton angle={50} radius={4} move={flip} y={-0.5}>
-              <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss} />
-            </ItemMenuButton>
-          )
-        }
+        {place && (
+          <ItemMenuButton angle={50} radius={4} move={place}>
+            <FontAwesomeIcon icon={faArrowDown} css={pointerCursorCss} />
+          </ItemMenuButton>
+        )}
+        {flip && (
+          <ItemMenuButton angle={50} radius={4} move={flip} y={-0.5}>
+            <FontAwesomeIcon icon={faRotateRight} css={pointerCursorCss} />
+          </ItemMenuButton>
+        )}
       </>
     )
   }

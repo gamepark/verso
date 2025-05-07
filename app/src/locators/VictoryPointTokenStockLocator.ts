@@ -6,7 +6,8 @@ class VictoryPointTokenStockLocator extends PileLocator {
   radius = 4
   getCoordinates(_: Location, context: MaterialContext) {
     const nbPlayers = context.rules.players.length
-    const deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
+    let deckCoordinates = faceCardDeckLocator.getCoordinates(_, context)
+    deckCoordinates = { x: deckCoordinates.x! + 2, y: deckCoordinates.y! - 2 }
 
     if (nbPlayers === 6) {
       return { x: deckCoordinates.x!, y: deckCoordinates.y! - 10 }

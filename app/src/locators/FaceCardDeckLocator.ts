@@ -1,8 +1,16 @@
-import { DeckLocator, MaterialContext } from '@gamepark/react-game'
+import { css } from '@emotion/react'
+import { DeckLocator, LocationDescription, MaterialContext } from '@gamepark/react-game'
 import { Coordinates, Location } from '@gamepark/rules-api'
+import { faceCardDescription } from '../material/FaceCardDescription'
+import { StackSpotCounter } from './component/StackSpotCounter'
 
 export class FaceCardDeckLocator extends DeckLocator {
-  getCoordinates(_: Location, context: MaterialContext): Partial<Coordinates> {
+  getCoordinates(location: Location, context: MaterialContext): Partial<Coordinates> {
+    const coordinates = this.getBaseCoordinates(context)
+    if (location.x) return coordinates
+    return { x: coordinates.x! - 2, y: coordinates.y! + 2 }
+  }
+  getBaseCoordinates(context: MaterialContext): Partial<Coordinates> {
     const nbPlayers = context.rules.players.length
     switch (nbPlayers) {
       case 1:
@@ -20,7 +28,39 @@ export class FaceCardDeckLocator extends DeckLocator {
     }
   }
 
+  location = {}
+
   navigationSorts = []
+
+  locationDescription = new FaceCardDeckDescription(faceCardDescription)
+}
+
+class FaceCardDeckDescription extends LocationDescription {
+  content = StackSpotCounter
+
+  canDrop(): boolean {
+    console.log('coucou')
+    return false
+  }
+
+  extraCss = css`
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+
+    > span {
+      font-size: 1.75em;
+      font-weight: bolder;
+      color: white;
+      opacity: 0.7;
+      text-shadow:
+        3px 3px 0 #000,
+        -3px 3px 0 #000,
+        -3px -3px 0 #000,
+        3px -3px 0 #000;
+      margin-right: 0.2em;
+    }
+  `
 }
 
 export const faceCardDeckLocator = new FaceCardDeckLocator()
