@@ -10,10 +10,10 @@ export const FlipCardHistory = (props: MoveComponentProps) => {
   const actionPlayer = context.action.playerId
   const name = usePlayerName(actionPlayer)
   const card: CardItem = context.game.items[MaterialType.Card][move.itemIndex]
-  const cardId = move.reveal?.id.back ?? card?.id.back ?? move.reveal?.id.front ?? card?.id.front
-  const flipedCard: CardItem = { id: cardId, location: { type: 0, rotation: false } }
-  const value = getFaceValue(move.reveal.id.back || move.reveal.id.front)
-  const color = getFaceColor(move.reveal.id.back || move.reveal.id.front)
+  const flipedCard: CardItem = { id: move.reveal?.id, location: { type: 0, rotation: move.location.rotation } }
+  console.log(flipedCard)
+  const value = getFaceValue(move.reveal?.id.back || move.reveal?.id.front)
+  const color = getFaceColor(move.reveal?.id.back || move.reveal?.id.front)
   const oldValue = getItemFaceValue(card)
   const oldColor = getItemFaceColor(card)
   const displayMaterialHelp = MaterialMoveBuilder.displayMaterialHelp
@@ -39,7 +39,7 @@ export const FlipCardHistory = (props: MoveComponentProps) => {
   return (
     <Trans defaults="history.flip.card.player" values={{ player: name, value, color, oldValue, oldColor }}>
       <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, card)} local />
-      <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, flipedCard)} local />
+      <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, flipedCard)} transient />
     </Trans>
   )
 }
