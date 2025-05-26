@@ -16,7 +16,7 @@ import { ValidateSequenceHistory } from './components/ValidateSequenceHistory'
 
 export class VersoLogs implements LogDescription {
   getMovePlayedLogDescription(move: MaterialMove, context: MoveComponentContext): MovePlayedLogDescription | undefined {
-    const ruleId: RuleId = context.game.rule.id
+    const ruleId: RuleId = context.game.rule?.id
     const actionPlayer = context.action.playerId
 
     const placeCardRules = [RuleId.PlayCard, RuleId.ChooseAction]
