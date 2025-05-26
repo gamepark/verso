@@ -1,4 +1,4 @@
-import { isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
+import { CustomMove, isCustomMoveType, isMoveItemType, ItemMove, MaterialMove } from '@gamepark/rules-api'
 import { CardId, getItemFaceColor, getItemFaceValue, JOKER } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'
@@ -9,7 +9,13 @@ import { Memory } from '../Memory'
 import { RuleId } from '../RuleId'
 
 export class SimulateOtherPlayerRule extends FlipCardRule {
-  onRuleStart(): MaterialMove[] {
+  getPlayerMoves(): MaterialMove[] {
+    return [this.customMove(CustomMoveType.FlipCardForAutoma)]
+  }
+
+  onCustomMove(move: CustomMove): MaterialMove[] {
+    if (!isCustomMoveType(CustomMoveType.FlipCardForAutoma)(move)) return []
+
     const moves: MaterialMove[] = []
     this.memorize(Memory.CardToFlipValue, getItemFaceValue(this.cardInDeck.getItem<CardId>()!))
     moves.push(this.cardInDeck.moveItem((item) => ({ ...item.location, rotation: !item.location.rotation })))

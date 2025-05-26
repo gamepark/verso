@@ -11,7 +11,6 @@ export const FlipCardHistory = (props: MoveComponentProps) => {
   const name = usePlayerName(actionPlayer)
   const card: CardItem = context.game.items[MaterialType.Card][move.itemIndex]
   const flipedCard: CardItem = { id: move.reveal?.id, location: { type: 0, rotation: move.location.rotation } }
-  console.log(flipedCard)
   const value = getFaceValue(move.reveal?.id.back || move.reveal?.id.front)
   const color = getFaceColor(move.reveal?.id.back || move.reveal?.id.front)
   const oldValue = getItemFaceValue(card)

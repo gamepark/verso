@@ -38,11 +38,6 @@ export class FaceCardDeckLocator extends DeckLocator {
 class FaceCardDeckDescription extends LocationDescription {
   content = StackSpotCounter
 
-  canDrop(): boolean {
-    console.log('coucou')
-    return false
-  }
-
   extraCss = css`
     display: flex;
     align-items: flex-end;
