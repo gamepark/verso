@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { GameTable, GameTableNavigation } from '@gamepark/react-game'
 import { FC } from 'react'
+import { SoloDialog } from './dialogs/SoloDialog'
 import { PlayerPanels } from './panels/PlayerPanels'
 
 type GameDisplayProps = {
@@ -63,6 +64,7 @@ export const GameDisplay: FC<GameDisplayProps> = ({ players }: GameDisplayProps)
       >
         <GameTableNavigation css={getNavigationCss()} />
         <PlayerPanels />
+        <SoloDialog />
       </GameTable>
     </>
   )
