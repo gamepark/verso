@@ -70,6 +70,7 @@ export class VersoRules
   }
 
   protected afterItemMove(move: ItemMove) {
+    const moves: MaterialMove[] = []
     if (
       isMoveItem(move) &&
       move.location.type === LocationType.PlayerLayout &&
@@ -81,21 +82,26 @@ export class VersoRules
       const color = getItemFaceColor(card)
       const otherColors = getEnumValues(FaceColor).filter((otherColor) => otherColor !== color)
       if (color === card.location.id && this.lineSize(player, color) === 3 && otherColors.every((otherColor) => this.lineSize(player, otherColor) >= 3)) {
-        return [customMove(CustomMoveType.Score, { type: ScoreType.Square, score: 7, player })]
+        moves.push(customMove(CustomMoveType.Score, { type: ScoreType.Square, score: 7, player }))
       }
     }
-    return []
+    moves.push(...super.afterItemMove(move))
+    return moves
   }
 
   protected onCustomMove(move: CustomMove) {
+    const moves: MaterialMove[] = []
     if (move.type === CustomMoveType.Score) {
       const { player, score } = move.data as Scoring
       this.getMemory(player).memorize<number>(Memory.Score, (previousScore) => previousScore + score)
-      return this.material(MaterialType.VictoryPointToken)
-        .money(victoryPointTokens)
-        .addMoney(score, { type: LocationType.PlayerVictoryPointTokenStock, player: player })
+      moves.push(
+        ...this.material(MaterialType.VictoryPointToken)
+          .money(victoryPointTokens)
+          .addMoney(score, { type: LocationType.PlayerVictoryPointTokenStock, player: player })
+      )
     }
-    return []
+    moves.push(...super.onCustomMove(move))
+    return moves
   }
 
   lineSize(player: number, color: FaceColor) {
