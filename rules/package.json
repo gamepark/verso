@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/verso",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The rules of Verso adapted for Game Park",
   "type": "module",
   "sideEffects": false,
