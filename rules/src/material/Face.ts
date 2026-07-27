@@ -1,5 +1,5 @@
 import { getEnumValues, MaterialItem } from '@gamepark/rules-api'
-import { uniq } from 'lodash'
+import { uniq } from 'es-toolkit'
 
 export enum Face {
   SeaJoker = 10,

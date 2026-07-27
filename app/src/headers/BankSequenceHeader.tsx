@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { isCustomMoveType } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
@@ -16,7 +15,7 @@ export const BankSequenceHeader = () => {
   if (itsMe) {
     return (
       <Trans
-        defaults="header.bank.you"
+        i18nKey="header.bank.you"
         components={{
           validate: <PlayMoveButton move={validate} />
         }}
@@ -24,5 +23,5 @@ export const BankSequenceHeader = () => {
     )
   }
 
-  return <Trans defaults="header.bank.player" values={{ player: name }} />
+  return <Trans i18nKey="header.bank.player" values={{ player: name }} />
 }

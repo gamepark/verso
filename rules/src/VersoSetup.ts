@@ -1,5 +1,5 @@
 import { MaterialGameSetup } from '@gamepark/rules-api'
-import { sample, shuffle } from 'lodash'
+import { sample, shuffle } from 'es-toolkit'
 import { Memory } from './rules/Memory'
 import { VersoOptions } from './VersoOptions'
 import { VersoRules } from './VersoRules'

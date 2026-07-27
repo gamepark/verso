@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { isMoveItemType, MaterialMove } from '@gamepark/rules-api'
 import { LocationType } from '@gamepark/verso/material/LocationType'
@@ -18,7 +17,7 @@ export const ChooseActionHeader = () => {
   if (itsMe) {
     return (
       <Trans
-        defaults="header.choose.action.you"
+        i18nKey="header.choose.action.you"
         components={{
           place: <PlayMoveButton move={place} />,
           flip: <PlayMoveButton move={flip} />
@@ -27,5 +26,5 @@ export const ChooseActionHeader = () => {
     )
   }
 
-  return <Trans defaults="header.choose.action.player" values={{ player: name }} />
+  return <Trans i18nKey="header.choose.action.player" values={{ player: name }} />
 }

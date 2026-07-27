@@ -1,5 +1,5 @@
 import { MaterialMove } from '@gamepark/rules-api'
-import { uniq } from 'lodash'
+import { uniq } from 'es-toolkit'
 import { FaceColor } from '../material/Face'
 import { FlipCardRule } from './FlipCardRule'
 import { Memory } from './Memory'

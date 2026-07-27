@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { StyledPlayerPanel, usePlayers, useRules } from '@gamepark/react-game'
 import { Memory } from '@gamepark/verso/rules/Memory'
@@ -113,7 +112,7 @@ const getPanelPosition = (index: number, nbPlayers: number) => {
   }
 }
 
-export const playerColorCode: Record<number, string> = {
+const playerColorCode: Record<number, string> = {
   1: 'red',
   2: 'blue',
   3: 'green',

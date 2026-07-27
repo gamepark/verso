@@ -1,41 +1,37 @@
-/** @jsxImportSource @emotion/react */
-
 import { usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { VersoRules } from '@gamepark/verso/VersoRules'
-import { uniq } from 'lodash'
+import { uniq } from 'es-toolkit'
 import { Trans } from 'react-i18next'
+
+const getPlayersNear = (players: number[], activePlayer?: number) => {
+  const index = players.findIndex((p) => p === activePlayer)
+  if (index === 0) {
+    return uniq([players[players.length - 1], players[1]])
+  }
+  if (index === players.length - 1) {
+    return uniq([players[players.length - 2], players[0]])
+  }
+  return uniq([players[index - 1], players[index + 1]])
+}
 
 export const FlipCardAfterBankSequenceHeader = () => {
   const player: number | undefined = usePlayerId()
   const rules = useRules<VersoRules>()!
   const activePlayer = rules.game.rule?.player
-  const itsMe = player && activePlayer === player
+  const itsMe = player !== undefined && activePlayer === player
+  const playersNear = getPlayersNear(rules.game.players, activePlayer)
 
-  const getPlayersNear = () => {
-    const game: VersoRules = useRules()?.game
-    const otherPlayers: number[] = game.players
-    const index = otherPlayers.findIndex((p) => p === activePlayer)
-    if (index === 0) {
-      return uniq([otherPlayers[otherPlayers.length - 1], otherPlayers[1]])
-    }
-    if (index === otherPlayers.length - 1) {
-      return uniq([otherPlayers[otherPlayers.length - 2], otherPlayers[0]])
-    }
-    return uniq([otherPlayers[index - 1], otherPlayers[index + 1]])
-  }
+  const name = usePlayerName(activePlayer)
+  const next1 = usePlayerName(playersNear[0])
+  const next2 = usePlayerName(playersNear[1])
 
   if (itsMe) {
-    if (getPlayersNear().length === 1) return <Trans defaults="header.after.bank.you.single" values={{ next1: usePlayerName(getPlayersNear()[0]) }} />
-    return <Trans defaults="header.after.bank.you.multi" values={{ next1: usePlayerName(getPlayersNear()[0]), next2: usePlayerName(getPlayersNear()[1]) }} />
+    if (playersNear.length === 1) return <Trans i18nKey="header.after.bank.you.single" values={{ next1 }} />
+    return <Trans i18nKey="header.after.bank.you.multi" values={{ next1, next2 }} />
   }
 
-  if (getPlayersNear().length === 1) {
-    return <Trans defaults="header.after.bank.player.single" values={{ player: usePlayerName(activePlayer), next1: usePlayerName(getPlayersNear()[0]) }} />
+  if (playersNear.length === 1) {
+    return <Trans i18nKey="header.after.bank.player.single" values={{ player: name, next1 }} />
   }
-  return (
-    <Trans
-      defaults="header.after.bank.player.multi"
-      values={{ player: usePlayerName(activePlayer), next1: usePlayerName(getPlayersNear()[0]), next2: usePlayerName(getPlayersNear()[1]) }}
-    />
-  )
+  return <Trans i18nKey="header.after.bank.player.multi" values={{ player: name, next1, next2 }} />
 }

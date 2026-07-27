@@ -2,7 +2,7 @@ import { getCardIds } from '@gamepark/verso/material/Face'
 import { LocationType } from '@gamepark/verso/material/LocationType'
 import { MaterialType } from '@gamepark/verso/material/MaterialType'
 import { VersoSetup } from '@gamepark/verso/VersoSetup'
-import { sample } from 'lodash'
+import { sample } from 'es-toolkit'
 
 export const me = 1
 export const opponent = 2

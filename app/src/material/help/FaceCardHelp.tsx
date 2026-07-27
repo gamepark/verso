@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { MaterialHelpProps } from '@gamepark/react-game'
 import { CardItem, getItemFaceColor, getItemFaceValue, JOKER } from '@gamepark/verso/material/Face'
@@ -20,30 +19,27 @@ export const FaceCardHelp: FC<MaterialHelpProps> = (props) => {
   const lowerValue = value === 1 ? 6 : value - 1
   const higherValue = value === 6 ? 1 : value + 1
 
-  const VersoValue = () => {
-    if (value === JOKER) {
-      return <Trans defaults="verso.any" components={components} />
-    }
-    if (points === 1) {
-      return <Trans defaults="verso.value" values={{ a: lowerValue, b: higherValue }} components={components} />
-    }
-    return <Trans defaults="verso.joker" values={{ a: lowerValue, b: higherValue }} components={components} />
-  }
+  const versoValue =
+    value === JOKER ? (
+      <Trans i18nKey="verso.any" components={components} />
+    ) : points === 1 ? (
+      <Trans i18nKey="verso.value" values={{ a: lowerValue, b: higherValue }} components={components} />
+    ) : (
+      <Trans i18nKey="verso.joker" values={{ a: lowerValue, b: higherValue }} components={components} />
+    )
 
   return (
     <>
       <h2>{t(`card.${color}`)}</h2>
       <p>
-        <Trans defaults={value === JOKER ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
+        <Trans i18nKey={value === JOKER ? 'card.joker' : `card.value`} values={{ value, points }} components={components} />
       </p>
-      <Trans defaults="verso" />
+      <Trans i18nKey="verso" />
       <ul css={listCss}>
         <li>
-          <Trans defaults="verso.color" components={components} />
+          <Trans i18nKey="verso.color" components={components} />
         </li>
-        <li>
-          <VersoValue />
-        </li>
+        <li>{versoValue}</li>
       </ul>
     </>
   )

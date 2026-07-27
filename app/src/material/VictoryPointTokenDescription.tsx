@@ -9,6 +9,7 @@ import VP10 from '../images/tokens/VP10.png'
 class VictoryPointTokenDescription extends MoneyDescription {
   height = 2.7
   width = 2.7
+  transparency = true
   images = {
     [VictoryPointToken.victoryPointToken1]: VP1,
     [VictoryPointToken.victoryPointToken3]: VP3,

@@ -1,5 +1,5 @@
 import { Material, MaterialGame, MaterialMove, MaterialRulesPart } from '@gamepark/rules-api'
-import { sumBy } from 'lodash'
+import { sumBy } from 'es-toolkit'
 import { CardId, CardItem, getItemFace, getItemFaceColor, isValidSequence } from '../../material/Face'
 import { LocationType } from '../../material/LocationType'
 import { MaterialType } from '../../material/MaterialType'

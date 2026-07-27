@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { PlayMoveButton, useLegalMove, usePlayerId, usePlayerName, useRules } from '@gamepark/react-game'
 import { isCustomMoveType } from '@gamepark/rules-api'
 import { CustomMoveType } from '@gamepark/verso/rules/CustomMoveType'
@@ -14,7 +13,7 @@ export const BankLastSequenceHeader = () => {
   if (playerId !== undefined && activePlayers.includes(playerId)) {
     return (
       <Trans
-        defaults="header.bank.last.you"
+        i18nKey="header.bank.last.you"
         components={{
           validate: <PlayMoveButton move={validate} />
         }}

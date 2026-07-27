@@ -78,7 +78,7 @@ export class FaceCardDescription extends CardDescription {
       if (!higherCardsInColor.entries.some(([index, card]) => helper.canCardMakeSequence(card, index))) {
         return (
           <>
-            <ItemMenuButton label={<Trans defaults="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
+            <ItemMenuButton label={<Trans i18nKey="button.bank" />} angle={50} radius={4} y={-3.7} move={bank}>
               <FontAwesomeIcon icon={faMoneyCheckDollar} css={pointerCursorCss} />
             </ItemMenuButton>
           </>

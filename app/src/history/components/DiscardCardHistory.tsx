@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { MoveComponentProps, PlayMoveButton, usePlayerName } from '@gamepark/react-game'
 import { MaterialMoveBuilder } from '@gamepark/rules-api'
 import { CardItem, getItemFaceColor, getItemFaceValue, JOKER } from '@gamepark/verso/material/Face'
@@ -16,14 +15,14 @@ export const DiscardCardHistory = (props: MoveComponentProps) => {
 
   if (value === JOKER) {
     return (
-      <Trans defaults="history.discard.joker.player" values={{ player: name, color }}>
+      <Trans i18nKey="history.discard.joker.player" values={{ player: name, color }}>
         <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, card)} local />
       </Trans>
     )
   }
 
   return (
-    <Trans defaults="history.discard.card.player" values={{ player: name, value, color }}>
+    <Trans i18nKey="history.discard.card.player" values={{ player: name, value, color }}>
       <PlayMoveButton move={displayMaterialHelp(MaterialType.Card, card)} local />
     </Trans>
   )
