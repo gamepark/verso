@@ -2,13 +2,13 @@ import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { imagetools } from 'vite-imagetools'
-import { version } from './package.json'
+import { version } from './package.json' with { type: 'json' }
 
 function translationHmrPlugin(): PluginOption {
   return {
     name: 'translation-hmr',
     configureServer(server) {
-      const translationDir = path.resolve(__dirname, 'public/translation')
+      const translationDir = path.resolve(import.meta.dirname, 'public/translation')
       let timeout: ReturnType<typeof setTimeout>
       server.watcher.on('change', (file) => {
         if (file.startsWith(translationDir) && file.endsWith('.json')) {
@@ -46,11 +46,11 @@ export default defineConfig(({ mode }) => {
       sourcemap: 'hidden'
     },
     server: {
-      port: 3000
+      port: 3000,
     },
     resolve: {
       alias: {
-        '@gamepark/verso': path.resolve(__dirname, '../rules/src')
+        '@gamepark/verso': path.resolve(import.meta.dirname, '../rules/src')
       },
       dedupe: ['react', 'react-dom', 'react-redux', '@dnd-kit/core', '@emotion/react', 'react-i18next']
     },
@@ -60,11 +60,6 @@ export default defineConfig(({ mode }) => {
       'process.env.PUSHER_KEY': JSON.stringify(env.VITE_PUSHER_KEY),
       'process.env.VERSION': JSON.stringify(version)
     },
-    plugins: [
-      react({ jsxImportSource: '@emotion/react' }),
-      imagetools({ defaultDirectives: () => new URLSearchParams({ format: 'webp' }) }),
-      translationHmrPlugin(),
-      localeUrlPlugin()
-    ]
+    plugins: [react({ jsxImportSource: '@emotion/react' }), imagetools({ defaultDirectives: () => new URLSearchParams({ format: 'webp' }) }), translationHmrPlugin(), localeUrlPlugin()]
   }
 })

@@ -1,3 +1,3 @@
 export { VersoRules } from './VersoRules'
-export { VersoOptionsSpec } from './VersoOptions'
+export { VersoOptionsSpecV2 } from './VersoOptions'
 export { VersoSetup } from './VersoSetup'

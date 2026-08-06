@@ -1,5 +1,5 @@
 import { GameProvider } from '@gamepark/react-game'
-import { VersoOptionsSpec } from '@gamepark/verso/VersoOptions'
+import { VersoOptionsSpecV2 } from '@gamepark/verso/VersoOptions'
 import { VersoRules } from '@gamepark/verso/VersoRules'
 import { VersoSetup } from '@gamepark/verso/VersoSetup'
 import { StrictMode } from 'react'
@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
     <GameProvider
       game="verso"
       Rules={VersoRules}
-      optionsSpec={VersoOptionsSpec}
+      optionsSpec={VersoOptionsSpecV2}
       GameSetup={VersoSetup}
       material={Material}
       locators={Locators}
